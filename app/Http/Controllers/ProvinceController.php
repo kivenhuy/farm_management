@@ -13,7 +13,7 @@ class ProvinceController extends Controller
      */
     public function index()
     {
-        //
+        return view('province.index');
     }
 
     /**
@@ -21,9 +21,9 @@ class ProvinceController extends Controller
      */
     public function create()
     {
-        //
+        $country = Country::all();
+        return view('province.create',['country'=>$country]);
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -37,6 +37,7 @@ class ProvinceController extends Controller
             'status'=>$request->status 
         ];
         $province->create($data);
+        return redirect()->route("province.index")->with('success','Province created successfull');
     }
 
     /**

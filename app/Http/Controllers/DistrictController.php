@@ -13,7 +13,7 @@ class DistrictController extends Controller
      */
     public function index()
     {
-        //
+        return view('district.index');
     }
 
     /**
@@ -21,7 +21,8 @@ class DistrictController extends Controller
      */
     public function create()
     {
-        //
+        $province = Province::all();
+        return view('district.create',['province'=>$province]);
     }
 
     /**
@@ -37,6 +38,7 @@ class DistrictController extends Controller
             'status'=>$request->status 
         ];
         $district->create($data);
+        return redirect()->route("district.index")->with('success','District created successfull');
     }
 
     /**
