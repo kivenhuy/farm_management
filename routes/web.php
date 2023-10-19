@@ -19,7 +19,12 @@ Route::group(["prefix"=> ""], function () {
 });
 
 
- //Country
+
+
+Route::group(['middleware' => ['auth']], function () {
+Route::get("/dashboard", [HomeController::class, 'dashboard'])->name('dashboard');
+
+    //Country
  Route::get("/country", [CountryController::class, 'index'])->name('country.index');
  Route::get("/country/dtajax", [CountryController::class, 'dtajax'])->name('country.dtajax');
  Route::get("/country/create", [CountryController::class, 'create'])->name('country.create');
@@ -44,10 +49,6 @@ Route::group(["prefix"=> ""], function () {
  Route::post("/add_commune", [CommuneController::class, 'store'])->name('commune.store');
  Route::get("/commnue_filter_by_district/{id}", [CommuneController::class, 'filter_by_district'])->name('commnue.filter_by_district');
 
-Route::group(['middleware' => ['auth']], function () {
-Route::get("/dashboard", [HomeController::class, 'dashboard'])->name('dashboard');
-
-
-   
+    
 });
 
