@@ -13,7 +13,7 @@ class CommuneController extends Controller
      */
     public function index()
     {
-        //
+        return view('commune.index');
     }
 
     /**
@@ -21,7 +21,8 @@ class CommuneController extends Controller
      */
     public function create()
     {
-        //
+        $district = District::all();
+        return view('commune.create',['district'=>$district]);
     }
 
     /**
@@ -37,6 +38,7 @@ class CommuneController extends Controller
             'status'=>$request->status 
         ];
         $commune->create($data);
+        return redirect()->route("country.index")->with('success','Commune created successfull');
     }
 
     /**

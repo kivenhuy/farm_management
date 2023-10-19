@@ -18,8 +18,9 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Canonical SEO -->
   <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/aiz-core.css') }}" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
-  
 
   <!-- Include Styles -->
   <!-- $isFront is used to append the front layout styles only on the front layout otherwise the variable will be blank -->
@@ -82,8 +83,24 @@
 
   <!-- Include Scripts -->
   <!-- $isFront is used to append the front layout scripts only on the front layout otherwise the variable will be blank -->
+  {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
+  {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="{{ asset('plugins/jquery-validation/jquery.validate.min.js') }}" ></script>
+	<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}" ></script>
+	<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}" ></script>
+	<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}" ></script>
+	<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}" ></script>
+   --}}
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
   @include('layouts/sections/scripts')
   @stack('scripts')
+
+
+  {{-- <script src="{{ asset('js/aiz-core.js') }}" ></script> --}}
 </body>
 
 </html>
+
+
