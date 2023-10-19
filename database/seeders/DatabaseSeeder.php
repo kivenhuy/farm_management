@@ -20,25 +20,25 @@ class DatabaseSeeder extends Seeder
         // supper admin
         $admin = new User();
         $admin->name = "Supper Admin";
+        $admin->user_type = "super_admin";
         $admin->username = "farmangel";
         $admin->email = "farmangel@farm-angel.com";
         $admin->password = Hash::make('123456789abc');
-        $admin->phone_number = "";
-        $admin->user_type = "super_admin";
+        $admin->phone_number = "123456789";
         $admin->email_verified_at = "";
         $admin->save();
 
         // farmer
         $user = new User();
-        $ser->name = "Farmer";
+        $user->name = "Farmer";
+        $user->user_type = "farmer";
         $user->username = "farmer";
         $user->email = "farmer@farm-angel.com";
         $user->password = Hash::make('12345678');
-        $user->phone_number = "";
-        $user->user_type = "farmer";
+        $user->phone_number = "12345678";
         $user->email_verified_at = "";
         $user->save();
-u
+
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Supper Admin',
