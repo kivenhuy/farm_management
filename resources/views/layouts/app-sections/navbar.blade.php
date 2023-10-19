@@ -1,15 +1,9 @@
-@php
-$containerNav = $containerNav ?? 'container-fluid';
-$navbarDetached = ($navbarDetached ?? '');
-//dd($containerNav);
-@endphp
-
 <!-- Navbar -->
 <nav class="layout-navbar container-fluid navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
 
     <!-- ! Not required for layout-without-menu -->
     @if(!isset($navbarHideToggle))
-    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0{{ isset($menuHorizontal) ? ' d-xl-none ' : '' }} {{ isset($contentNavbar) ?' d-xl-none ' : '' }}">
+    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-block d-xl-none">
       <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
         <i class="mdi mdi-menu mdi-24px"></i>
       </a>
