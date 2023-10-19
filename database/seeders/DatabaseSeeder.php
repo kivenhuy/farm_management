@@ -48,5 +48,9 @@ class DatabaseSeeder extends Seeder
         //     'phone_number' => '',
         //     'user_type'=> 'super_admin',
         // ]);
+
+        $this->call([
+            SeasonsSeeder::class,
+        ]);
     }
 }
