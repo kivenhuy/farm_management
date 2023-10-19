@@ -9,53 +9,6 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    public function signup(Request $request)
-    {
-       
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'username' => 'required',
-            'user_type' => 'required|in:super_amin,admin,farmer',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
-            'phone' => 'required|numeric',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'result' => false,
-                'message' => $validator->messages(),
-            ]);
-        }
-
-        $user = User::create($request->all());
-        
-        return $this->loginSuccess($user);
-    }
-
-    public function loginSuccess($user, $token = null)
-    {
-
-        if (!$token) {
-            $token = $user->createToken('Farm-angel API Token')->plainTextToken;
-        }
-
-        return response()->json([
-            'result' => true,
-            'message' => 'Successfully logged in',
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'expires_at' => null,
-            'user' => [
-                'id' => $user->id,
-                'type' => $user->user_type,
-                'name' => $user->name,
-                'email' => $user->email,
-                'phone' => $user->phone_number,
-            ]
-        ]);
-    }
-
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -91,6 +44,30 @@ class AuthController extends Controller
             'message' => 'The credentials did not match',
         ]);
     }
+
+    public function loginSuccess($user, $token = null)
+    {
+
+        if (!$token) {
+            $token = $user->createToken('Farm-angel API Token')->plainTextToken;
+        }
+
+        return response()->json([
+            'result' => true,
+            'message' => 'Successfully logged in',
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'expires_at' => null,
+            'user' => [
+                'id' => $user->id,
+                'type' => $user->user_type,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone_number,
+            ]
+        ]);
+    }
+
 
     public function logout(Request $request)
     {

@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['prefix' => 'v2/auth'], function () {
     Route::post('login', 'App\Http\Controllers\Api\V2\AuthController@login');
-    Route::post('signup', 'App\Http\Controllers\Api\V2\AuthController@signup');
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('logout', 'App\Http\Controllers\Api\V2\AuthController@logout');
         Route::get('dashboard', 'App\Http\Controllers\Api\V2\AuthController@dashboard');
