@@ -28,6 +28,10 @@
   <!-- Include Scripts for customizer, helper, analytics, config -->
   <!-- $isFront is used to append the front layout scriptsIncludes only on the front layout otherwise the variable will be blank -->
   @include('layouts/sections/scriptsIncludes')
+
+  <link rel="stylesheet" href="{{ asset('custom\css\jquery.datetimepicker.min.css')}}">
+  <link rel="stylesheet" href="{{ asset('custom\css\style.css?v=')}}{{ now()->timestamp}}">
+
   @yield('style')
 
 </head>

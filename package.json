@@ -127,6 +127,7 @@
     "jkanban": "1.3.1",
     "jquery": "3.7.0",
     "jquery-datatables-checkboxes": "1.2.13",
+    "jquery-datetimepicker": "^2.5.21",
     "jquery-sticky": "1.0.4",
     "jquery.repeater": "1.2.1",
     "jstree": "3.3.15",
