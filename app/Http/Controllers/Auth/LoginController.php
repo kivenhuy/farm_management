@@ -42,7 +42,7 @@ class LoginController extends Controller
             return redirect()->route('dashboard');
         }
 
-        flash('The credentials did not match')->error();
+        //flash('The credentials did not match')->error();
 
         return redirect()->back()
             ->withErrors(['message' => 'The credentials did not match'])
