@@ -66,7 +66,7 @@ class UploadsController extends Controller
     }
 
 
-    public function upload_photo($file)
+    public function upload_photo($file,$user_id)
     {
         $type = array(
             "jpg" => "image",
@@ -189,7 +189,7 @@ class UploadsController extends Controller
 
                 $upload->extension = $extension;
                 $upload->file_name = $path;
-                $upload->user_id = 2;
+                $upload->user_id = $user_id;
                 $upload->type = $type[$upload->extension];
                 $upload->file_size = $size;
                 // dd($upload);
