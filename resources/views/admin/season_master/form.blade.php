@@ -4,7 +4,7 @@
     <div class="container p-0">
         @include('shared.form-alerts')
 
-        <form action="{{ !empty($seasonMaster->id) ? route('season-masters.update', ['season_master' => $seasonMaster]) : route('season-masters.store') }}" method="POST" class="mb-5" data-parsley-validate>
+        <form action="{{ !empty($seasonMaster->id) ? route('season-masters.update', ['season_master' => $seasonMaster]) : route('season-masters.store') }}" method="POST" class="mb-5" data-parsley-validate id="form-season-master">
             {{ $seasonMaster->id ? method_field('PUT') : method_field('POST') }}
             @csrf
 
@@ -99,6 +99,10 @@
         		datepicker: true,
                 timepicker: false,
             });
+
+            $('#js-from-period, #js-to-period').change(function () {
+                $('#form-season-master').parsley().validate();
+            })
         });
     </script>
 @endpush
