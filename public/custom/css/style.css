@@ -1,0 +1,9 @@
+.parsley-errors-list {
+  color: #dc3545;
+  padding-left: 18px;
+  margin-bottom: 0;
+}
+
+.parsley-error {
+  border-color: #dc3545;
+}
