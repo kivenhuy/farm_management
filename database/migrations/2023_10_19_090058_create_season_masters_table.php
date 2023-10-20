@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('season_code');
             $table->date('from_period');
             $table->date('to_period');
-            $table->string('status')->comment('active,inactive');
+            $table->string('status')->default('active')->comment('active,inactive');
             $table->timestamps();
         });
     }
