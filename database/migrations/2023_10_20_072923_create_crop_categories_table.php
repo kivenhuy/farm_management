@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('season_masters', function (Blueprint $table) {
+        Schema::create('crop_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('season_code');
-            $table->date('from_period');
-            $table->date('to_period');
-            $table->string('status')->default('active')->comment('active,inactive');
+            $table->string('code');
+            $table->string('name');
+            $table->string('name_vi')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('season_masters');
+        Schema::dropIfExists('crop_categories');
     }
 };

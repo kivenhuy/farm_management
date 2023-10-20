@@ -33,7 +33,14 @@
       </a>
     </li> --}}
 
-    <li class="aiz-side-nav-item menu-item" id="icon-1">
+    <li class="aiz-side-nav-item"> 
+        <a class="aiz-side-nav-link" href="{{ route('crop-informations.index') }}"> 
+            <i class="las la-home aiz-side-nav-icon"></i> 
+            <span class="aiz-side-nav-text">Crop Master</span> 
+        </a> 
+    </li>
+
+    <li class="aiz-side-nav-item menu-item">
       <div class="aiz-side-nav-link">
           <i class="las la-shopping-cart aiz-side-nav-icon"></i>
           <span class="aiz-side-nav-text">Location Master</span>
@@ -90,14 +97,10 @@ $(".menu-item").on('click',function(){
   $(this).find("ul:first").slideDown();
   return false;
   }
-  else{
-  $(this).find("ul:first").slideUp();
-  return false;
-  }
-});
-
-document.getElementById('icon-1').addEventListener('click', function(){
-    classie.toggle(document.getElementById('dropdown-1'), 'close');
+  // else{
+  // $(this).find("ul:first").slideUp();
+  // return false;
+  // }
 });
 </script>
 @endpush

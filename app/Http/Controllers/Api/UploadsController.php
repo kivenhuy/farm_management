@@ -141,7 +141,8 @@ class UploadsController extends Controller
                 // }
 
                 $path = $file->store('uploads/all', 'public');
-                
+                $storagePath = 'storage/' . $path;
+
                 // dd($path);
                 $size = $file->getSize();
 
@@ -188,7 +189,7 @@ class UploadsController extends Controller
                 // }
 
                 $upload->extension = $extension;
-                $upload->file_name = $path;
+                $upload->file_name = $storagePath;
                 $upload->user_id = $user_id;
                 $upload->type = $type[$upload->extension];
                 $upload->file_size = $size;

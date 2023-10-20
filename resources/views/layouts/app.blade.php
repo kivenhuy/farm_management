@@ -96,6 +96,7 @@
             display:none;
             padding-left: 2rem;
           }
+
         </style>
         <!-- / Layout wrapper -->
 
