@@ -13,25 +13,40 @@
 
   <ul class="aiz-side-nav-list" id="main-menu" data-toggle="aiz-side-menu">
     <li class="aiz-side-nav-item">
-        <a class="aiz-side-nav-link" href="{{ route('season-masters.index') }}">
+        <a class="aiz-side-nav-link">
             <i class="las la-home aiz-side-nav-icon"></i>
             <span class="aiz-side-nav-text">Season Master</span>
         </a>
     </li>
     <li class="aiz-side-nav-item">
-      <a class="aiz-side-nav-link" href="{{ route('crop-informations.index') }}">
+        <a href="{{ route('staff.index') }}" class="aiz-side-nav-link">
+            <i class="las la-home aiz-side-nav-icon"></i>
+            <span class="aiz-side-nav-text">Staff</span>
+        </a>
+    </li>
+    
+
+    {{-- <li class="aiz-side-nav-item">
+      <a href="{{ route('farm_land.index') }}" class="aiz-side-nav-link">
           <i class="las la-home aiz-side-nav-icon"></i>
-          <span class="aiz-side-nav-text">Crop Master</span>
+          <span class="aiz-side-nav-text">Farm Land Report</span>
       </a>
-  </li>
-    <li class="aiz-side-nav-item">
-      <a href="#" class="aiz-side-nav-link">
+    </li> --}}
+
+    <li class="aiz-side-nav-item"> 
+        <a class="aiz-side-nav-link" href="{{ route('crop-informations.index') }}"> 
+            <i class="las la-home aiz-side-nav-icon"></i> 
+            <span class="aiz-side-nav-text">Crop Master</span> 
+        </a> 
+    </li>
+
+    <li class="aiz-side-nav-item menu-item">
+      <div class="aiz-side-nav-link">
           <i class="las la-shopping-cart aiz-side-nav-icon"></i>
           <span class="aiz-side-nav-text">Location Master</span>
-          <span class="aiz-side-nav-arrow"></span>
-      </a>
-
-      <ul class="aiz-side-nav-list level-2" style="visibility: unset">
+          <div id="dropdown-1" class="dropdown"></div>
+      </div>
+      <ul class="aiz-side-nav-list sub-menu" >
           <li class="aiz-side-nav-item">
               <a href="{{ route('country.index') }}"
                   class="aiz-side-nav-link ">
@@ -59,29 +74,33 @@
           </li>
       </ul>
     </li>
+    <li class="aiz-side-nav-item">
+      <a href="{{ route('farmer.index') }}" class="aiz-side-nav-link">
+          <i class="las la-home aiz-side-nav-icon"></i>
+          <span class="aiz-side-nav-text">Farmer Report</span>
+      </a>
+    </li>
+    
   </ul>
+  
 </aside>
 
-
+{{-- 
 <style>
-  .aiz-side-nav-arrow::after {
-    content: "\f105";
-    font-family: "Line Awesome Free";
-    font-weight: 900;
-    -webkit-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-}
-.aiz-side-nav-arrow {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: end;
-    -ms-flex-pack: end;
-    justify-content: flex-end;
-    font-size: 80%;
-}
+  
+</style> --}}
 
-</style>
+@push('scripts')
+<script>
+$(".menu-item").on('click',function(){
+  if($(this).find("ul:first").is(":hidden")){
+  $(this).find("ul:first").slideDown();
+  return false;
+  }
+  // else{
+  // $(this).find("ul:first").slideUp();
+  // return false;
+  // }
+});
+</script>
+@endpush

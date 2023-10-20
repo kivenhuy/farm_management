@@ -23,14 +23,10 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>RFQ Code</th>
-                      <th>Raised Date</th>
-                      <th>Seller Name</th>
-                      <th>Product Name</th>
-                      <th>Quantity</th>
-                      <th>Price</th>
+                      <th>Country Name</th>
+                      <th>Province Name</th>
+                      <th>Province Code</th>
                       <th>Status</th>
-                      <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -75,10 +71,14 @@
       </script>
 @stop
 
-@section('script')
+@push('scripts')
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}" ></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}" ></script>
+<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}" ></script>
+<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}" ></script>
 
-
-{{-- <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function()
     {   
         var rfq_table = $("#example1").DataTable
@@ -89,54 +89,29 @@
                 searching: false,
                 bSort:false,
                 serverSide: true,
-                    ajax: "{{route('country.dtajax')}}",
+                    ajax: "{{route('province.dtajax')}}",
                     // error: function (xhr) {
                     //     if (xhr.status == 401) {
                     //     window.location.href = "{!! route('login') !!}";
                     //     }
                     // },
                     columns: [
-                          {data: 'code_rfq', name: 'code_rfq', render: function(data){
+                          {data: 'country_name', name: 'country_name', render: function(data){
                               return (data=="")?"":data;
                           }},
-                          {data: 'created_at', name: 'created_at',render: function (data, type, row) {
-                                    return moment(data).format('MM/DD/YYYY');
-                            }},
-                          {data: 'seller_name', name: 'seller_name'},
-                          {data: 'product_name', name: 'product_name'},
-                          {data: 'quantity', name: 'quantity', render: function(data){
-                              return (data=="")?"":data;
+                          {data: 'province_name', name: 'province_name',render: function (data) {
+                            return (data=="")?"":data;
                           }},
-                          {data: 'price', name: 'price'},
-                          {data: 'status', name: 'status', render: function(data){
-                            
-                          if(data == 0)
-                          {
-                              return "<span class='badge badge-inline badge-secondary'>Pending Approval</span>";
-                          }
-                          else if(data == 1)
-                          {
-                              return "<span class='badge badge-inline badge-warning'>Pending Price Update</span>";
-                          }
-                          else if(data == 2)
-                          {
-                              return "<span class='badge badge-inline badge-info' >Waiting For Customer</span>";
-                          }
-                          else if(data == 3)
-                          {
-                              return "<span class='badge badge-inline badge-success' style='background-color:#28a745 !important'>Added To Cart</span>";
-                          }
-                        }},
-                        {
-                                data: 'action', 
-                                name: 'action', 
-                                orderable: true, 
-                                searchable: true
-                        },
-                    ],
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6');
+                          {data: 'province_code', name: 'province_code',render: function (data) {
+                            return (data=="")?"":data;
+                          }},
+                          {data: 'status', name: 'status',render: function (data) {
+                            return (data=="active")?"Active":"In Active";
+                          }},
+                      ]
+        });
     });
 
     
-</script> --}}
-@endsection
+</script>
+@endpush

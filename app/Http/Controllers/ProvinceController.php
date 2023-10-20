@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Country;
 use App\Models\Province;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class ProvinceController extends Controller
 {
@@ -77,5 +78,17 @@ class ProvinceController extends Controller
         $country = Country::find($id);
         $province = $country->province()->get();
         return $province;
+    }
+
+    public function dtajax(Request $request)
+    {
+            $province = Province::all()->sortDesc();
+            $out =  DataTables::of($province)->make(true);
+            $data = $out->getData();
+            for($i=0; $i < count($data->data); $i++) {
+                $data->data[$i]->country_name = Country::find($data->data[$i]->country_id)->country_name;
+            }
+            $out->setData($data);
+            return $out;
     }
 }

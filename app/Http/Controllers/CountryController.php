@@ -74,27 +74,11 @@ class CountryController extends Controller
     public function dtajax(Request $request)
     {
             $country = Country::all()->sortDesc();
-            dd($country);
             $out =  DataTables::of($country)->make(true);
             $data = $out->getData();
-            dd($data);
-            // for($i=0; $i < count($data->data); $i++) {
-            //     // dd($data->data[$i]->id);
-            //     $output = '';
-            //     $output .= ' <a href="'.url(route('rfq_request_user.show',['id'=>$data->data[$i]->id])).'" class="btn btn-info btn-xs" data-toggle="tooltip" title="Show Details" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-eye"></i></a>';
-            //     $data->data[$i]->product_name = Product::find($data->data[$i]->product_id)?->name;
-            //     $data->data[$i]->seller_name = User::find($data->data[$i]->seller_id)?->name;
-            //     $data->data[$i]->buyer_name = User::find($data->data[$i]->buyer_id)?->name;
-            //     if(!empty($data->data[$i]->product_name) && !empty($data->data[$i]->seller_name) && !empty($data->data[$i]->buyer_name) )
-            //     {
-            //         $data->data[$i]->action = (string)$output;
-            //     }
-            //     else
-            //     {
-            //         $data->data[$i]->action = '';
-            //     }
-            //  }
-            // $out->setData($data);
+            for($i=0; $i < count($data->data); $i++) {
+             }
+            $out->setData($data);
             return $out;
     }
 }

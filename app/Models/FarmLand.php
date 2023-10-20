@@ -9,7 +9,7 @@ class FarmLand extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id',
+            'user_id',
             'farm_name',
             'total_land_holding',
             'lat',
@@ -23,8 +23,13 @@ class FarmLand extends Model
             'approach_road',
             'land_topology',
             'land_gradient',
-           'land_document',
+            'land_document',
     ];
 
+
+    public function farm_land_lat_lng()
+    {
+        return $this->hasMany(FarmLand::class);
+    }
     
 }

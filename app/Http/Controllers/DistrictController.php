@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\District;
 use App\Models\Province;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class DistrictController extends Controller
 {
@@ -78,5 +79,17 @@ class DistrictController extends Controller
         $province = Province::find($id);
         $district = $province->district()->get();
         return $district;
+    }
+
+    public function dtajax(Request $request)
+    {
+            $district = District::all()->sortDesc();
+            $out =  DataTables::of($district)->make(true);
+            $data = $out->getData();
+            for($i=0; $i < count($data->data); $i++) {
+                $data->data[$i]->province_name = Province::find($data->data[$i]->province_id)->province_name;
+            }
+            $out->setData($data);
+            return $out;
     }
 }

@@ -80,11 +80,18 @@ class CommuneController extends Controller
     public function filter_by_district($id)
     {
         $district = District::find($id);
-        $commune = $district->commune()->get();
+        if(isset($district))
+        {
+            $commune = $district->commune()->get();
+            return response()->json([
+                'result' => true,
+                'message' => 'Get all commune success fully',
+                'data' =>$commune
+            ]);
+        }   
         return response()->json([
-            'result' => true,
-            'message' => 'Get all commune success fully',
-            'data' =>$commune
+            'result' => false,
+            'message' => 'Data not found'
         ]);
     }
 }

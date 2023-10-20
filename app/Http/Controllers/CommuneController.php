@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Commune;
 use App\Models\District;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class CommuneController extends Controller
 {
@@ -78,5 +79,17 @@ class CommuneController extends Controller
         $district = District::find($id);
         $commune = $district->commune()->get();
         return $commune;
+    }
+
+    public function dtajax(Request $request)
+    {
+            $commune = Commune::all()->sortDesc();
+            $out =  DataTables::of($commune)->make(true);
+            $data = $out->getData();
+            for($i=0; $i < count($data->data); $i++) {
+                $data->data[$i]->district_name = District::find($data->data[$i]->district_id)->district_name;
+            }
+            $out->setData($data);
+            return $out;
     }
 }
