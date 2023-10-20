@@ -7,6 +7,8 @@ use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\SeasonMasterController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\FarmersController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function(){
@@ -27,6 +29,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('season-masters', SeasonMasterController::class)->names('season-masters');
     //Route::get("/season-master", [HomeController::class, 'season_master'])->name('season_master');
 
+     // Farmer Details
+    Route::get("/farmer", [FarmersController::class, 'index'])->name('farmer.index');
+    Route::get("/farmer/dtajax", [FarmersController::class, 'dtajax'])->name('farmer.dtajax');
+    Route::get("/farmer/{id}", [FarmersController::class, 'show'])->name('farmer.show');
 
     //Country
     Route::get("/country", [CountryController::class, 'index'])->name('country.index');
@@ -34,21 +40,30 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get("/country/create", [CountryController::class, 'create'])->name('country.create');
     Route::post("/add_country", [CountryController::class, 'store'])->name('country.store');
 
+    // Staff
+    Route::get("/staff", [StaffController::class, 'index'])->name('staff.index');
+    Route::get("/staff/dtajax", [StaffController::class, 'dtajax'])->name('staff.dtajax');
+    Route::get("/staff/create", [StaffController::class, 'create'])->name('staff.create');
+    Route::post("/add_staff", [StaffController::class, 'store'])->name('staff.store');
+
 
     //Province
     Route::get("/province", [ProvinceController::class, 'index'])->name('province.index');
+    Route::get("/province/dtajax", [ProvinceController::class, 'dtajax'])->name('province.dtajax');
     Route::get("/province/create", [ProvinceController::class, 'create'])->name('province.create');
     Route::post("/add_province", [ProvinceController::class, 'store'])->name('province.store');
     Route::get("/province_filter_by_country/{id}", [ProvinceController::class, 'filter_by_country'])->name('province.filter_by_country');
 
     //District
     Route::get("/district", [DistrictController::class, 'index'])->name('district.index');
+    Route::get("/district/dtajax", [DistrictController::class, 'dtajax'])->name('district.dtajax');
     Route::get("/district/create", [DistrictController::class, 'create'])->name('district.create');
     Route::post("/add_district", [DistrictController::class, 'store'])->name('district.store');
     Route::get("/district_filter_by_province/{id}", [DistrictController::class, 'filter_by_province'])->name('district.filter_by_province');
 
     //Commune
     Route::get("/commune", [CommuneController::class, 'index'])->name('commune.index');
+    Route::get("/commune/dtajax", [CommuneController::class, 'dtajax'])->name('commune.dtajax');
     Route::get("/commune/create", [CommuneController::class, 'create'])->name('commune.create');
     Route::post("/add_commune", [CommuneController::class, 'store'])->name('commune.store');
     Route::get("/commnue_filter_by_district/{id}", [CommuneController::class, 'filter_by_district'])->name('commnue.filter_by_district');

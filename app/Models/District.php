@@ -14,5 +14,8 @@ class District extends Model
         'district_code',
         'status'
     ];
-    
+    public function commune()
+    {
+        return $this->hasMany(Commune::class);
+    }
 }

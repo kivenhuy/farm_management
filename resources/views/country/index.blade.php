@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
     <!-- Main content -->
     <div class="container-fluid">
@@ -19,24 +20,19 @@
                         </div>
                     </div>
                 </div>
-              <div class="card-body" >
+              <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th>RFQ Code</th>
-                      <th>Raised Date</th>
-                      <th>Seller Name</th>
-                      <th>Product Name</th>
-                      <th>Quantity</th>
-                      <th>Price</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                  </tr>
-                  </thead>
-                  <tbody>
+                    <thead>
                       <tr>
+                          <th>Country Name</th>
+                          <th>Country Code</th>
+                          <th>Status</th>
                       </tr>
-                  </tbody>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        </tr>
+                    </tbody>
                 </table>
               </div>
               <!-- /.card-body -->
@@ -73,12 +69,19 @@
             toastr.success("{{ session('delete') }}");
         @endif
       </script>
+        <style>
+            
+        </style>
 @stop
 
-@section('script')
+@push('scripts')
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}" ></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}" ></script>
+<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}" ></script>
+<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}" ></script>
 
-
-{{-- <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function()
     {   
         var rfq_table = $("#example1").DataTable
@@ -96,47 +99,19 @@
                     //     }
                     // },
                     columns: [
-                          {data: 'code_rfq', name: 'code_rfq', render: function(data){
+                          {data: 'country_name', name: 'country_name', render: function(data){
                               return (data=="")?"":data;
                           }},
-                          {data: 'created_at', name: 'created_at',render: function (data, type, row) {
-                                    return moment(data).format('MM/DD/YYYY');
-                            }},
-                          {data: 'seller_name', name: 'seller_name'},
-                          {data: 'product_name', name: 'product_name'},
-                          {data: 'quantity', name: 'quantity', render: function(data){
-                              return (data=="")?"":data;
+                          {data: 'country_code', name: 'country_code',render: function (data) {
+                            return (data=="")?"":data;
                           }},
-                          {data: 'price', name: 'price'},
-                          {data: 'status', name: 'status', render: function(data){
-                            
-                          if(data == 0)
-                          {
-                              return "<span class='badge badge-inline badge-secondary'>Pending Approval</span>";
-                          }
-                          else if(data == 1)
-                          {
-                              return "<span class='badge badge-inline badge-warning'>Pending Price Update</span>";
-                          }
-                          else if(data == 2)
-                          {
-                              return "<span class='badge badge-inline badge-info' >Waiting For Customer</span>";
-                          }
-                          else if(data == 3)
-                          {
-                              return "<span class='badge badge-inline badge-success' style='background-color:#28a745 !important'>Added To Cart</span>";
-                          }
-                        }},
-                        {
-                                data: 'action', 
-                                name: 'action', 
-                                orderable: true, 
-                                searchable: true
-                        },
-                    ],
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6');
+                          {data: 'status', name: 'status',render: function (data) {
+                            return (data=="active")?"Active":"In Active";
+                          }},
+                      ]
+        });
     });
 
     
-</script> --}}
-@endsection
+</script>
+@endpush

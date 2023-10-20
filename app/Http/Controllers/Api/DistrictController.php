@@ -80,11 +80,18 @@ class DistrictController extends Controller
     public function filter_by_province($id)
     {
         $province = Province::find($id);
-        $district = $province->district()->get();
+        if(isset($province))
+        {
+            $district = $province->district()->get();
+            return response()->json([
+                'result' => true,
+                'message' => 'Get all district success fully',
+                'data' =>$district
+            ]);
+        }
         return response()->json([
-            'result' => true,
-            'message' => 'Get all district success fully',
-            'data' =>$district
+            'result' => false,
+            'message' => 'Data not found'
         ]);
     }
 }

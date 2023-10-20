@@ -13,7 +13,7 @@
                     
                 </div>
               <div class="card-body" >
-                <form action="{{route('country.store')}}" method="POST">
+                <form action="{{route('country.store')}}" method="POST" id="country_from">
                     @csrf
                     {{-- Country Name --}}
                     <div class="form-group row">
@@ -26,7 +26,7 @@
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Country Code</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="country_code" placeholder="Country Name">
+                            <input type="text" onkeyup="myFunction()" class="form-control" name="country_code" placeholder="Country Name">
                         </div>
                     </div>
                     {{-- Status --}}
@@ -50,7 +50,7 @@
                     </div>
                     <div class="col-12">
                         <div class="mar-all mb-2" style=" text-align: end;">
-                            <button type="submit" name="button" value="publish"
+                            <button type="submit" name="button"  value="publish"
                                 class="btn btn-primary">Create</button>
                         </div>
                     </div>
@@ -67,3 +67,14 @@
       </div>
    
 @stop
+@push('scripts')
+<script type="text/javascript">
+    $(document).ready(function()
+    {   
+        
+    });
+    function myFunction() {
+            alert('aaa')
+        }
+</script>
+@endpush

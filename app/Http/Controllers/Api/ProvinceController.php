@@ -79,11 +79,18 @@ class ProvinceController extends Controller
     public function filter_by_country($id)
     {
         $country = Country::find($id);
-        $province = $country->province()->get();
+        if(isset($country))
+        {
+            $province = $country->province()->get();
+            return response()->json([
+                'result' => true,
+                'message' => 'Get all province success fully',
+                'data' =>$province
+            ]);    
+        }
         return response()->json([
-            'result' => true,
-            'message' => 'Get all province success fully',
-            'data' =>$province
+            'result' => false,
+            'message' => 'Data not found'
         ]);
     }
 }

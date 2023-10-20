@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Commune;
+use App\Models\Country;
+use App\Models\District;
 use App\Models\FarmerDetails;
+use App\Models\Province;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,7 +21,20 @@ class FarmersController extends Controller
      */
     public function index()
     {
-        //
+        $farmer_data = FarmerDetails::all();
+        foreach ($farmer_data as $details_farmer_data)
+        {
+            $details_farmer_data->farmer_photo = uploaded_asset($details_farmer_data->farmer_photo);
+            $details_farmer_data->country= Country::find($details_farmer_data->country)->country_name;
+            $details_farmer_data->province= Province::find($details_farmer_data->province)->province_name;
+            $details_farmer_data->district= District::find($details_farmer_data->district)->district_name;
+            $details_farmer_data->commune= Commune::find($details_farmer_data->commune)->commune_name;
+        }
+        return response()->json([
+            'result' => true,
+            'message' => 'Get All Farmer Successfully',
+            'farmer_data' =>$farmer_data
+        ]);
     }
 
     /**
@@ -33,7 +50,18 @@ class FarmersController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $farmer_data = FarmerDetails::find($id);
+        $farmer_data->farmer_photo = uploaded_asset($farmer_data->farmer_photo);
+        $farmer_data->id_proof_photo = uploaded_asset($farmer_data->id_proof_photo);
+        $farmer_data->country= Country::find($farmer_data->country)->country_name;
+        $farmer_data->province= Province::find($farmer_data->province)->province_name;
+        $farmer_data->district= District::find($farmer_data->district)->district_name;
+        $farmer_data->commune= Commune::find($farmer_data->commune)->commune_name;
+        return response()->json([
+            'result' => true,
+            'message' => 'Get Farmer Successfully',
+            'farmer_data' =>$farmer_data
+        ]);
     }
 
     /**
@@ -139,6 +167,11 @@ class FarmersController extends Controller
             'farmer_photo'=>implode(',', $farmer_photo),
             'id_proof_photo'=>implode(',', $id_proof_photo),
         ];
-        $farmer_details->create($data_farmer_details);
+        $farmer_data = $farmer_details->create($data_farmer_details);
+        return response()->json([
+            'result' => true,
+            'message' => 'Farmer Registration Successfully',
+            'farmer_data' =>$farmer_data
+        ]);
     }
 }

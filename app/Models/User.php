@@ -45,4 +45,19 @@ class User extends Authenticatable
         // 'email_verified_at' => 'datetime',
         // 'password' => 'hashed',
     ];
+
+    public function farm_land()
+    {
+        return $this->hasMany(FarmLand::class);
+    }
+
+    public function farmer_detail()
+    {
+        return $this->hasOne(FarmerDetails::class);
+    }
+
+    public function staff_detail()
+    {
+        return $this->hasOne(FarmerDetails::class);
+    }
 }

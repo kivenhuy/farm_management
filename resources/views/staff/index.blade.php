@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
     <!-- Main content -->
     <div class="container-fluid">
@@ -8,31 +9,32 @@
             <div class="card">
                 <div class="card-header row gutters-5">
                     <div class="col">
-                        <h5 class="mb-md-0 h6">All District</h5>
+                        <h5 class="mb-md-0 h6">All Staff</h5>
                     </div>
                     <div class="col">
                         <div class="mar-all mb-2" style=" text-align: end;">
-                            <a href="{{route('district.create')}}">
+                            <a href="{{route('staff.create')}}">
                                 <button type="submit" name="button" value="publish"
                                     class="btn btn-primary">Create</button>
                             </a>
                         </div>
                     </div>
                 </div>
-              <div class="card-body" >
+              <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th>Province Name</th>
-                      <th>District Name</th>
-                      <th>District Code</th>
-                      <th>Status</th>
-                  </tr>
-                  </thead>
-                  <tbody>
+                    <thead>
                       <tr>
+                          <th>Staff Name</th>
+                          <th>Contact Number</th>
+                          <th>Email</th>
+                          <th>Gender</th>
+                          <th>Status</th>
                       </tr>
-                  </tbody>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        </tr>
+                    </tbody>
                 </table>
               </div>
               <!-- /.card-body -->
@@ -72,6 +74,9 @@
 @stop
 
 @push('scripts')
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}" ></script>
 <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}" ></script>
@@ -89,24 +94,27 @@
                 searching: false,
                 bSort:false,
                 serverSide: true,
-                    ajax: "{{route('district.dtajax')}}",
+                    ajax: "{{route('staff.dtajax')}}",
                     // error: function (xhr) {
                     //     if (xhr.status == 401) {
                     //     window.location.href = "{!! route('login') !!}";
                     //     }
                     // },
                     columns: [
-                          {data: 'province_name', name: 'province_name', render: function(data){
-                              return (data=="")?"":data;
+                          {data: 'first_name', name: 'staff_name', render: function(data,type,row){
+                              return row.first_name + " " + row.last_name
                           }},
-                          {data: 'district_name', name: 'district_name',render: function (data) {
+                          {data: 'phone_number', name: 'phone_number',render: function (data) {
                             return (data=="")?"":data;
                           }},
-                          {data: 'district_code', name: 'district_code',render: function (data) {
+                          {data: 'email', name: 'email',render: function (data) {
+                            return (data=="")?"":data;
+                          }},
+                          {data: 'gender', name: 'gender',render: function (data) {
                             return (data=="")?"":data;
                           }},
                           {data: 'status', name: 'status',render: function (data) {
-                            return (data=="active")?"Active":"In Active";
+                            return (data=="active")?"Active":"Block";
                           }},
                       ]
         });
