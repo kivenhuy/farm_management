@@ -4,6 +4,7 @@
     <div class="container p-0">
         <div>
             <a href="{{ route('season-masters.create') }}" class="btn btn-info mb-4">Create Season Master</a>
+            @include('shared.form-alerts')
         </div>
         <form action="{{ route('season-masters.index')}}" class="mb-5">
             {{-- @csrf --}}
@@ -46,7 +47,6 @@
             </div>
         </form>
 
-        @if($seasonMasters->count())
         <table class="table table-bordered">
             <thead>
               <tr style="background-color: #666cff;">
@@ -58,28 +58,30 @@
               </tr>
             </thead>
             <tbody>
-              @foreach ($seasonMasters as $seasonMaster)  
-                <tr>
-                    <td>{{ $seasonMaster->season->name}}</td>
-                    <td>{{ $seasonMaster->from_period}}</td>
-                    <td>{{ $seasonMaster->to_period}}</td>
-                    <td>{{ $seasonMaster->status == 'active' ? 'Active' : 'Inactive'}} </td>
-                    <td style="width: 250px;">
-                        <a href="{{ route('season-masters.edit', ['season_master' => $seasonMaster]) }}" class="btn btn-primary btn-sm text-white" style="margin-right: 10px;"><i class="fa fa-edit"></i>Edit</a>    
-                        <form method="POST" action="{{ route('season-masters.destroy', ['season_master' => $seasonMaster]) }}" class="d-inline">
-                            {{ method_field('DELETE') }}
-                            @csrf
+                @if($seasonMasters->count())
+                    @foreach ($seasonMasters as $seasonMaster)  
+                        <tr>
+                            <td>{{ $seasonMaster->season->name}}</td>
+                            <td>{{ $seasonMaster->from_period}}</td>
+                            <td>{{ $seasonMaster->to_period}}</td>
+                            <td>{{ $seasonMaster->status == 'active' ? 'Active' : 'Inactive'}} </td>
+                            <td style="width: 250px;">
+                                <a href="{{ route('season-masters.edit', ['season_master' => $seasonMaster]) }}" class="btn btn-primary btn-sm text-white" style="margin-right: 10px;"><i class="fa fa-edit"></i>Edit</a>    
+                                <form method="POST" action="{{ route('season-masters.destroy', ['season_master' => $seasonMaster]) }}" class="d-inline">
+                                    {{ method_field('DELETE') }}
+                                    @csrf
 
-                            <button type="button" class="btn btn-sm btn-danger js-delete-season" data-delete-season-title="{{ $seasonMaster->season->name }}"><i class="fa fa-trash"></i> Delete</button>
-                        </form>
+                                    <button type="button" class="btn btn-sm btn-danger js-delete-season" data-delete-season-title="{{ $seasonMaster->season->name }}"><i class="fa fa-trash"></i> Delete</button>
+                                </form>
 
-                        {{-- <a href="{{ }}" class="btn btn-danger">Delete</a>     --}}
-                    </td>
-                </tr>
-              @endforeach
+                                {{-- <a href="{{ }}" class="btn btn-danger">Delete</a>     --}}
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
           </table>
-        @endif
+        
 
         <div class="position-relative" style="min-height: 30px">
             {{ $seasonMasters->links('shared.paginator') }}
