@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class CropInformation extends Model
+{
+    use HasFactory;
+
+    protected $table = 'crop_informations';
+
+    protected $fillable = ['name','photo','crop_category_code','duration','duration_type','expected_expense','expected_income','expected_yield',];
+
+    const DURATION_TYPE = [
+        'days' => 'Day(s)',
+        'months' => 'Month(s)',
+        'years' => 'Year(s)',
+    ];
+
+    const EXPECTED_YIELD_TYPE = [
+        'hectare'=> 'Hectare',
+        'acre'   => 'Acre'
+    ];
+
+    public function crop_category()
+    {
+        return $this->belongsTo(CropCategory::class, 'crop_category_code', 'code');
+    }
+
+    public function thumbnail()
+    {
+        return $this->belongsTo(Uploads::class,'photo','id');
+    }
+
+    public function getPhotoUrlAttribute()
+    {
+        if (!empty($this->thumbnail)) {
+            return asset($this->thumbnail->file_name);
+        }
+        
+        return '';
+    }
+}
