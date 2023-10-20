@@ -85,7 +85,7 @@ $customizerHidden = 'customizer-hide';
           <h4 class="mb-2">Welcome to Upstream! 👋</h4>
           <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
-          @include('shared.form-errors')
+          @include('shared.form-alerts')
 
           <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="post">
             @csrf

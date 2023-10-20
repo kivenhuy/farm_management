@@ -13,7 +13,7 @@
 
   <ul class="aiz-side-nav-list" id="main-menu" data-toggle="aiz-side-menu">
     <li class="aiz-side-nav-item">
-        <a class="aiz-side-nav-link">
+        <a class="aiz-side-nav-link" href="{{ route('season-masters.index') }}">
             <i class="las la-home aiz-side-nav-icon"></i>
             <span class="aiz-side-nav-text">Season Master</span>
         </a>

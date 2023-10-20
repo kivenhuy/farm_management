@@ -2,8 +2,11 @@
 
 @section('content')
     <div class="container p-0">
+        <div>
+            <a href="{{ route('season-masters.create') }}" class="btn btn-info mb-4">Create Season Master</a>
+        </div>
         <form action="{{ route('season-masters.index')}}" class="mb-5">
-            @csrf
+            {{-- @csrf --}}
             <div class="form-group row align-items-center">
                 <div class="col">
                     <div>
@@ -11,28 +14,28 @@
                         <select name="season_code" id="js-season-code" class="form-control">
                             <option value="">Select Season</option>
                             @foreach (\App\Models\Season::get()->pluck('name', 'code') as $code => $name)
-                                <option value="{{  $code }}">{{ $name }}</option>
+                                <option value="{{  $code }}" {{ $code == $seasonCode ? 'selected' : ''}}>{{ $name }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="col">
                     <label for="js-from-period">From period</label>
-                    <input id="js-from-period" name="from_period" type="text" class="form-control datatimepicker-enable" value="" autocomplete="off">
+                    <input id="js-from-period" name="from_period" type="text" class="form-control datatimepicker-enable" value="{{ $fromPefiod }}" autocomplete="off" placeholder="From Period">
                 </div>
                 <div class="col">
                     <label for="js-to-period">To period</label>
-                    <input id="js-to-period" name="to_period" type="text" class="form-control datatimepicker-enable" value="" autocomplete="off">
+                    <input id="js-to-period" name="to_period" type="text" class="form-control datatimepicker-enable" value="{{ $toPefiod }}" autocomplete="off" placeholder="To Period">
                 </div>
                 <div class="col">
                     <label for="js-to-period">Status</label>
                     <div class="d-flex">
                         <div class="form-check mt-2" style="margin-right: 1rem;">
-                            <input class="form-check-input" type="radio" name="status" id="status-active" value="active">
+                            <input class="form-check-input" type="radio" name="status" id="status-active" value="active" {{ $status == 'active' ? 'checked' : ''}}>
                             <label class="form-check-label" for="status-active">Active</label>
                         </div>
                         <div class="form-check  mt-2">
-                            <input class="form-check-input" type="radio" name="status" id="status-inactive" value="inactive">
+                            <input class="form-check-input" type="radio" name="status" id="status-inactive" value="inactive" {{ $status == 'inactive' ? 'checked' : ''}}>
                             <label class="form-check-label" for="status-inactive">Inactive</label>
                         </div>
                     </div>
@@ -44,13 +47,14 @@
         </form>
 
         @if($seasonMasters->count())
-        <table class="table">
+        <table class="table table-bordered">
             <thead>
-              <tr>
-                <th scope="col">Season</th>
-                <th scope="col">From period</th>
-                <th scope="col">To period</th>
-                <th scope="col">Status</th>
+              <tr style="background-color: #666cff;">
+                <th scope="col" style="color:white;">Season</th>
+                <th scope="col" style="color:white;">From period</th>
+                <th scope="col" style="color:white;">To period</th>
+                <th scope="col" style="color:white;">Status</th>
+                <th scope="col" style="color:white;">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -60,11 +64,28 @@
                     <td>{{ $seasonMaster->from_period}}</td>
                     <td>{{ $seasonMaster->to_period}}</td>
                     <td>{{ $seasonMaster->status == 'active' ? 'Active' : 'Inactive'}} </td>
+                    <td style="width: 250px;">
+                        <a href="{{ route('season-masters.edit', ['season_master' => $seasonMaster]) }}" class="btn btn-primary btn-sm text-white" style="margin-right: 10px;"><i class="fa fa-edit"></i>Edit</a>    
+                        <form method="POST" action="{{ route('season-masters.destroy', ['season_master' => $seasonMaster]) }}" class="d-inline">
+                            {{ method_field('DELETE') }}
+                            @csrf
+
+                            <button type="button" class="btn btn-sm btn-danger js-delete-season" data-delete-season-title="{{ $seasonMaster->season->name }}"><i class="fa fa-trash"></i> Delete</button>
+                        </form>
+
+                        {{-- <a href="{{ }}" class="btn btn-danger">Delete</a>     --}}
+                    </td>
                 </tr>
               @endforeach
             </tbody>
           </table>
         @endif
+
+        <div class="position-relative" style="min-height: 30px">
+            {{ $seasonMasters->links('shared.paginator') }}
+
+            <div style="position: absolute;right: 19px; top:0"><span class="font-weight-bold">{{ $seasonMasters->total() }}</span> results found</div>
+        </div>
     </div>
 @endsection 
 
@@ -80,6 +101,14 @@
                 format: 'Y-m-d',
         		datepicker: true,
                 timepicker: false,
+            });
+
+            $('.js-delete-season').click(function () {
+                var message = 'Are you sure to delete "' + $(this).data('delete-season-title') + '"?';
+
+                if (confirm(message)) {
+                    $(this).closest('form').submit();
+                }
             });
         });
     </script>
