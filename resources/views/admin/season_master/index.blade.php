@@ -61,7 +61,7 @@
                 @if($seasonMasters->count())
                     @foreach ($seasonMasters as $seasonMaster)  
                         <tr>
-                            <td>{{ $seasonMaster->season->name}}</td>
+                            <td>{{ $seasonMaster->name}}</td>
                             <td>{{ $seasonMaster->from_period}}</td>
                             <td>{{ $seasonMaster->to_period}}</td>
                             <td>{{ $seasonMaster->status == 'active' ? 'Active' : 'Inactive'}} </td>
@@ -71,7 +71,7 @@
                                     {{ method_field('DELETE') }}
                                     @csrf
 
-                                    <button type="button" class="btn btn-sm btn-danger js-delete-season" data-delete-season-title="{{ $seasonMaster->season->name }}"><i class="fa fa-trash"></i> Delete</button>
+                                    <button type="button" class="btn btn-sm btn-danger js-delete-season" data-delete-season-title="{{ $seasonMaster->name }}"><i class="fa fa-trash"></i> Delete</button>
                                 </form>
 
                                 {{-- <a href="{{ }}" class="btn btn-danger">Delete</a>     --}}

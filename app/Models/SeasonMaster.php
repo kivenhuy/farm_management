@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SeasonMaster extends Model
 {
     use HasFactory;
+    protected $table = 'seasons';
 
     public function season()
     {

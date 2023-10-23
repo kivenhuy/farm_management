@@ -1,0 +1,6 @@
+php artisan make:model AssetInfo --migration
+php artisan make:model BankInfo --migration
+php artisan make:model FinanceInfo --migration
+php artisan make:model InsuranceInfo --migration
+php artisan make:model FarmEquipment --migration
+php artisan make:model FamilyInfo --migration

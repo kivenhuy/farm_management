@@ -35,15 +35,18 @@
   <link rel="stylesheet" href="{{ asset('custom\css\style.css?v=')}}{{ now()->timestamp}}">
   
   @yield('style')
-
+  <script>
+    var AIZ = AIZ || {};
+        AIZ.local = {}
+  </script>
 </head>
 
 <body>
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
       
-          @include('layouts/app-sections/verticalMenu')
-      
+          {{-- @include('layouts/app-sections/navbar') --}}
+          @include('layouts/sections/menu/verticalMenu')
       
           <!-- Layout page -->
           <div class="layout-page">
@@ -119,7 +122,7 @@
   @stack('scripts')
 
     
-  {{-- <script src="{{ asset('js/aiz-core.js') }}" ></script> --}}
+  
 </body>
 
 </html>
