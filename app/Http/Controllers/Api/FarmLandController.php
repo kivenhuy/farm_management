@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\FarmCatalogue;
 use App\Models\FarmLand;
 use App\Models\FarmLandLatLng;
 use Illuminate\Http\Request;
@@ -23,7 +24,38 @@ class FarmLandController extends Controller
      */
     public function create()
     {
-        //
+        $data_appoarch_road = [];
+        $data_land_topolog = [];
+        $data_land_gradient = [];
+        $data_land_document = [];
+        $appoarch_road = FarmCatalogue::where('NAME','Approach Road')->first();
+        if(isset($appoarch_road))
+        {
+            $data_appoarch_road = $appoarch_road->catalogue_value()->get();
+        }
+        $land_topolog = FarmCatalogue::where('NAME','Land Topology')->first();
+        if(isset($land_topolog))
+        {
+            $data_land_topolog = $land_topolog->catalogue_value()->get();
+        }
+        $land_gradient = FarmCatalogue::where('NAME','Land Gradient')->first();
+        if(isset($land_gradient))
+        {
+            $data_land_gradient = $land_gradient->catalogue_value()->get();
+        }
+        $land_document = FarmCatalogue::where('NAME','Land Document')->first();
+        if(isset($land_document))
+        {
+            $data_land_document = $land_document->catalogue_value()->get();
+        }
+        return response()->json([
+            'result' => true,
+            'message' => 'Farmer Created Successfully',
+            'data_appoarch_road' =>$data_appoarch_road,
+            'data_land_topolog' =>$data_land_topolog,
+            'data_land_gradient' =>$data_land_gradient,
+            'data_land_document' =>$data_land_document
+        ]);
     }
 
     /**
@@ -87,9 +119,16 @@ class FarmLandController extends Controller
                     'lat'=> $lat_lng[0], 
                     'lng'=> $lat_lng[1] 
                 ];
-                $farm_land_lat_lng->create($farm_land_lat_lng_data);
+                $final_farm_land_lat_lng=$farm_land_lat_lng->create($farm_land_lat_lng_data);
             }
         }
+
+        return response()->json([
+            'result' => true,
+            'message' => 'Farmer Created Successfully',
+            'farm_land' =>$final_farm_land,
+            'farm_land_lat_lng' =>$final_farm_land_lat_lng
+        ]);
     }
 
     /**

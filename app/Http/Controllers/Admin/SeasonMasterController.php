@@ -36,7 +36,6 @@ class SeasonMasterController extends Controller
         }
 
         $seasonMasters = $seasonMasterQuery->paginate()->appends($request->except('page'));
-
         return view('admin.season_master.index', compact('seasonMasters', 'seasonCode', 'fromPefiod', 'toPefiod', 'status'));
     }
 
