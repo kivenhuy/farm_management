@@ -32,7 +32,7 @@
                             <td>{{ $cropInformation->duration . ' ' . $cropInformation->duration_type }}</td>
                             <td>{{ number_format($cropInformation->expected_expense) . ' VND'}}</td>
                             <td>{{ number_format($cropInformation->expected_income) . ' VND'}}</td>
-                            <td>{{ $cropInformation->expected_yield }}</td>
+                            <td>{{ $cropInformation->expected_yield . ' ' . $cropInformation->expected_yield_type }}</td>
                             <td style="width: 250px;">
                                 <a href="{{ route('crop-informations.edit', ['crop_information' => $cropInformation]) }}" class="btn btn-primary btn-sm text-white" style="margin-right: 10px;"><i class="fa fa-edit"></i>Edit</a>    
                                 <form method="POST" action="{{ route('crop-informations.destroy', ['crop_information' => $cropInformation]) }}" class="d-inline">
