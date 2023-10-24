@@ -32,7 +32,8 @@ class FarmersController extends Controller
      */
     public function index()
     {
-        $farmer_data = FarmerDetails::all();
+        $user_login = Auth::user();
+        $farmer_data = FarmerDetails::where('staff_id',$user_login->id)->get();
         foreach ($farmer_data as $details_farmer_data)
         {
             $details_farmer_data->farmer_photo = uploaded_asset($details_farmer_data->farmer_photo);
