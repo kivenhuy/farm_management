@@ -73,8 +73,5 @@
     {   
         
     });
-    function myFunction() {
-            alert('aaa')
-        }
 </script>
 @endpush
