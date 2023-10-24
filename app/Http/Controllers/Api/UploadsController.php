@@ -150,7 +150,7 @@ class UploadsController extends Controller
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
 
                 // Get the MIME type of the file
-                $file_mime = finfo_file($finfo, base_path('public/storage/') . $path);
+                // $file_mime = finfo_file($finfo, base_path('public/storage/') . $path);
 
                 // if ($type[$extension] == 'image' && get_setting('disable_image_optimization') != 1) {
                 //     try {
