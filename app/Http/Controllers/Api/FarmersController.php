@@ -230,37 +230,113 @@ class FarmersController extends Controller
                 'message' => 'Farmer Not Exists',
             ]);
         }
-        // $family_info = new FamilyInfo();
-        $data_insurance_info = [
-            'life_insurance'=>$request->life_insurance,
-            'provider_life_insurance'=>$request->provider_life_insurance,
-            'life_insurance_amount'=>$request->life_insurance_amount,
-            'life_insurance_enrolled_date'=>$request->life_insurance_enrolled_date,
-            'life_insurance_end_date'=>$request->life_insurance_end_date,
-            'health_insurance'=>$request->health_insurance,
-            'provider_health_insurance'=>$request->provider_health_insurance,
-            'health_insurance_amount'=>$request->health_insurance_amount,
-            'health_insurance_enrolled_date'=>$request->health_insurance_enrolled_date,
-            'health_insurance_end_date'=>$request->health_insurance_end_date,
-            'crop_insurance'=>$request->crop_insurance,
-            'provider_crop_insurance'=>$request->provider_crop_insurance,
-            'crop_insured'=>$request->crop_insured,
-            'no_of_area_insured'=>$request->no_of_area_insured,
-            'crop_insurance_enrolled_date'=>$request->crop_insurance_enrolled_date,
-            'crop_insurance_end_date'=>$request->life_insuranccrop_insurance_end_datee,
-            'social_insurance'=>$request->social_insurance,
-            'provider_social_insurance'=>$request->provider_social_insurance,
-            'social_insurance_enrolled_date'=>$request->social_insurance_enrolled_date,
-            'social_insurance_end_date'=>$request->social_insurance_end_date,
-            'other_insurance'=>$request->other_insurance
-        ];
-        $insurance_info = InsuranceInfo::updateOrCreate(['farmer_id'=>$id], $data_insurance_info );
-        if(isset($insurance_info))
+        $all_insurance_update = [];
+        if(count($request->data_insurance) == 0)
+        {
+            return response()->json([
+                'result' => false,
+                'message' => 'No Data Update',
+            ]);
+        }
+        foreach($request->data_insurance as $sub_data_insurance)
+        {
+            $life_insurance = "";
+            $provider_life_insurance = "";
+            $life_insurance_amount = 0;
+            $life_insurance_enrolled_date = "";
+            $life_insurance_end_date = "";
+            $health_insurance = "";
+            $provider_health_insurance = "";
+            $health_insurance_amount = 0;
+            $health_insurance_enrolled_date = "";
+            $health_insurance_end_date = "";
+            $crop_insurance = "";
+            $provider_crop_insurance = "";
+            $crop_insured = 0;
+            $no_of_area_insured = 0;
+            $crop_insurance_enrolled_date = "";
+            $crop_insurance_end_date = "";
+            $social_insurance = "";
+            $provider_social_insurance = "";
+            $social_insurance_enrolled_date = "";
+            $social_insurance_end_date = "";
+            $other_insurance = $request->other_insurance;
+            if($sub_data_insurance['life_insurance'] == "yes")
+            {
+                $life_insurance = $sub_data_insurance['life_insurance'];
+                $provider_life_insurance = $sub_data_insurance['provider_life_insurance'];
+                $life_insurance_amount = $sub_data_insurance['life_insurance_amount'];
+                $life_insurance_enrolled_date = $sub_data_insurance['life_insurance_enrolled_date'];
+                $life_insurance_end_date = $sub_data_insurance['life_insurance_end_date'];
+            }
+            if($sub_data_insurance['health_insurance'] == "yes")
+            {
+                $health_insurance = $sub_data_insurance['health_insurance'];
+                $provider_health_insurance = $sub_data_insurance['provider_health_insurance'];
+                $health_insurance_amount = $sub_data_insurance['health_insurance_amount'];
+                $health_insurance_enrolled_date = $sub_data_insurance['health_insurance_enrolled_date'];
+                $health_insurance_end_date = $sub_data_insurance['health_insurance_end_date'];
+            }
+            if($sub_data_insurance['crop_insurance'] == "yes")
+            {
+                $crop_insurance = $sub_data_insurance['crop_insurance'];
+                $provider_crop_insurance = $sub_data_insurance['provider_crop_insurance'];
+                $crop_insured = $sub_data_insurance['crop_insured'];
+                $no_of_area_insured = $sub_data_insurance['no_of_area_insured'];
+                $crop_insurance_enrolled_date = $sub_data_insurance['crop_insurance_enrolled_date'];
+                $crop_insurance_end_date = $sub_data_insurance['crop_insurance_end_date'];
+            }
+            if($sub_data_insurance['social_insurance'] == "yes")
+            {
+                $social_insurance = $sub_data_insurance['social_insurance'];
+                $provider_social_insurance = $sub_data_insurance['provider_social_insurance'];
+                $social_insurance_enrolled_date = $sub_data_insurance['social_insurance_enrolled_date'];
+                $life_insurance_enrolled_date = $sub_data_insurance['life_insurance_enrolled_date'];
+                $social_insurance_end_date = $sub_data_insurance['social_insurance_end_date'];
+            }
+            $data_insurance_info = [
+                'farmer_id'=>$id,
+                'life_insurance'=>$life_insurance,
+                'provider_life_insurance'=>$provider_life_insurance,
+                'life_insurance_amount'=>$life_insurance_amount,
+                'life_insurance_enrolled_date'=>$life_insurance_enrolled_date,
+                'life_insurance_end_date'=>$life_insurance_end_date,
+                'health_insurance'=>$health_insurance,
+                'provider_health_insurance'=>$provider_health_insurance,
+                'health_insurance_amount'=>$health_insurance_amount,
+                'health_insurance_enrolled_date'=>$health_insurance_enrolled_date,
+                'health_insurance_end_date'=>$health_insurance_end_date,
+                'crop_insurance'=>$crop_insurance,
+                'provider_crop_insurance'=>$provider_crop_insurance,
+                'crop_insured'=>$crop_insured,
+                'no_of_area_insured'=>$no_of_area_insured,
+                'crop_insurance_enrolled_date'=>$crop_insurance_enrolled_date,
+                'crop_insurance_end_date'=>$crop_insurance_end_date,
+                'social_insurance'=>$social_insurance,
+                'provider_social_insurance'=>$provider_social_insurance,
+                'social_insurance_enrolled_date'=>$social_insurance_enrolled_date,
+                'social_insurance_end_date'=>$social_insurance_end_date,
+                'other_insurance'=>$other_insurance
+            ];
+            if($sub_data_insurance['id'] == "")
+            {
+                $creat_insurance = new InsuranceInfo();
+                $insurance_info = $creat_insurance->create($data_insurance_info);
+                array_push($all_insurance_update,$insurance_info);  
+            }
+            else
+            {
+                $creat_insurance = InsuranceInfo::find($sub_data_insurance['id']);
+                $insurance_info = $creat_insurance->create($data_insurance_info);
+                array_push($all_insurance_update,$insurance_info);  
+            }
+        }
+        if(count($all_insurance_update)>0)
         {
             return response()->json([
                 'result' => true,
                 'message' => 'Update Insurance Information Successfully',
-                'bank_info'=>$insurance_info
+                'bank_info'=>$all_insurance_update
             ]);
         }
         else
