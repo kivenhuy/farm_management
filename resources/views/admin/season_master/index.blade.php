@@ -61,7 +61,7 @@
                 @if($seasonMasters->count())
                     @foreach ($seasonMasters as $seasonMaster)  
                         <tr>
-                            <td>{{ $seasonMaster->name}}</td>
+                            <td>{{ $seasonMaster->season->name}}</td>
                             <td>{{ $seasonMaster->from_period}}</td>
                             <td>{{ $seasonMaster->to_period}}</td>
                             <td>{{ $seasonMaster->status == 'active' ? 'Active' : 'Inactive'}} </td>
