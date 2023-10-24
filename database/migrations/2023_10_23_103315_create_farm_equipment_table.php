@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('farm_equipment', function (Blueprint $table) {
             $table->id();
+            $table->string('farm_equipment_items')->nullable();
+            $table->integer('farm_equipment_items_count')->nullable();
+            $table->integer('year_of_manufacture')->nullable();
+            $table->integer('year_of_purchase')->nullable();
             $table->timestamps();
         });
     }

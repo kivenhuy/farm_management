@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bank_infos', function (Blueprint $table) {
+        Schema::create('certificate_information', function (Blueprint $table) {
             $table->id();
-            $table->string('accout_type')->nullable();
-            $table->string('accout_no')->nullable();
-            $table->string('bank_name')->nullable();
-            $table->string('branch_details')->nullable();
-            $table->string('sort_code')->nullable();
+            $table->string('is_certified_farmer')->nullable();
+            $table->string('certification_type')->nullable();
+            $table->integer('year_of_ics')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bank_infos');
+        Schema::dropIfExists('certificate_information');
     }
 };

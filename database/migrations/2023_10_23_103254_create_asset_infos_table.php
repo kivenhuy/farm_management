@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('asset_infos', function (Blueprint $table) {
             $table->id();
-            $table->string('housing_ownership');
-            $table->string('house_type');
-            $table->string('consumer_electronic');
-            $table->string('vehicle');
+            $table->string('housing_ownership')->nullable();
+            $table->string('house_type')->nullable();
+            $table->string('consumer_electronic')->nullable();
+            $table->string('vehicle')->nullable();
             $table->timestamps();
         });
     }
