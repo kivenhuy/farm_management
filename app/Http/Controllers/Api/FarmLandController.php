@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\FarmCatalogue;
+use App\Models\FarmerDetails;
 use App\Models\FarmLand;
 use App\Models\FarmLandLatLng;
 use Illuminate\Http\Request;
@@ -24,10 +25,12 @@ class FarmLandController extends Controller
      */
     public function create()
     {
+        $staff = Auth::user();
         $data_appoarch_road = [];
         $data_land_topolog = [];
         $data_land_gradient = [];
         $data_land_document = [];
+        $data_farmer = [];
         $appoarch_road = FarmCatalogue::where('NAME','Approach Road')->first();
         if(isset($appoarch_road))
         {
@@ -48,13 +51,15 @@ class FarmLandController extends Controller
         {
             $data_land_document = $land_document->catalogue_value()->get();
         }
+        $all_farmer = FarmerDetails::where('staff_id',$staff->id)->get();
         return response()->json([
             'result' => true,
             'message' => 'Farmer Created Successfully',
             'data_appoarch_road' =>$data_appoarch_road,
             'data_land_topolog' =>$data_land_topolog,
             'data_land_gradient' =>$data_land_gradient,
-            'data_land_document' =>$data_land_document
+            'data_land_document' =>$data_land_document,
+            'all_farmer'=>$all_farmer
         ]);
     }
 
