@@ -55,9 +55,6 @@ class AuthController extends Controller
         return response()->json([
             'result' => true,
             'message' => 'Successfully logged in',
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'expires_at' => null,
             'data' =>[
                 'user' => [
                     'id' => $user->id,
@@ -65,7 +62,10 @@ class AuthController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                     'phone' => $user->phone_number,
-                ]
+                ],
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'expires_at' => null,
             ]
         ]);
     }
