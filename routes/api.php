@@ -15,7 +15,7 @@ use App\Http\Controllers\Api\FarmersController;
 |
 */
 
-Route::post('farmer/registration',[App\Http\Controllers\Api\FarmersController::class,'registration']);
+
 
 //Farm Land
 
@@ -32,29 +32,39 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+
+
     Route::get('logout', 'App\Http\Controllers\Api\AuthController@logout');
     Route::get('dashboard', 'App\Http\Controllers\Api\AuthController@dashboard');
     
-    // Farmer Details
-    Route::get('farmer',[App\Http\Controllers\Api\FarmersController::class,'index']);
-    Route::get('farmer/drop_down_for_register',[App\Http\Controllers\Api\FarmersController::class,'drop_down_for_register']);
-    Route::get('farmer/drop_down_for_family_info',[App\Http\Controllers\Api\FarmersController::class,'drop_down_for_family_info']);
-    Route::get('farmer/drop_down_for_asset_info',[App\Http\Controllers\Api\FarmersController::class,'drop_down_for_asset_info']);
-    Route::get('farmer/drop_down_for_bank_info',[App\Http\Controllers\Api\FarmersController::class,'drop_down_for_bank_info']);
-    Route::get('farmer/drop_down_for_finance_info',[App\Http\Controllers\Api\FarmersController::class,'drop_down_for_finance_info']);
-    Route::get('farmer/drop_down_for_insurance_info',[App\Http\Controllers\Api\FarmersController::class,'drop_down_for_insurance_info']);
-    Route::get('farmer/drop_down_for_animal_husbandry',[App\Http\Controllers\Api\FarmersController::class,'drop_down_for_animal_husbandry']);
-    Route::get('farmer/drop_down_for_farm_equipment',[App\Http\Controllers\Api\FarmersController::class,'drop_down_for_farm_equipment']);
-    Route::get('farmer/{id}',[App\Http\Controllers\Api\FarmersController::class,'show']);
+    Route::controller(FarmersController::class)->group(function () {
 
-    // Route::put('farmer/drop_down_for_register',[App\Http\Controllers\Api\FarmersController::class,'drop_down_for_register']);
-    Route::put('farmer/update_family_info',[App\Http\Controllers\Api\FarmersController::class,'update_family_info']);
-    Route::put('farmer/update_asset_info',[App\Http\Controllers\Api\FarmersController::class,'update_asset_info']);
-    Route::put('farmer/update_bank_info',[App\Http\Controllers\Api\FarmersController::class,'update_bank_info']);
-    Route::put('farmer/update_finance_info',[App\Http\Controllers\Api\FarmersController::class,'update_finance_info']);
-    Route::put('farmer/update_insurance_info',[App\Http\Controllers\Api\FarmersController::class,'update_insurance_info']);
-    Route::put('farmer/update_animal_husbandry',[App\Http\Controllers\Api\FarmersController::class,'update_animal_husbandry']);
-    Route::put('farmer/update_farm_equipment',[App\Http\Controllers\Api\FarmersController::class,'update_farm_equipment']);
+        // Farmer Register 
+        Route::post('farmer/registration','registration');
+
+        // Farmer Details
+        Route::get('farmer','index');
+        Route::get('farmer/drop_down_for_register','drop_down_for_register');
+        Route::get('farmer/drop_down_for_family_info','drop_down_for_family_info');
+        Route::get('farmer/drop_down_for_asset_info','drop_down_for_asset_info');
+        Route::get('farmer/drop_down_for_bank_info','drop_down_for_bank_info');
+        Route::get('farmer/drop_down_for_finance_info','drop_down_for_finance_info');
+        Route::get('farmer/drop_down_for_insurance_info','drop_down_for_insurance_info');
+        Route::get('farmer/drop_down_for_animal_husbandry','drop_down_for_animal_husbandry');
+        Route::get('farmer/drop_down_for_farm_equipment','drop_down_for_farm_equipment');
+        Route::get('farmer/{id}','show');
+
+        // Route::put('farmer/drop_down_for_register',[App\Http\Controllers\Api\FarmersController::class,'drop_down_for_register');
+        Route::put('farmer/update_family_info/{id}','update_family_info');
+        Route::put('farmer/update_asset_info/{id}','update_asset_info');
+        Route::put('farmer/update_bank_info/{id}','update_bank_info');
+        Route::put('farmer/update_finance_info/{id}','update_finance_info');
+        Route::put('farmer/update_insurance_info/{id}','update_insurance_info');
+        Route::put('farmer/update_animal_husbandry/{id}','update_animal_husbandry');
+        Route::put('farmer/update_farm_equipment/{id}','update_farm_equipment');
+        Route::put('farmer/update_certificate/{id}','update_certificate');
+    });
+    
 
 
     // Farm land

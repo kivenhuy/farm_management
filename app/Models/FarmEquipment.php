@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class FarmEquipment extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'farmer_id',
+        'farm_equipment_items',
+        'farm_equipment_items_count',
+        'year_of_manufacture',
+        'year_of_purchase',
+    ];
 }

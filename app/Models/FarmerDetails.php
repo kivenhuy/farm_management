@@ -10,6 +10,7 @@ class FarmerDetails extends Model
     use HasFactory;
 
     protected $fillable = [
+        'staff_id',
         'user_id',
         'enrollment_date',
         'enrollment_place',
