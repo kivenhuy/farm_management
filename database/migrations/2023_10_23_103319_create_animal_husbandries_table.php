@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('animal_husbandries', function (Blueprint $table) {
             $table->id();
+            $table->string('farm_animal')->nullable();
+            $table->integer('animal_count')->nullable();
+            $table->string('fodder')->nullable();
+            $table->string('animal_housing')->nullable();
+            $table->string('revenue')->nullable();
+            $table->string('breed_name')->nullable();
+            $table->string('animal_for_growth')->nullable();
             $table->timestamps();
         });
     }

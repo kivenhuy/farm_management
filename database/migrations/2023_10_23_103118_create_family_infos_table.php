@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('family_infos', function (Blueprint $table) {
             $table->id();
-            $table->string('education');
-            $table->string('marial_status');
-            $table->string('parent_name');
-            $table->string('spouse_name');
-            $table->string('no_of_family');
-            $table->string('education');
-            $table->longText('total_child_under_18');
-            $table->longText('total_child_under_18_going_school');
+            $table->string('education')->nullable();
+            $table->string('marial_status')->nullable();
+            $table->string('parent_name')->nullable();
+            $table->string('spouse_name')->nullable();
+            $table->string('no_of_family')->nullable();
+            $table->longText('total_child_under_18')->nullable();
+            $table->longText('total_child_under_18_going_school')->nullable();
             $table->timestamps();
         });
     }
