@@ -119,7 +119,7 @@ class FarmersController extends Controller
     public function update_family_info(Request $request, string $id)
     {
         $data_family = $request->data_family;
-        $farmer_data = FarmerDetails::where('user_id',$id)->first();
+        $farmer_data = FarmerDetails::find($id);
         if(!isset($farmer_data))
         {
             return response()->json([
@@ -137,7 +137,7 @@ class FarmersController extends Controller
             'total_child_under_18'=>json_encode($data_family['total_child_under_18']),
             'total_child_under_18_going_school'=>$data_family['total_child_under_18_going_school']
         ];
-        $family_info = FamilyInfo::updateOrCreate(['farmer_id'=>$id], $data_family_info );
+        $family_info = FamilyInfo::updateOrCreate(['farmer_id'=>$farmer_data->id], $data_family_info );
         if(isset($family_info))
         {
             return response()->json([
@@ -162,7 +162,7 @@ class FarmersController extends Controller
     public function update_asset_info(Request $request, string $id)
     {
         $data_asset = $request->data_asset;
-        $farmer_data = FarmerDetails::where('user_id',$id)->first();
+        $farmer_data = FarmerDetails::find($id);
         if(!isset($farmer_data))
         {
             return response()->json([
@@ -177,7 +177,7 @@ class FarmersController extends Controller
             'consumer_electronic'=>$data_asset['consumer_electronic'],
             'vehicle'=>$data_asset['vehicle']
         ];
-        $asset_info = AssetInfo::updateOrCreate(['farmer_id'=>$id], $data_asset_info );
+        $asset_info = AssetInfo::updateOrCreate(['farmer_id'=>$farmer_data->id], $data_asset_info );
         if(isset($asset_info))
         {
             return response()->json([
@@ -202,7 +202,7 @@ class FarmersController extends Controller
     public function update_bank_info(Request $request, string $id)
     {
         $data_bank = $request->data_bank;
-        $farmer_data = FarmerDetails::where('user_id',$id)->first();
+        $farmer_data = FarmerDetails::find($id);
         $all_bank_update = [];
         if(!isset($farmer_data))
         {
@@ -214,7 +214,7 @@ class FarmersController extends Controller
         foreach($data_bank as $sub_data_bank)
         {
             $data_bank_info = [
-                'farmer_id'=>$id,
+                'farmer_id'=>$farmer_data->id,
                 'accout_type'=>$sub_data_bank['accout_type'],
                 'accout_no'=>$sub_data_bank['accout_no'],
                 'bank_name'=>$sub_data_bank['bank_name'],
@@ -251,7 +251,7 @@ class FarmersController extends Controller
     // Insurance Info
     public function update_insurance_info(Request $request, string $id)
     {
-        $farmer_data = FarmerDetails::where('user_id',$id)->first();
+        $farmer_data = FarmerDetails::find($id);
         if(!isset($farmer_data))
         {
             return response()->json([
@@ -324,7 +324,7 @@ class FarmersController extends Controller
                 $social_insurance_end_date = $sub_data_insurance['social_insurance_end_date'];
             }
             $data_insurance_info = [
-                'farmer_id'=>$id,
+                'farmer_id'=>$farmer_data->id,
                 'life_insurance'=>$life_insurance,
                 'provider_life_insurance'=>$provider_life_insurance,
                 'life_insurance_amount'=>$life_insurance_amount,
@@ -388,7 +388,7 @@ class FarmersController extends Controller
     public function update_finance_info(Request $request, string $id)
     {
         $data_finance = $request->data_finance;
-        $farmer_data = FarmerDetails::where('user_id',$id)->first();
+        $farmer_data = FarmerDetails::find($id);
         if(!isset($farmer_data))
         {
             return response()->json([
@@ -407,7 +407,7 @@ class FarmersController extends Controller
             'loan_repayment_amount'=>$data_finance['loan_repayment_amount'],
             'loan_repayment_date'=>$data_finance['loan_repayment_date']
         ];
-        $finance_info = FinanceInfo::updateOrCreate(['farmer_id'=>$id], $data_finance_info );
+        $finance_info = FinanceInfo::updateOrCreate(['farmer_id'=>$farmer_data->id], $data_finance_info );
         if(isset($finance_info))
         {
             return response()->json([
@@ -433,7 +433,7 @@ class FarmersController extends Controller
     public function update_farm_equipment(Request $request, string $id)
     {
         $data_farm_equipment = $request->data_farm_equipment;
-        $farmer_data = FarmerDetails::where('user_id',$id)->first();
+        $farmer_data = FarmerDetails::find($id);
         $all_farm_equipment = [];
         if(!isset($farmer_data))
         {
@@ -445,7 +445,7 @@ class FarmersController extends Controller
         foreach($data_farm_equipment as $sub_data_farm_equipment)
         {
             $data_create_farm_equipment = [
-                'farmer_id'=>$id,
+                'farmer_id'=>$farmer_data->id,
                 'farm_equipment_items'=>$sub_data_farm_equipment['farm_equipment_items'],
                 'farm_equipment_items_count'=>$sub_data_farm_equipment['farm_equipment_items_count'],
                 'year_of_manufacture'=>$sub_data_farm_equipment['year_of_manufacture'],
@@ -482,7 +482,7 @@ class FarmersController extends Controller
     public function update_animal_husbandry(Request $request, string $id)
     {
         $data_animal_husbandry = $request->data_animal_husbandry;
-        $farmer_data = FarmerDetails::where('user_id',$id)->first();
+        $farmer_data = FarmerDetails::find($id);
         $all_animal_husbandry = [];
         if(!isset($farmer_data))
         {
@@ -494,7 +494,7 @@ class FarmersController extends Controller
         foreach($data_animal_husbandry as $sub_data_animal_husbandry)
         {
             $data_create_animal_husbandry = [
-                'farmer_id'=>$id,
+                'farmer_id'=>$farmer_data->id,
                 'farm_animal'=>$sub_data_animal_husbandry['farm_animal'],
                 'animal_count'=>$sub_data_animal_husbandry['animal_count'],
                 'fodder'=>$sub_data_animal_husbandry['fodder'],
@@ -534,7 +534,7 @@ class FarmersController extends Controller
     public function update_certificate(Request $request, string $id)
     {
         $data_certificate = $request->data_certificate;
-        $farmer_data = FarmerDetails::where('user_id',$id)->first();
+        $farmer_data = FarmerDetails::find($id);
         if(!isset($farmer_data))
         {
             return response()->json([
@@ -548,7 +548,7 @@ class FarmersController extends Controller
             'certification_type'=>$data_certificate['certification_type'],
             'year_of_ics'=>$data_certificate['year_of_ics']
         ];
-        $certitifcate_info = CertificateInformation::updateOrCreate(['farmer_id'=>$id], $data_certitifcate_info );
+        $certitifcate_info = CertificateInformation::updateOrCreate(['farmer_id'=>$farmer_data->id], $data_certitifcate_info );
         if(isset($certitifcate_info))
         {
             return response()->json([

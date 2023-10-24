@@ -65,6 +65,7 @@ class FarmLandController extends Controller
     {
         $data_farm_land_lat_lng = json_decode($request->list_lat_lng);
         $user = Auth::user();
+        // dd($user->farmer_detail()->first()->id);
         $farm_photo = [];
         $land_document = [];
         if (!empty($request->all()['farm_photo'])) {
@@ -90,7 +91,7 @@ class FarmLandController extends Controller
         }
 
         $data_farm_land = [
-            'user_id' =>$user->id,
+            'farmer_id' => $request->farmer,
             'farm_name' => $request->farm_name,
             'total_land_holding' => $request->total_land_holding,
             'lat' => $request->lat,

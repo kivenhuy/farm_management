@@ -9,7 +9,7 @@ class FarmLand extends Model
 {
     use HasFactory;
     protected $fillable = [
-            'user_id',
+            'farmer_id',
             'farm_name',
             'total_land_holding',
             'lat',
