@@ -3,16 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\AssetInfo;
+use App\Models\BankInfo;
 use App\Models\Commune;
 use App\Models\Country;
 use App\Models\CropInformation;
 use App\Models\District;
+use App\Models\FamilyInfo;
 use App\Models\FarmCatalogue;
 use App\Models\FarmerDetails;
+use App\Models\InsuranceInfo;
 use App\Models\Province;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -35,7 +40,9 @@ class FarmersController extends Controller
         return response()->json([
             'result' => true,
             'message' => 'Get All Farmer Successfully',
-            'farmer_data' =>$farmer_data
+            'data' =>[
+                'farmer_data'=>$farmer_data
+            ]
         ]);
     }
 
@@ -91,14 +98,200 @@ class FarmersController extends Controller
         return response()->json([
             'result' => true,
             'message' => 'Get Farmer Successfully',
-            'farmer_data' =>$farmer_data
+            'data' =>[
+                'farmer_data'=>$farmer_data
+            ]
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
+    // Family Info
     public function update_family_info(Request $request, string $id)
+    {
+        $farmer_data = FarmerDetails::where('user_id',$id)->first();
+        if(!isset($farmer_data))
+        {
+            return response()->json([
+                'result' => false,
+                'message' => 'Farmer Not Exists',
+            ]);
+        }
+        // $family_info = new FamilyInfo();
+        $data_family_info = [
+            'education'=>$request->education,
+            'marial_status'=>$request->marial_status,
+            'parent_name'=>$request->parent_name,
+            'spouse_name'=>$request->spouse_name,
+            'no_of_family'=>$request->no_of_family,
+            'total_child_under_18'=>json_encode($request->total_child_under_18),
+            'total_child_under_18_going_school'=>$request->total_child_under_18_going_school
+        ];
+        $family_info = FamilyInfo::updateOrCreate(['farmer_id'=>$id], $data_family_info );
+        if(isset($family_info))
+        {
+            return response()->json([
+                'result' => true,
+                'message' => 'Update Family Information Successfully',
+                'family_info'=>$family_info
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'result' => false,
+                'message' => 'Update Family Information Failed',
+            ]);
+        }
+    }
+
+    // Asset Info
+    public function update_asset_info(Request $request, string $id)
+    {
+        $farmer_data = FarmerDetails::where('user_id',$id)->first();
+        if(!isset($farmer_data))
+        {
+            return response()->json([
+                'result' => false,
+                'message' => 'Farmer Not Exists',
+            ]);
+        }
+        // $family_info = new FamilyInfo();
+        $data_asset_info = [
+            'housing_ownership'=>$request->housing_ownership,
+            'house_type'=>$request->house_type,
+            'consumer_electronic'=>$request->consumer_electronic,
+            'vehicle'=>$request->vehicle
+        ];
+        $asset_info = AssetInfo::updateOrCreate(['farmer_id'=>$id], $data_asset_info );
+        if(isset($asset_info))
+        {
+            return response()->json([
+                'result' => true,
+                'message' => 'Update Asset Information Successfully',
+                'asset_info'=>$asset_info
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'result' => false,
+                'message' => 'Update Asset Information Failed',
+            ]);
+        }
+    }
+
+    //Bank Info 
+    public function update_bank_info(Request $request, string $id)
+    {
+        $farmer_data = FarmerDetails::where('user_id',$id)->first();
+        if(!isset($farmer_data))
+        {
+            return response()->json([
+                'result' => false,
+                'message' => 'Farmer Not Exists',
+            ]);
+        }
+        // $family_info = new FamilyInfo();
+        $data_bank_info = [
+            'accout_type'=>$request->accout_type,
+            'accout_no'=>$request->accout_no,
+            'bank_name'=>$request->bank_name,
+            'branch_details'=>$request->branch_details,
+            'sort_code'=>$request->sort_code
+        ];
+        $bank_info = BankInfo::updateOrCreate(['farmer_id'=>$id], $data_bank_info );
+        if(isset($bank_info))
+        {
+            return response()->json([
+                'result' => true,
+                'message' => 'Update Bank Information Successfully',
+                'bank_info'=>$bank_info
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'result' => false,
+                'message' => 'Update Bank Information Failed',
+            ]);
+        }
+    }
+
+    // Insurance Info
+    public function update_insurance_info(Request $request, string $id)
+    {
+        $farmer_data = FarmerDetails::where('user_id',$id)->first();
+        if(!isset($farmer_data))
+        {
+            return response()->json([
+                'result' => false,
+                'message' => 'Farmer Not Exists',
+            ]);
+        }
+        // $family_info = new FamilyInfo();
+        $data_insurance_info = [
+            'life_insurance'=>$request->life_insurance,
+            'provider_life_insurance'=>$request->provider_life_insurance,
+            'life_insurance_amount'=>$request->life_insurance_amount,
+            'life_insurance_enrolled_date'=>$request->life_insurance_enrolled_date,
+            'life_insurance_end_date'=>$request->life_insurance_end_date,
+            'health_insurance'=>$request->health_insurance,
+            'provider_health_insurance'=>$request->provider_health_insurance,
+            'health_insurance_amount'=>$request->health_insurance_amount,
+            'health_insurance_enrolled_date'=>$request->health_insurance_enrolled_date,
+            'health_insurance_end_date'=>$request->health_insurance_end_date,
+            'crop_insurance'=>$request->crop_insurance,
+            'provider_crop_insurance'=>$request->provider_crop_insurance,
+            'crop_insured'=>$request->crop_insured,
+            'no_of_area_insured'=>$request->no_of_area_insured,
+            'crop_insurance_enrolled_date'=>$request->crop_insurance_enrolled_date,
+            'crop_insurance_end_date'=>$request->life_insuranccrop_insurance_end_datee,
+            'social_insurance'=>$request->social_insurance,
+            'provider_social_insurance'=>$request->provider_social_insurance,
+            'social_insurance_enrolled_date'=>$request->social_insurance_enrolled_date,
+            'social_insurance_end_date'=>$request->social_insurance_end_date,
+            'other_insurance'=>$request->other_insurance
+        ];
+        $insurance_info = InsuranceInfo::updateOrCreate(['farmer_id'=>$id], $data_insurance_info );
+        if(isset($insurance_info))
+        {
+            return response()->json([
+                'result' => true,
+                'message' => 'Update Insurance Information Successfully',
+                'bank_info'=>$insurance_info
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'result' => false,
+                'message' => 'Update Insurance Information Failed',
+            ]);
+        }
+    }
+
+    // Finance Info
+    public function update_finance_info(Request $request, string $id)
+    {
+        
+    }
+
+    // Farm Equipment 
+    public function update_farm_equipment(Request $request, string $id)
+    {
+        
+    }
+
+    // Animal Husbandry
+    public function update_animal_husbandry(Request $request, string $id)
+    {
+        
+    }
+
+    // Certification
+    public function update_certificate(Request $request, string $id)
     {
         
     }
@@ -124,6 +317,7 @@ class FarmersController extends Controller
                 'message' => $validator->messages(),
             ]);
         }
+        $staff = Auth::user();
         $user = New User();
         $farmer_details = New FarmerDetails();
 
@@ -131,15 +325,6 @@ class FarmersController extends Controller
         {
             $email = "";
         }
-        $user_data = [
-            'name' =>$request->full_name,
-            'user_type'=>'farmer',
-            'username'=>$request->full_name,
-            'email'=>$email,
-            'password'=>Hash::make($request->password),
-            'phone_number'=>$request->phone_number,
-            'email_verified_at' => ''
-        ];
 
         $user = new User(); 
         $user->name = $request->full_name; 
@@ -178,6 +363,7 @@ class FarmersController extends Controller
         $current_timestamp = Carbon::now()->timestamp; 
         $farmer_code = 'Farmer-'.$ldate.'-'.$current_timestamp;
         $data_farmer_details =[
+            'staff_id'=>$staff->id,
             'user_id'=>$user->id,
             'enrollment_date' =>$request->enrollment_date,
             'enrollment_place'=>$request->enrollment_place,
@@ -202,7 +388,9 @@ class FarmersController extends Controller
         return response()->json([
             'result' => true,
             'message' => 'Farmer Registration Successfully',
-            'farmer_data' =>$farmer_data
+            'data' =>[
+                'farmer_data'=>$farmer_data
+            ]
         ]);
     }
 
