@@ -58,12 +58,14 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
             'expires_at' => null,
-            'user' => [
-                'id' => $user->id,
-                'type' => $user->user_type,
-                'name' => $user->name,
-                'email' => $user->email,
-                'phone' => $user->phone_number,
+            'data' =>[
+                'user' => [
+                    'id' => $user->id,
+                    'type' => $user->user_type,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' => $user->phone_number,
+                ]
             ]
         ]);
     }
