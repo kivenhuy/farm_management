@@ -593,12 +593,11 @@ class FarmersController extends Controller
         $staff = Auth::user();
         $user = New User();
         $farmer_details = New FarmerDetails();
-
-        if($request->email == null)
+        $email = "";
+        if($request->email != "")
         {
-            $email = "";
+            $email = $request->email;
         }
-
         $user = new User(); 
         $user->name = $request->full_name; 
         $user->user_type = "farmer"; 
