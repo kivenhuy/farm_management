@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('farmer_details', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->integer('staff_id');
             $table->string('enrollment_date');
             $table->string('enrollment_place');
             $table->string('full_name');
