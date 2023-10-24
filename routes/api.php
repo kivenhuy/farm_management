@@ -32,15 +32,15 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-
-
     Route::get('logout', 'App\Http\Controllers\Api\AuthController@logout');
     Route::get('dashboard', 'App\Http\Controllers\Api\AuthController@dashboard');
     
     Route::controller(FarmersController::class)->group(function () {
 
         // Farmer Register 
-        Route::post('farmer/registration','registration');
+        Route::group(['middleware' => 'staff'], function () {
+            Route::post('farmer/registration','registration');
+        });
 
         // Farmer Details
         Route::get('farmer','index');
