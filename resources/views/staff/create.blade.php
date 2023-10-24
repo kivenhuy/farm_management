@@ -59,7 +59,7 @@
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Password</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="password" placeholder="Password">
+                            <input type="password" class="form-control" name="password" placeholder="Password">
                         </div>
                     </div>
 
@@ -67,7 +67,7 @@
                     <div class="form-group row">
                         <label class="col-md-3 col-from-label">Password Confirmation</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" name="password_confirmation" placeholder="Password Confirmation">
+                            <input type="password" class="form-control" name="password_confirmation" placeholder="Password Confirmation">
                         </div>
                     </div>
                     
