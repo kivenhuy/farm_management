@@ -51,7 +51,7 @@ class AuthController extends Controller
         if (!$token) {
             $token = $user->createToken('Farm-angel API Token')->plainTextToken;
         }
-
+        
         return response()->json([
             'result' => true,
             'message' => 'Successfully logged in',
