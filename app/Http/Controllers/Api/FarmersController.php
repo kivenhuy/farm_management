@@ -581,7 +581,7 @@ class FarmersController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required|string|unique:users,phone_number',
-            'username' => 'string|unique:users,username',
+            'full_name' => 'nullable|string|unique:users,username',
             'password' => 'required|string|min:5',
         ]);
         if ($validator->fails()) {
@@ -590,7 +590,7 @@ class FarmersController extends Controller
                 'message' => $validator->messages(),
             ]);
         }
-        $staff = Auth::user();
+        $staff = Auth::user()->staff;
         $user = New User();
         $farmer_details = New FarmerDetails();
 
@@ -610,8 +610,8 @@ class FarmersController extends Controller
         $user->save();
 
         // $user->create($user_data);
+        $farmer_photo = [];
         if (!empty($request->all()['farmer_photo'])) {
-            $farmer_photo = [];
             foreach ($request->all()['farmer_photo'] as $photo) {                        
                 $id = (new UploadsController)->upload_photo($photo,$user->id);
 
