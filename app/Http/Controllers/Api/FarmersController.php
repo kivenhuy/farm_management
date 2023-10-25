@@ -598,14 +598,20 @@ class FarmersController extends Controller
         {
             $email = $request->email;
         }
+        $password = "";
+        if($request->password != "")
+        {
+            $password = Hash::make($request->password); 
+        }
         $user = new User(); 
         $user->name = $request->full_name; 
         $user->user_type = "farmer"; 
         $user->username = $request->full_name; 
         $user->email = $email; 
-        $user->password = Hash::make($request->password); 
+        $user->password =  $password; 
         $user->phone_number = $request->phone_number; 
         $user->email_verified_at = ""; 
+        // dd($password);
         $user->save();
 
         // $user->create($user_data);
