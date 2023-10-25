@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Staff;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -22,23 +23,22 @@ class DatabaseSeeder extends Seeder
         $admin->name = "Supper Admin";
         $admin->user_type = "super_admin";
         $admin->username = "farmangel";
-        $admin->email = "farmangel@farm-angel.com";
+        $admin->email = "admin@farm-angel.com";
         $admin->password = Hash::make('123456789abc');
         $admin->phone_number = "123456789";
         $admin->email_verified_at = "";
         $admin->save();
 
-        // farmer
-        $user = new User();
-        $user->name = "Farmer";
-        $user->user_type = "farmer";
-        $user->username = "farmer";
-        $user->email = "farmer@farm-angel.com";
-        $user->password = Hash::make('12345678');
-        $user->phone_number = "12345678";
-        $user->email_verified_at = "";
-        $user->save();
-
+        // staff
+        // $staff = new Staff();
+        // $staff->user_id = $admin->id;
+        // $staff->first_name = 'Supper';
+        // $staff->last_name = 'Admin';
+        // $staff->gender = 'Male';
+        // $staff->email = 'admin@farm-angel.com';
+        // $staff->phone_number = '123456789';
+        // $staff->status = 'active';
+        // $staff->save();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Supper Admin',

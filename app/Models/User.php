@@ -11,7 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    protected $with = ['farmer_detail'];
     /**
      * The attributes that are mass assignable.
      *
@@ -59,5 +59,10 @@ class User extends Authenticatable
     public function staff_detail()
     {
         return $this->hasOne(FarmerDetails::class);
+    }
+
+    public function staff()
+    {
+        return $this->hasOne(Staff::class, 'user_id', 'id');
     }
 }
