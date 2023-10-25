@@ -18,4 +18,9 @@ class AnimalHusbandry extends Model
         'breed_name',
         'animal_for_growth',
     ];
+
+    public function farmer_details()
+    {
+        return $this->belongsTo(FarmerDetails::class);
+    }
 }

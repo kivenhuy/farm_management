@@ -16,4 +16,10 @@ class BankInfo extends Model
         'branch_details',
         'sort_code',
     ];
+    
+    public function farmer_details()
+    {
+        return $this->belongsTo(FarmerDetails::class);
+    }
+
 }

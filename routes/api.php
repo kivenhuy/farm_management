@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('farmer/get_data_for_insurance_info/{id}','get_data_for_insurance_info');
             Route::get('farmer/get_data_for_animal_husbandry/{id}','get_data_for_animal_husbandry');
             Route::get('farmer/get_data_for_farm_equipment/{id}','get_data_for_farm_equipment');
+            Route::get('farmer/get_data_for_certificate_info/{id}','get_data_for_certificate_info');
             Route::get('farmer/{id}','show');
 
             // Farmer Register 
@@ -63,6 +64,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::put('farmer/update_animal_husbandry/{id}','update_animal_husbandry');
             Route::put('farmer/update_farm_equipment/{id}','update_farm_equipment');
             Route::put('farmer/update_certificate/{id}','update_certificate');
+            Route::put('farmer/update_personal_info/{id}','update_personal_info');
         });
 
         
