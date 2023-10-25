@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\FarmerDetails;
 use App\Models\FarmLand;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -83,12 +84,33 @@ class AuthController extends Controller
         ]);
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
+        $request->validate([
+            'lat' => 'nullable|numeric',
+            'lng' => 'nullable|numeric',
+            'nearby_km' => 'nullable|numeric',
+        ]);
+
         $farmerDetail = Auth::user()->staff->farmer_details;
-        //dd($farmerDetail);
         $totalFarmer = $farmerDetail->count();
         $totalHectares = FarmLand::whereIn('farmer_id', $farmerDetail->pluck('id'))->sum('total_land_holding');
+        $totalPlot = FarmLand::whereIn('farmer_id', $farmerDetail->pluck('id'))->sum('actual_area');
+
+        $nearbyPlot = [];
+        if ($request->lat && $request->lng) {
+            $nearbyKm   = $request->nearby_km ?? 3;
+            foreach (Farmland::get() as $farmLand) {
+                $distance = $this->distance($request->lat, $request->lng, $farmLand->lat, $farmLand->lng);
+                if ($distance > $nearbyKm) {
+                    continue;
+                }
+
+                array_push($nearbyPlot, $farmLand);
+            }
+        }
+
+        $farmer_list = FarmerDetails::select('id','full_name')->get();
 
         return response()->json([
             'result' => true,
@@ -96,7 +118,25 @@ class AuthController extends Controller
             'data' => [
                 'total_farmmer' => $totalFarmer,
                 'total_hectares' => $totalHectares,
+                'total_plot' => $totalPlot,
+                'nearby_plot' => $nearbyPlot,
+                'farmer_list' => $farmer_list,
             ]
         ]);
+    }
+
+    public function distance($lat1, $lon1, $lat2, $lon2) {
+        if (($lat1 == $lat2) && ($lon1 == $lon2)) {
+          return 0;
+        }
+        else {
+          $theta = $lon1 - $lon2;
+          $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+          $dist = acos($dist);
+          $dist = rad2deg($dist);
+          $miles = $dist * 60 * 1.1515;
+      
+          return ($miles * 1.609344); // return KM
+        }
     }
 }
