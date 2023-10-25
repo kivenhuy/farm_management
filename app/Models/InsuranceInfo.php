@@ -32,4 +32,9 @@ class InsuranceInfo extends Model
         'social_insurance_end_date',
         'other_insurance',
     ];
+
+    public function farmer_details()
+    {
+        return $this->belongsTo(FarmerDetails::class);
+    }
 }

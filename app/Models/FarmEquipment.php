@@ -16,4 +16,8 @@ class FarmEquipment extends Model
         'year_of_manufacture',
         'year_of_purchase',
     ];
+    public function farmer_details()
+    {
+        return $this->belongsTo(FarmerDetails::class);
+    }
 }
