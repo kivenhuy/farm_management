@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\FarmLand;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -83,9 +85,18 @@ class AuthController extends Controller
 
     public function dashboard()
     {
+        $farmerDetail = Auth::user()->staff->farmer_details;
+        //dd($farmerDetail);
+        $totalFarmer = $farmerDetail->count();
+        $totalHectares = FarmLand::whereIn('farmer_id', $farmerDetail->pluck('id'))->sum('total_land_holding');
+
         return response()->json([
             'result' => true,
             'message' => 'dashboard page',
+            'data' => [
+                'total_farmmer' => $totalFarmer,
+                'total_hectares' => $totalHectares,
+            ]
         ]);
     }
 }

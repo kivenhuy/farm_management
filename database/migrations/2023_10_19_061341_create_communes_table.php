@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('district_id');
             $table->string('commune_name');
             $table->string('commune_code')->nullable();
-            $table->string('pin_location');
+            $table->string('pin_location')->nullable();
             $table->string('status');
             $table->timestamps();
         });

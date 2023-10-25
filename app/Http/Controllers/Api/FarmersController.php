@@ -581,8 +581,8 @@ class FarmersController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required|string|unique:users,phone_number',
-            'username' => 'string|unique:users,username',
-            'password' => 'required|string|min:5',
+            'full_name' => 'nullable|string|unique:users,username',
+            // 'password' => 'required|string|min:5',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -590,7 +590,7 @@ class FarmersController extends Controller
                 'message' => $validator->messages(),
             ]);
         }
-        $staff = Auth::user();
+        $staff = Auth::user()->staff;
         $user = New User();
         $farmer_details = New FarmerDetails();
         $email = "";
@@ -609,8 +609,8 @@ class FarmersController extends Controller
         $user->save();
 
         // $user->create($user_data);
+        $farmer_photo = [];
         if (!empty($request->all()['farmer_photo'])) {
-            $farmer_photo = [];
             foreach ($request->all()['farmer_photo'] as $photo) {                        
                 $id = (new UploadsController)->upload_photo($photo,$user->id);
 
@@ -676,6 +676,13 @@ class FarmersController extends Controller
                 'message' => 'Farmer Not Exists',
             ]);
         }
+        if ( $farmer_data->family_info ) {
+            $family_info = $farmer_data->family_info->first();
+        } else {
+            $family_info = [];
+        }
+       
+        
         $data_education = [];
         $data_marial_status = [];
         $data_gender = [];
@@ -695,14 +702,27 @@ class FarmersController extends Controller
             'data' => [
                 'data_education' =>$data_education,
                 'data_marial_status' =>$data_marial_status,
-                // 'farmily_info' =>$farmer_data->
+                'family_info' =>$family_info
             ]
             
         ]);
     }
 
-    public function get_data_for_asset_info()
+    public function get_data_for_asset_info($id)
     {
+        $farmer_data = FarmerDetails::find($id);
+        if(!isset($farmer_data))
+        {
+            return response()->json([
+                'result' => false,
+                'message' => 'Farmer Not Exists',
+            ]);
+        }
+        if ( $farmer_data->asset_info ) {
+            $asset_info = $farmer_data->asset_info->first();
+        } else {
+            $asset_info = [];
+        }
         $data_housing_owner = [];
         $data_house_type = [];
         $data_consumer_electronic = [];
@@ -734,7 +754,8 @@ class FarmersController extends Controller
                 'data_housing_owner' =>$data_housing_owner,
                 'data_house_type' =>$data_house_type,
                 'data_consumer_electronic' =>$data_consumer_electronic,
-                'data_vehicle' =>$data_vehicle
+                'data_vehicle' =>$data_vehicle,
+                'asset_info'=>$asset_info
             ]
             
         ]);

@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Staff extends Model
 {
     use HasFactory;
+
+    protected $with = ['farmer_details'];
+
     protected $fillable = [
         'user_id',
         'first_name',
@@ -17,4 +20,14 @@ class Staff extends Model
         'phone_number',
         'status',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function farmer_details()
+    {
+        return $this->hasMany(FarmerDetails::class);
+    }
 }
