@@ -7,8 +7,10 @@
       $activeClass = null;
       $active = $configData["layout"] === 'vertical' ? 'active open':'active';
       $currentRouteName =  Route::currentRouteName();
+      $filterRouteName = str_replace(['index', 'edit', 'store', 'show', 'update', 'destroy', 'create', 'dtajax'], '', $currentRouteName);
+      $filterRouteName = str_replace('.', '', $filterRouteName);
 
-      if ($currentRouteName === $submenu->slug) {
+      if ($filterRouteName === $submenu->slug) {
           $activeClass = 'active';
       }
       elseif (isset($submenu->submenu)) {

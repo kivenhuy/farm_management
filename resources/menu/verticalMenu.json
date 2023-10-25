@@ -40,25 +40,25 @@
     {
       "name": "All Farmer",
       "icon": "menu-icon tf-icons mdi mdi-account-cowboy-hat",
-      "slug": "all_farmer",
+      "slug": "farmer",
       "url": "farmer"
     },
     {
       "name": "All Staff",
       "icon": "menu-icon tf-icons mdi mdi-account",
-      "slug": "all_staff",
+      "slug": "staff",
       "url": "staff"
     },
     {
       "name": "Season Masters",
       "icon": "menu-icon tf-icons mdi mdi-snowflake",
-      "slug": "season_masters",
+      "slug": "season-masters",
       "url": "season-masters"
     },
     {
       "name": "Crop Informations",
       "icon": "menu-icon tf-icons mdi mdi-barley",
-      "slug": "crop_informations",
+      "slug": "crop-informations",
       "url": "crop-informations"
     }
   ]
