@@ -33,7 +33,15 @@ class FarmersController extends Controller
     public function index()
     {
         $user_login = Auth::user();
-        $farmer_data = FarmerDetails::where('staff_id',$user_login->id)->get();
+        if(!($user_login->staff))
+        {
+            return response()->json([
+                'result' => true,
+                'message' => 'Staff Not Exist Try Again',
+            ]);
+        }
+        $staff_data = $user_login->staff->first();
+        $farmer_data = FarmerDetails::where('staff_id',$staff_data->id)->get();
         foreach ($farmer_data as $details_farmer_data)
         {
             $details_farmer_data->farmer_photo = uploaded_asset($details_farmer_data->farmer_photo);

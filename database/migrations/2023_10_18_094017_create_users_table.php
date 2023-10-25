@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('user_type')->comment('super_admin,admin,farmer');
-            $table->string('username')->unique();
+            $table->string('username');
             $table->string('email')->nullable();
             $table->string('password');
             $table->string('phone_number')->unique();
