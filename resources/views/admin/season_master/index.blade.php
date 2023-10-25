@@ -41,8 +41,9 @@
                         </div>
                     </div>
                 </div>
-                <div style="width: 200px;">
-                    <button type="submit" class="btn btn-primary">Search</button>
+                <div style="width: 260px;">
+                    <button type="submit" class="btn btn-primary" style="margin-right: 1rem;">Search</button>
+                    <button type="button" class="btn btn-secondary js-reset">Reset</button>
                 </div>
             </div>
         </form>
@@ -111,6 +112,12 @@
                 if (confirm(message)) {
                     $(this).closest('form').submit();
                 }
+            });
+
+            $('.js-reset').click(function(){
+                $('input[type="text"]').val('');
+                $('select').val('');
+                document.querySelector('input[name="status"]:checked').checked = false;
             });
         });
     </script>

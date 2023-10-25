@@ -60,6 +60,12 @@
       "icon": "menu-icon tf-icons mdi mdi-barley",
       "slug": "crop-informations",
       "url": "crop-informations"
+    },
+    {
+      "name": "Catalogue Value",
+      "icon": "menu-icon tf-icons mdi mdi-note",
+      "slug": "catalogue-values",
+      "url": "catalogue-values"
     }
   ]
 }
