@@ -110,7 +110,7 @@ class AuthController extends Controller
             }
         }
 
-        $farmer_list = FarmerDetails::select('id','full_name')->get();
+        $farmer_list = FarmerDetails::with('farm_lands:id,farm_name,actual_area,farmer_id')->select('id','full_name')->get();
 
         return response()->json([
             'result' => true,
