@@ -582,7 +582,7 @@ class FarmersController extends Controller
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required|string|unique:users,phone_number',
             'full_name' => 'nullable|string|unique:users,username',
-            'password' => 'required|string|min:5',
+            // 'password' => 'required|string|min:5',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -598,14 +598,20 @@ class FarmersController extends Controller
         {
             $email = $request->email;
         }
+        $password = "";
+        if($request->password != "")
+        {
+            $password = Hash::make($request->password); 
+        }
         $user = new User(); 
         $user->name = $request->full_name; 
         $user->user_type = "farmer"; 
         $user->username = $request->full_name; 
         $user->email = $email; 
-        $user->password = Hash::make($request->password); 
+        $user->password =  $password; 
         $user->phone_number = $request->phone_number; 
         $user->email_verified_at = ""; 
+        // dd($password);
         $user->save();
 
         // $user->create($user_data);
@@ -666,8 +672,23 @@ class FarmersController extends Controller
         ]);
     }
 
-    public function drop_down_for_family_info()
+    public function get_data_for_family_info($id)
     {
+        $farmer_data = FarmerDetails::find($id);
+        if(!isset($farmer_data))
+        {
+            return response()->json([
+                'result' => false,
+                'message' => 'Farmer Not Exists',
+            ]);
+        }
+        if ( $farmer_data->family_info ) {
+            $family_info = $farmer_data->family_info->first();
+        } else {
+            $family_info = [];
+        }
+       
+        
         $data_education = [];
         $data_marial_status = [];
         $data_gender = [];
@@ -686,14 +707,28 @@ class FarmersController extends Controller
             'message' =>'Get Data Successfully',
             'data' => [
                 'data_education' =>$data_education,
-                'data_marial_status' =>$data_marial_status
+                'data_marial_status' =>$data_marial_status,
+                'family_info' =>$family_info
             ]
             
         ]);
     }
 
-    public function drop_down_for_asset_info()
+    public function get_data_for_asset_info($id)
     {
+        $farmer_data = FarmerDetails::find($id);
+        if(!isset($farmer_data))
+        {
+            return response()->json([
+                'result' => false,
+                'message' => 'Farmer Not Exists',
+            ]);
+        }
+        if ( $farmer_data->asset_info ) {
+            $asset_info = $farmer_data->asset_info->first();
+        } else {
+            $asset_info = [];
+        }
         $data_housing_owner = [];
         $data_house_type = [];
         $data_consumer_electronic = [];
@@ -725,13 +760,14 @@ class FarmersController extends Controller
                 'data_housing_owner' =>$data_housing_owner,
                 'data_house_type' =>$data_house_type,
                 'data_consumer_electronic' =>$data_consumer_electronic,
-                'data_vehicle' =>$data_vehicle
+                'data_vehicle' =>$data_vehicle,
+                'asset_info'=>$asset_info
             ]
             
         ]);
     }
 
-    public function drop_down_for_bank_info()
+    public function get_data_for_bank_info()
     {
         $data_account_type = [];
         $account_type = FarmCatalogue::where('NAME','Account Type')->first();
@@ -749,7 +785,7 @@ class FarmersController extends Controller
         ]);
     }
 
-    public function drop_down_for_finance_info()
+    public function get_data_for_finance_info()
     {
         $data_purpose = [];
         $purpose = FarmCatalogue::where('NAME','Purpose')->first();
@@ -767,7 +803,7 @@ class FarmersController extends Controller
         ]);
     }
 
-    public function drop_down_for_insurance_info()
+    public function get_data_for_insurance_info()
     {
         $data_crop = [];
         $data_crop = CropInformation::All();
@@ -780,7 +816,7 @@ class FarmersController extends Controller
         ]);
     }
 
-    public function drop_down_for_animal_husbandry()
+    public function get_data_for_animal_husbandry()
     {
         $data_farm_animal = [];
         $data_fodder = [];
@@ -819,7 +855,7 @@ class FarmersController extends Controller
         ]);
     }
 
-    public function drop_down_for_certificate_info()
+    public function get_data_for_certificate_info()
     {
         $data_enrollment_place = [];
         $data_identity_proof = [];
@@ -851,7 +887,7 @@ class FarmersController extends Controller
         ]);
     }
 
-    public function drop_down_for_farm_equipment()
+    public function get_data_for_farm_equipment()
     {
         $data_farm_equipment = [];
         $farm_equipment = FarmCatalogue::where('NAME','Farm Equipments')->first();

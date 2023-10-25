@@ -39,9 +39,41 @@ class FarmerDetails extends Model
     {
     	return $this->belongsTo(User::class);
     }
-
     public function farm_lands()
     {
         return $this->hasMany(FarmLand::class, 'farmer_id', 'id');
     }
+    public function family_info()
+    {
+    	return $this->hasOne(FamilyInfo::class,'farmer_id', 'id');
+    }
+    public function asset_info()
+    {
+    	return $this->hasOne(AssetInfo::class,'farmer_id', 'id');
+    }
+    public function bank_info()
+    {
+    	return $this->hasMany(BankInfo::class,'farmer_id', 'id');
+    }
+    public function finance_info()
+    {
+    	return $this->hasOne(FinanceInfo::class,'farmer_id', 'id');
+    }
+    public function insurance_info()
+    {
+    	return $this->hasMany(InsuranceInfo::class,'farmer_id', 'id');
+    }
+    public function animal_husbandry()
+    {
+    	return $this->hasMany(AnimalHusbandry::class,'farmer_id', 'id');
+    }
+    public function certificate_info()
+    {
+    	return $this->hasOne(CertificateInformation::class,'farmer_id', 'id');
+    }
+    public function farm_equipment()
+    {
+    	return $this->hasMany(FarmEquipment::class,'farmer_id', 'id');
+    }
+    
 }
