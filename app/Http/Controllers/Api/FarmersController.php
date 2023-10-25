@@ -625,9 +625,9 @@ class FarmersController extends Controller
                 }
             }    
         }
-
+        $id_proof_photo = [];
         if (!empty($request->all()['id_proof_photo'])) {
-            $id_proof_photo = [];
+            
             foreach ($request->all()['id_proof_photo'] as $photo) {                        
                 $id = (new UploadsController)->upload_photo($photo,$user->id);
 
