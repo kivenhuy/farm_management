@@ -40,20 +40,23 @@ $configData = Helper::appClasses();
     @php
       $activeClass = null;
       $currentRouteName =  Route::currentRouteName();
+      $filterRouteName = str_replace(['index', 'edit', 'store', 'show', 'update', 'destroy', 'create', 'dtajax'], '', $currentRouteName);
+      $filterRouteName = str_replace('.', '', $filterRouteName);
 
-      if ($currentRouteName === $menu->slug) {
+      if ($filterRouteName === $menu->slug) {
           $activeClass = 'active';
       }
       elseif (isset($menu->submenu)) {
         if (gettype($menu->slug) === 'array') {
           foreach($menu->slug as $slug){
-            if (str_contains($currentRouteName,$slug) and strpos($currentRouteName,$slug) === 0) {
+            if (str_contains($filterRouteName,$slug) and strpos($filterRouteName,$slug) === 0) {
               $activeClass = 'active open';
             }
           }
         }
         else{
-          if (str_contains($currentRouteName,$menu->slug) and strpos($currentRouteName,$menu->slug) === 0) {
+          $subMenuSlug = collect($menu->submenu)->pluck('slug')->toArray();
+          if (in_array($filterRouteName,$subMenuSlug)) {
             $activeClass = 'active open';
           }
         }
