@@ -9,5 +9,14 @@ class CatalogueValue extends Model
 {
     use HasFactory;
     protected $table = 'catalogue_value';
+    protected $perPage = 15;
 
+    public function getCatalogueStatusAttribute()
+    {
+        if ($this->STATUS == '1') {
+            return 'Active';
+        }
+
+        return 'Inactive';
+    }
 }
