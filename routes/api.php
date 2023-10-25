@@ -37,32 +37,39 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::controller(FarmersController::class)->group(function () {
 
-        // Farmer Register 
+        
         Route::group(['middleware' => 'staff'], function () {
+            // Farmer Details
+            Route::get('farmer','index');
+            Route::get('farmer/drop_down_for_register','drop_down_for_register');
+            Route::get('farmer/get_data_for_family_info/{id}','get_data_for_family_info');
+            Route::get('farmer/get_data_for_asset_info/{id}','get_data_for_asset_info');
+            Route::get('farmer/get_data_for_bank_info/{id}','get_data_for_bank_info');
+            Route::get('farmer/get_data_for_finance_info/{id}','get_data_for_finance_info');
+            Route::get('farmer/get_data_for_insurance_info/{id}','get_data_for_insurance_info');
+            Route::get('farmer/get_data_for_animal_husbandry/{id}','get_data_for_animal_husbandry');
+            Route::get('farmer/get_data_for_farm_equipment/{id}','get_data_for_farm_equipment');
+            Route::get('farmer/{id}','show');
+
+            // Farmer Register 
             Route::post('farmer/registration','registration');
+
+            // Farmer Update 
+            Route::put('farmer/update_family_info/{id}','update_family_info');
+            Route::put('farmer/update_asset_info/{id}','update_asset_info');
+            Route::put('farmer/update_bank_info/{id}','update_bank_info');
+            Route::put('farmer/update_finance_info/{id}','update_finance_info');
+            Route::put('farmer/update_insurance_info/{id}','update_insurance_info');
+            Route::put('farmer/update_animal_husbandry/{id}','update_animal_husbandry');
+            Route::put('farmer/update_farm_equipment/{id}','update_farm_equipment');
+            Route::put('farmer/update_certificate/{id}','update_certificate');
         });
 
-        // Farmer Details
-        Route::get('farmer','index');
-        Route::get('farmer/drop_down_for_register','drop_down_for_register');
-        Route::get('farmer/drop_down_for_family_info','drop_down_for_family_info');
-        Route::get('farmer/drop_down_for_asset_info','drop_down_for_asset_info');
-        Route::get('farmer/drop_down_for_bank_info','drop_down_for_bank_info');
-        Route::get('farmer/drop_down_for_finance_info','drop_down_for_finance_info');
-        Route::get('farmer/drop_down_for_insurance_info','drop_down_for_insurance_info');
-        Route::get('farmer/drop_down_for_animal_husbandry','drop_down_for_animal_husbandry');
-        Route::get('farmer/drop_down_for_farm_equipment','drop_down_for_farm_equipment');
-        Route::get('farmer/{id}','show');
+        
+        
 
         // Route::put('farmer/drop_down_for_register',[App\Http\Controllers\Api\FarmersController::class,'drop_down_for_register');
-        Route::put('farmer/update_family_info/{id}','update_family_info');
-        Route::put('farmer/update_asset_info/{id}','update_asset_info');
-        Route::put('farmer/update_bank_info/{id}','update_bank_info');
-        Route::put('farmer/update_finance_info/{id}','update_finance_info');
-        Route::put('farmer/update_insurance_info/{id}','update_insurance_info');
-        Route::put('farmer/update_animal_husbandry/{id}','update_animal_husbandry');
-        Route::put('farmer/update_farm_equipment/{id}','update_farm_equipment');
-        Route::put('farmer/update_certificate/{id}','update_certificate');
+        
     });
     
 

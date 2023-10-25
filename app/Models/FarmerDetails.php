@@ -36,4 +36,9 @@ class FarmerDetails extends Model
     {
     	return $this->belongsTo(User::class);
     }
+
+    public function family_info()
+    {
+    	return $this->hasOne(FamilyInfo::class);
+    }
 }

@@ -20,6 +20,9 @@ class IsStaff
         if (Auth::user() &&  Auth::user()->user_type == 'staff') {
             return $next($request);
         }
-        return redirect('/');
+        return response()->json([
+            'result' => false,
+            'message' =>'Your permission not allowed to take this action',
+        ]);
     }
 }
