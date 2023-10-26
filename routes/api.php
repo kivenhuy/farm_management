@@ -72,14 +72,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Route::put('farmer/drop_down_for_register',[App\Http\Controllers\Api\FarmersController::class,'drop_down_for_register');
         
+         // Farm land
+        Route::get("/farmland", [App\Http\Controllers\Api\FarmLandController::class, 'index'])->name('farmland.index');
+        Route::get("/farmland/{id}", [App\Http\Controllers\Api\FarmLandController::class, 'show'])->name('farmland.show');
+        Route::get("/farmland/dropdown_value", [App\Http\Controllers\Api\FarmLandController::class, 'create'])->name('farmland.create');
+        Route::post("/add_farmland", [App\Http\Controllers\Api\FarmLandController::class, 'store'])->name('commnue.add_farmland');
+
+
     });
     
 
 
-    // Farm land
-    Route::get("/farmland", [App\Http\Controllers\Api\FarmLandController::class, 'index'])->name('farmland.index');
-    Route::get("/farmland/dropdown_value", [App\Http\Controllers\Api\FarmLandController::class, 'create'])->name('farmland.create');
-    Route::post("/add_farmland", [App\Http\Controllers\Api\FarmLandController::class, 'store'])->name('commnue.add_farmland');
+   
 
 
     //Crops Enrollments

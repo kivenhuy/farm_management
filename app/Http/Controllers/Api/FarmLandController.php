@@ -174,9 +174,20 @@ class FarmLandController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(FarmLand $farmLand)
+    public function show($id)
     {
-        //
+        $farm_land_data = FarmLand::find($id);
+        $farmer_name = FarmerDetails::find($farm_land_data->farmer_id)->full_name;
+        $farm_land_data->farmer_name = $farmer_name;
+        $farm_land_data->farm_photo = uploaded_asset($farm_land_data->farm_photo);
+        return response()->json([
+            'result' => true,
+            'message' => 'Get Farm Land Successfully',
+            'data' =>[
+                'farm_land_data'=>$farm_land_data,
+                'farm_land_ploting'=>$farm_land_data->farm_land_lat_lng()->get()
+            ]
+        ]);
     }
 
     /**

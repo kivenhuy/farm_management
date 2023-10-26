@@ -32,7 +32,7 @@ class FarmLand extends Model
 
     public function farm_land_lat_lng()
     {
-        return $this->hasMany(FarmLand::class);
+        return $this->hasMany(FarmLandLatLng::class,'farm_land_id','id');
     }
     
 }
