@@ -51,6 +51,11 @@ class FarmLandController extends Controller
         {
             $data_land_document = $land_document->catalogue_value()->get();
         }
+        $land_owner_ship = FarmCatalogue::where('NAME','Land Ownership')->first();
+        if(isset($land_owner_ship))
+        {
+            $data_land_owner_ship = $land_owner_ship->catalogue_value()->get();
+        }
         $all_farmer = FarmerDetails::where('staff_id',$staff->id)->get();
         return response()->json([
             'result' => true,
@@ -59,6 +64,7 @@ class FarmLandController extends Controller
             'data_land_topolog' =>$data_land_topolog,
             'data_land_gradient' =>$data_land_gradient,
             'data_land_document' =>$data_land_document,
+            'data_land_owner_ship'=>$data_land_owner_ship,
             'all_farmer'=>$all_farmer
         ]);
     }
@@ -117,11 +123,12 @@ class FarmLandController extends Controller
         if($final_farm_land)
         {
             $farm_land_lat_lng = new FarmLandLatLng;
-            foreach($data_farm_land_lat_lng as $lat_lng)
+            foreach($data_farm_land_lat_lng as $key => $lat_lng)
             {
                 $farm_land_lat_lng_data = [
                     'user_id'=> $user->id,
                     'farm_land_id'=> $final_farm_land->id,
+                    'order'=> $key + 1,
                     'lat'=> $lat_lng[0], 
                     'lng'=> $lat_lng[1] 
                 ];

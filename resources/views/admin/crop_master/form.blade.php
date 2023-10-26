@@ -10,7 +10,17 @@
 
             <div class="card">
                 <div class="card-header">
-                  {{ $cropInformation->id ? 'Edit Crop Master' : 'Create Crop Master' }}
+                    <div class="col">
+                        <h5 class="mb-md-0 h6"  style="color:black;font-size:24px">{{ $cropInformation->id ? 'Edit Crop Master' : 'Create Crop Master' }}</h5>
+                    </div>
+                    <div class="col">
+                        <div class="mar-all mb-2" style=" text-align: end;">
+                            <a href="{{route('farmer.index')}}">
+                                <button type="submit" name="button" value="publish" class="btn btn-primary waves-effect waves-light">Back</button>
+                            </a>
+                        </div>
+                    </div>
+                  
                 </div>
                 <div class="card-body">
 

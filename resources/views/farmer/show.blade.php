@@ -10,7 +10,13 @@
                     <div class="col">
                         <h5 class="mb-md-0 h6"  style="color:black;font-size:24px">Farmer Details</h5>
                     </div>
-                    
+                    <div class="col">
+                        <div class="mar-all mb-2" style=" text-align: end;">
+                            <a href="{{route('farmer.index')}}">
+                                <button type="submit" name="button" value="publish" class="btn btn-primary waves-effect waves-light">Back</button>
+                            </a>
+                        </div>
+                    </div>
                 </div>
               <div class="card-body" >
                 {{-- <form action="{{route('country.store')}}" method="POST" id="country_from">
@@ -49,7 +55,7 @@
                         </div>
                         <div class="col-4">
                             <div class="col-sm-12">
-                                <img src="{{$farmer_data->farmer_photo}}" alt="">
+                                <img width="100%" src="{{$farmer_data->farmer_photo}}" alt="">
                             </div>
                         </div>
                     </div>
