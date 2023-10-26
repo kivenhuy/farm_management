@@ -126,7 +126,7 @@ class FarmLandController extends Controller
             foreach($data_farm_land_lat_lng as $key => $lat_lng)
             {
                 $farm_land_lat_lng_data = [
-                    'user_id'=> $user->id,
+                    'farmer_id'=> $request->farmer,
                     'farm_land_id'=> $final_farm_land->id,
                     'order'=> $key + 1,
                     'lat'=> $lat_lng[0], 
