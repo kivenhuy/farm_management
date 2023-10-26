@@ -780,7 +780,9 @@ class FarmersController extends Controller
        
         try {
             $farmer_data = $farmer_details->create($data_farmer_details);
-            
+            $data_log_activities['status_code'] = 200;
+            $data_log_activities['status_msg'] = 'Farmer Registration Successfully';
+            $log_actitvities->store_log((object) $data_log_activities);
             return response()->json([
                 'result' => true,
                 'message' => 'Farmer Registration Successfully',

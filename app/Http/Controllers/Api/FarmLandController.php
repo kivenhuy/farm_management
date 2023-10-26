@@ -74,15 +74,23 @@ class FarmLandController extends Controller
      */
     public function store(Request $request)
     {
+        $log_actitvities = new LogActivitiesController();
+        $staff = Auth::user()->staff;
+        $data_log_activities = [
+            'request' =>$request->all(),
+            'staff_id' => $staff->id,
+            'action' =>'create',
+            'type' => 308
+        ];
         $data_farm_land_lat_lng = json_decode($request->list_lat_lng);
-        $user = Auth::user();
         // dd($user->farmer_detail()->first()->id);
+        $farmer_data = FarmerDetails::find($request->farmer);
         $farm_photo = [];
         $land_document = [];
         if (!empty($request->all()['farm_photo'])) {
             
             foreach ($request->all()['farm_photo'] as $photo) {                        
-                $id = (new UploadsController)->upload_photo($photo,$user->id);
+                $id = (new UploadsController)->upload_photo($photo,$farmer_data->user_id);
 
                 if (!empty($id)) {
                     array_push($farm_photo, $id);
@@ -93,7 +101,7 @@ class FarmLandController extends Controller
         if (!empty($request->all()['land_document'])) {
             
             foreach ($request->all()['land_document'] as $photo) {                        
-                $id = (new UploadsController)->upload_photo($photo,$user->id);
+                $id = (new UploadsController)->upload_photo($photo,$farmer_data->user_id);
 
                 if (!empty($id)) {
                     array_push($land_document, $id);
@@ -119,29 +127,48 @@ class FarmLandController extends Controller
             'land_document'=> implode(',', $land_document), 
         ];
         $farm_land = new FarmLand;
-        $final_farm_land = $farm_land->create($data_farm_land);
-        if($final_farm_land)
-        {
-            $farm_land_lat_lng = new FarmLandLatLng;
-            foreach($data_farm_land_lat_lng as $key => $lat_lng)
+
+        try {
+            $final_farm_land = $farm_land->create($data_farm_land);
+            if($final_farm_land)
             {
-                $farm_land_lat_lng_data = [
-                    'farmer_id'=> $request->farmer,
-                    'farm_land_id'=> $final_farm_land->id,
-                    'order'=> $key + 1,
-                    'lat'=> $lat_lng[0], 
-                    'lng'=> $lat_lng[1] 
-                ];
-                $final_farm_land_lat_lng=$farm_land_lat_lng->create($farm_land_lat_lng_data);
+                $farm_land_lat_lng = new FarmLandLatLng;
+                foreach($data_farm_land_lat_lng as $key => $lat_lng)
+                {
+                    $farm_land_lat_lng_data = [
+                        'farmer_id'=> $request->farmer,
+                        'farm_land_id'=> $final_farm_land->id,
+                        'order'=> $key + 1,
+                        'lat'=> $lat_lng[0], 
+                        'lng'=> $lat_lng[1] 
+                    ];
+                    $final_farm_land_lat_lng=$farm_land_lat_lng->create($farm_land_lat_lng_data);
+                }
             }
+            $data_log_activities['status_code'] = 200;
+            $data_log_activities['status_msg'] = 'Farm Land Created Successfully';
+            $log_actitvities->store_log((object) $data_log_activities);
+            return response()->json([
+                'result' => true,
+                'message' => 'Farm Land Created Successfully',
+                'farm_land' =>$final_farm_land,
+                'farm_land_lat_lng' =>$final_farm_land_lat_lng
+            ]);
+        } catch (\Exception $e) {  
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $e->getMessage();
+            $log_actitvities->store_log((object) $data_log_activities);
+            return response()->json([
+                'result' => true,
+                'message' => 'Farm Land Failed',
+            ]);
         }
 
-        return response()->json([
-            'result' => true,
-            'message' => 'Farmer Created Successfully',
-            'farm_land' =>$final_farm_land,
-            'farm_land_lat_lng' =>$final_farm_land_lat_lng
-        ]);
+
+
+        
+
+        
     }
 
     /**
