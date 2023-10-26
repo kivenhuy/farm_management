@@ -78,7 +78,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/farmland/dropdown_value", [App\Http\Controllers\Api\FarmLandController::class, 'create'])->name('farmland.create');
         Route::post("/add_farmland", [App\Http\Controllers\Api\FarmLandController::class, 'store'])->name('commnue.add_farmland');
 
-
+        //Crops Enrollments
+        Route::get("/crops", [App\Http\Controllers\Api\CropsController::class, 'index'])->name('crops.index');
+        Route::get("/crops_details/{id}", [App\Http\Controllers\Api\CropsController::class, 'show'])->name('crops.show');
+        Route::get("/crops/get_dropdown", [App\Http\Controllers\Api\CropsController::class, 'create'])->name('crops.create');
+        Route::post("/add_crops", [App\Http\Controllers\Api\CropsController::class, 'store'])->name('crops.add_crops');
     });
     
 
@@ -86,10 +90,8 @@ Route::middleware('auth:sanctum')->group(function () {
    
 
 
-    //Crops Enrollments
-    Route::get("/crops", [App\Http\Controllers\Api\CropsController::class, 'index'])->name('crops.index');
-    Route::get("/crops/{id}", [App\Http\Controllers\Api\CropsController::class, 'show'])->name('crops.show');
-    Route::post("/add_crops", [App\Http\Controllers\Api\CropsController::class, 'store'])->name('crops.add_crops');
+    
+    
 
     //Country
     Route::get("/country", [App\Http\Controllers\Api\CountryController::class, 'index'])->name('country.index');

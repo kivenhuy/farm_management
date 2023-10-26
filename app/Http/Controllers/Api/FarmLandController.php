@@ -83,7 +83,7 @@ class FarmLandController extends Controller
             'request' =>$request->all(),
             'staff_id' => $staff->id,
             'action' =>'create',
-            'type' => 308
+            'type' => 359
         ];
         $data_farm_land_lat_lng = json_decode($request->list_lat_lng);
         // dd($user->farmer_detail()->first()->id);

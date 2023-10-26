@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\CropInformation;
 use App\Models\Crops;
+use App\Models\Season;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +25,17 @@ class CropsController extends Controller
      */
     public function create()
     {
-        //
+        $season = Season::all();
+        $crop_information  = CropInformation::all();
+        return response()->json([
+            'result' => true,
+            'message' => 'Get Data Crops Successfully',
+            'data'=> [
+                'season' =>$season,
+                'crop_information'=> $crop_information
+            ]
+           
+        ]);
     }
 
     /**
@@ -31,6 +43,14 @@ class CropsController extends Controller
      */
     public function store(Request $request)
     {
+        $log_actitvities = new LogActivitiesController();
+        $staff = Auth::user()->staff;
+        $data_log_activities = [
+            'request' =>$request->all(),
+            'staff_id' => $staff->id,
+            'action' =>'create',
+            'type' => 357
+        ];
         $validator = Validator::make($request->all(), [
             'farm_land_id' => 'required|string',
             'season_id' => 'required|string',
@@ -40,6 +60,18 @@ class CropsController extends Controller
             'expect_date' => 'required|string',
         ]);
         if ($validator->fails()) {
+            $str_validation = "";
+            foreach ($validator->messages()->messages() as $key => $data)
+            {
+                $str_validation .= $data[0].",";
+            }
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $str_validation;
+            try {
+                $log_actitvities->store_log((object) $data_log_activities);
+            } catch (\Exception $e) {  
+            
+            }
             return response()->json([
                 'result' => false,
                 'message' => $validator->messages(),
@@ -67,22 +99,39 @@ class CropsController extends Controller
             'est_yield'=>$request->est_yield,
             'photo'=>implode(',', $crop_photo), 
         ];
-        $final_crops = $crops->create($data_crops);
-        if($final_crops)
+        try 
         {
+            $final_crops = $crops->create($data_crops);
+            if($final_crops)
+            {
+                $data_log_activities['status_code'] = 200;
+                $data_log_activities['status_msg'] = 'Crops Created Successfully';
+                $log_actitvities->store_log((object) $data_log_activities);
+                return response()->json([
+                    'result' => true,
+                    'message' => 'Crops Created Successfully',
+                    'data'=> [
+                        'data_crops' =>$final_crops,
+                    ]
+                    
+                ]);
+            }
+        } catch (\Exception $e) {  
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $e->getMessage();
+            $log_actitvities->store_log((object) $data_log_activities);
             return response()->json([
                 'result' => true,
-                'message' => 'Crops Created Successfully',
-                'data_crops' =>$final_crops,
+                'message' => 'Farm Land Failed',
             ]);
         }
-        else
-        {
-            return response()->json([
-                'result' => false,
-                'message' => 'Crops Created Fail'
-            ]);
-        }
+        // else
+        // {
+        //     return response()->json([
+        //         'result' => false,
+        //         'message' => 'Crops Created Fail'
+        //     ]);
+        // }
         
     }
 
@@ -98,10 +147,13 @@ class CropsController extends Controller
         return response()->json([
             'result' => true,
             'message' => 'Get Data Crops Successfully',
-            'crop_data' =>$crop_data,
-            'farm_land' =>$farm_land,
-            'season_master' =>$season_master,
-            'crop_master' =>$crop_master
+            'data'=> [
+                'crop_data' =>$crop_data,
+                'farm_land' =>$farm_land,
+                'season_master' =>$season_master,
+                'crop_master' =>$crop_master
+            ]
+           
         ]);
     }
 
