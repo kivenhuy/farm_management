@@ -60,12 +60,15 @@ class FarmLandController extends Controller
         return response()->json([
             'result' => true,
             'message' => 'Farmer Created Successfully',
-            'data_appoarch_road' =>$data_appoarch_road,
-            'data_land_topolog' =>$data_land_topolog,
-            'data_land_gradient' =>$data_land_gradient,
-            'data_land_document' =>$data_land_document,
-            'data_land_owner_ship'=>$data_land_owner_ship,
-            'all_farmer'=>$all_farmer
+            'data'=>[
+                'data_appoarch_road' =>$data_appoarch_road,
+                'data_land_topolog' =>$data_land_topolog,
+                'data_land_gradient' =>$data_land_gradient,
+                'data_land_document' =>$data_land_document,
+                'data_land_owner_ship'=>$data_land_owner_ship,
+                'all_farmer'=>$all_farmer
+            ]
+            
         ]);
     }
 
@@ -151,8 +154,10 @@ class FarmLandController extends Controller
             return response()->json([
                 'result' => true,
                 'message' => 'Farm Land Created Successfully',
-                'farm_land' =>$final_farm_land,
-                'farm_land_lat_lng' =>$final_farm_land_lat_lng
+                'data'=>[
+                    'farm_land' =>$final_farm_land,
+                    'farm_land_lat_lng' =>$final_farm_land_lat_lng
+                ]
             ]);
         } catch (\Exception $e) {  
             $data_log_activities['status_code'] = 400;
