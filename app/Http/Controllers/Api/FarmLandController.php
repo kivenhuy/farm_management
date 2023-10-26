@@ -56,7 +56,7 @@ class FarmLandController extends Controller
         {
             $data_land_owner_ship = $land_owner_ship->catalogue_value()->get();
         }
-        $all_farmer = FarmerDetails::where('staff_id',$staff->id)->get();
+        $all_farmer = FarmerDetails::where('staff_id',$staff->staff->first()->id)->get();
         return response()->json([
             'result' => true,
             'message' => 'Farmer Created Successfully',
