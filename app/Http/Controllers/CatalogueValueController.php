@@ -14,7 +14,7 @@ class CatalogueValueController extends Controller
         $display_name = $request->input('display_name');
         $status = $request->input('status');
 
-        $catalogueValueQuery = CatalogueValue::orderByDesc('id');
+        $catalogueValueQuery = CatalogueValue::orderByDesc('updated_at')->orderByDesc('CODE');
 
         if (!empty($code)) {
             $catalogueValueQuery->where('CODE', $code);
