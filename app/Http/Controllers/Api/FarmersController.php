@@ -30,6 +30,12 @@ class FarmersController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // private $log_actitvities;
+    // public function __construct($log_actitvities)
+    // {
+    //     $this->;
+    // }
+
     public function index()
     {
         $user_login = Auth::user();
@@ -668,18 +674,38 @@ class FarmersController extends Controller
     
     public function registration(Request $request)
     {
+        $log_actitvities = new LogActivitiesController();
+        $staff = Auth::user()->staff;
+        $data_log_activities = [
+            'request' =>$request->all(),
+            'staff_id' => $staff->id,
+            'action' =>'create',
+            'type' => 308
+        ];
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required|string|unique:users,phone_number',
-            'full_name' => 'nullable|string',
+            'full_name' => '|nullable|string',
             // 'password' => 'required|string|min:5',
         ]);
         if ($validator->fails()) {
+            $str_validation = "";
+            foreach ($validator->messages()->messages() as $key => $data)
+            {
+                $str_validation .= $data[0].",";
+            }
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $str_validation;
+            try {
+                $log_actitvities->store_log((object) $data_log_activities);
+            } catch (\Exception $e) {  
+            
+            }
             return response()->json([
                 'result' => false,
                 'message' => $validator->messages(),
             ]);
         }
-        $staff = Auth::user()->staff;
+        
         $user = New User();
         $farmer_details = New FarmerDetails();
         $email = "";
@@ -702,8 +728,6 @@ class FarmersController extends Controller
         $user->email_verified_at = ""; 
         // dd($password);
         $user->save();
-
-        // $user->create($user_data);
         $farmer_photo = [];
         if (!empty($request->all()['farmer_photo'])) {
             foreach ($request->all()['farmer_photo'] as $photo) {                        
@@ -726,6 +750,7 @@ class FarmersController extends Controller
             }    
         }
 
+        // $user->create($user_data);
         $ldate = date('Ymd');
         $current_timestamp = Carbon::now()->timestamp; 
         $farmer_code = 'Farmer-'.$ldate.'-'.$current_timestamp;
@@ -752,14 +777,28 @@ class FarmersController extends Controller
             'farmer_photo'=>implode(',', $farmer_photo),
             'id_proof_photo'=>implode(',', $id_proof_photo),
         ];
-        $farmer_data = $farmer_details->create($data_farmer_details);
-        return response()->json([
-            'result' => true,
-            'message' => 'Farmer Registration Successfully',
-            'data' =>[
-                'farmer_data'=>$farmer_data
-            ]
-        ]);
+       
+        try {
+            $farmer_data = $farmer_details->create($data_farmer_details);
+            
+            return response()->json([
+                'result' => true,
+                'message' => 'Farmer Registration Successfully',
+                'data' =>[
+                    'farmer_data'=>$farmer_data
+                ]
+            ]);
+        } catch (\Exception $e) {  
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $e->getMessage();
+            $log_actitvities->store_log((object) $data_log_activities);
+            User::find($user->id)->delete();
+            return response()->json([
+                'result' => true,
+                'message' => 'Farmer Registration Failed',
+            ]);
+        }
+        
     }
 
     public function get_data_for_family_info($id)

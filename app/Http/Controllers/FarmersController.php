@@ -7,6 +7,7 @@ use App\Models\Commune;
 use App\Models\Country;
 use App\Models\District;
 use App\Models\FarmerDetails;
+use App\Models\LogActivities;
 use Yajra\DataTables\DataTables;
 use App\Models\Province;
 use App\Models\User;
@@ -20,6 +21,13 @@ class FarmersController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $log_actitvities = new LogActivities();
+    }
+
+
+
     public function index()
     {
         return view('farmer.index');

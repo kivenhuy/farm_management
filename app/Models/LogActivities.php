@@ -5,17 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FarmLandLatLng extends Model
+class LogActivities extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'farmer_id',
-        'farm_land_id',
-        'order',
-        'lat',
-        'lng',
+        'staff_id',
+        'type',
+        'code',
+        'request_log',
+        'action',
+        'status_code',
+        'status_msg',
     ];
-
-
-   
 }
