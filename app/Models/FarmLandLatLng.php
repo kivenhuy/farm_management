@@ -11,6 +11,7 @@ class FarmLandLatLng extends Model
     protected $fillable = [
         'user_id',
         'farm_land_id',
+        'order',
         'lat',
         'lng',
     ];

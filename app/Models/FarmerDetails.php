@@ -33,6 +33,7 @@ class FarmerDetails extends Model
         'dob',
         'farmer_photo',
         'id_proof_photo',
+        'is_online',
     ];
 
     public function user()

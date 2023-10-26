@@ -88,7 +88,7 @@ class FarmersController extends Controller
         $data_enrollment_place = [];
         $data_identity_proof = [];
         $data_gender = [];
-        $identity_proof = FarmCatalogue::where('NAME','Identity Proof')->first();
+        $identity_proof = FarmCatalogue::where('NAME','Id Proof')->first();
         if(isset($appoarch_road))
         {
             $data_identity_proof = $identity_proof->catalogue_value()->get();
@@ -748,6 +748,7 @@ class FarmersController extends Controller
             'gender'=>$request->gender,
             'farmer_code'=>$farmer_code,
             'dob'=>$request->dob,
+            'is_online'=>$request->is_online,
             'farmer_photo'=>implode(',', $farmer_photo),
             'id_proof_photo'=>implode(',', $id_proof_photo),
         ];
