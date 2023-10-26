@@ -16,6 +16,9 @@ class FarmLandLatLng extends Model
         'lng',
     ];
 
-
+    public function farm_land()
+    {
+        return $this->belongsTo(FarmLand::class);
+    }
    
 }
