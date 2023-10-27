@@ -114,7 +114,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
   @include('layouts/sections/scripts')
 
-  <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
+  <script type="text/javascript" src="{{ asset(mix('js/app.js')) }}"></script>
 
 
   @stack('scripts')
