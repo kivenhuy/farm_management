@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Commune;
 use App\Models\Country;
+use App\Models\FarmerDetails;
+use App\Models\FarmLand;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 
@@ -12,7 +14,11 @@ class HomeController extends Controller
 {
     public function dashboard()
     {
-        $staffs = Staff::withCount('farmer_details')->get();
+        $staffs = Staff::withCount('farmer_details')->where('status', 'active')->get();
+        $farmerCount = FarmerDetails::count();
+        $totalLandHolding = FarmLand::sum('total_land_holding')/100;
+        $totalFarmlands = FarmLand::count();
+
         $staffsFormat = [];
         foreach ($staffs as $staff) {
             if ($staff->farmer_details_count > 0) {
@@ -35,6 +41,6 @@ class HomeController extends Controller
             ];
         }
 
-        return view('admin.dashboard', compact('staffsFormat', 'comunessData'));
+        return view('admin.dashboard', compact('staffsFormat', 'comunessData', 'staffs', 'farmerCount', 'totalLandHolding', 'totalFarmlands'));
     }
 }
