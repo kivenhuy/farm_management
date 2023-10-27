@@ -11,7 +11,9 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\FarmersController;
 use App\Http\Controllers\Admin\CropMasterController;
 use App\Http\Controllers\CatalogueValueController;
+use App\Http\Controllers\LogActivitiesController;
 use App\Models\CatalogueValue;
+use App\Models\LogActivities;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function(){
@@ -73,5 +75,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post("/add_commune", [CommuneController::class, 'store'])->name('commune.store');
     Route::get("/commnue_filter_by_district/{id}", [CommuneController::class, 'filter_by_district'])->name('commnue.filter_by_district');
     
+    //Log Activities
+    Route::get("/staff_activities", [LogActivitiesController::class, 'index'])->name('log_activities.index');
+    // Route::get("/commune/dtajax", [LogActivities::class, 'dtajax'])->name('commune.dtajax');
+    // Route::get("/commune/create", [LogActivities::class, 'create'])->name('commune.create');
+    // Route::post("/add_commune", [LogActivities::class, 'store'])->name('commune.store');
+    // Route::get("/commnue_filter_by_district/{id}", [LogActivities::class, 'filter_by_district'])->name('commnue.filter_by_district');
+
 });
 

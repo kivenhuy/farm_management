@@ -66,6 +66,12 @@
       "icon": "menu-icon tf-icons mdi mdi-note",
       "slug": "catalogue-values",
       "url": "catalogue-values"
+    },
+    {
+      "name": "Activities",
+      "icon": "menu-icon tf-icons mdi mdi-note",
+      "slug": "staff_activities",
+      "url": "staff_activities"
     }
   ]
 }
