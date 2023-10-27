@@ -29,7 +29,6 @@ class HomeController extends Controller
             }
         }
 
-        $commune = Country::get();
         $comunessData = [];
         foreach (Commune::withCount('farmer_details')->get() as $commune) {
             if (empty($commune->farmer_details_count)) {
@@ -41,6 +40,24 @@ class HomeController extends Controller
             ];
         }
 
-        return view('admin.dashboard', compact('staffsFormat', 'comunessData', 'staffs', 'farmerCount', 'totalLandHolding', 'totalFarmlands'));
+        // Farm area by commune chart
+        $communeCategory = Commune::whereHas('farmer_details')->pluck('commune_name')->toArray();
+        $communes = Commune::whereHas('farmer_details')->get();
+        $communeByFarmAreas = [];
+        if ($communes->count()) {
+            foreach ($communes as $commune) {
+                $farmerDetailIds = FarmerDetails::where('commune', $commune->id)->pluck('id')->toArray();
+                $totalLandHolding = FarmLand::whereIn('farmer_id', $farmerDetailIds)->sum('total_land_holding')/100;
+                $actual_area = FarmLand::whereIn('farmer_id', $farmerDetailIds)->sum('actual_area')/100;
+                
+                $communeByFarmAreas[] = [
+                    'name' => $commune->commune_name,
+                    'total_land_holding' => $totalLandHolding,
+                    'actual_area' => $actual_area,
+                ];
+            }
+        }
+
+        return view('admin.dashboard', compact('staffsFormat', 'comunessData', 'staffs', 'farmerCount', 'totalLandHolding', 'totalFarmlands', 'communeCategory', 'communeByFarmAreas'));
     }
 }
