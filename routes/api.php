@@ -33,7 +33,7 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('logout', 'App\Http\Controllers\Api\AuthController@logout');
-    Route::get('dashboard', 'App\Http\Controllers\Api\AuthController@dashboard');
+    
     
     Route::controller(FarmersController::class)->group(function () {
 
@@ -83,16 +83,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/crops_details/{id}", [App\Http\Controllers\Api\CropsController::class, 'show'])->name('crops.show');
         Route::get("/crops/get_dropdown", [App\Http\Controllers\Api\CropsController::class, 'create'])->name('crops.create');
         Route::post("/add_crops", [App\Http\Controllers\Api\CropsController::class, 'store'])->name('crops.add_crops');
+
+        // Dashboard
+        Route::get('dashboard', 'App\Http\Controllers\Api\AuthController@dashboard');
     });
     
-
-
-   
-
-
-    
-    
-
     //Country
     Route::get("/country", [App\Http\Controllers\Api\CountryController::class, 'index'])->name('country.index');
 

@@ -95,7 +95,7 @@ class FarmersController extends Controller
         $data_identity_proof = [];
         $data_gender = [];
         $identity_proof = FarmCatalogue::where('NAME','Id Proof')->first();
-        if(isset($appoarch_road))
+        if(isset($identity_proof))
         {
             $data_identity_proof = $identity_proof->catalogue_value()->get();
         }
