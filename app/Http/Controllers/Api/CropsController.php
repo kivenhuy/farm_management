@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\CropInformation;
 use App\Models\Crops;
+use App\Models\FarmLand;
 use App\Models\Season;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,12 +28,14 @@ class CropsController extends Controller
     {
         $season = Season::all();
         $crop_information  = CropInformation::all();
+        $farm_land = FarmLand::all();
         return response()->json([
             'result' => true,
             'message' => 'Get Data Crops Successfully',
             'data'=> [
                 'season' =>$season,
-                'crop_information'=> $crop_information
+                'crop_information'=> $crop_information,
+                'farm_land'=>$farm_land
             ]
            
         ]);

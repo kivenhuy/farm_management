@@ -12,7 +12,9 @@ class LogActivitiesController extends Controller
      */
     public function index()
     {
-        //
+        $data_log = LogActivities::all();
+        return view('activities.index',['data_log'=>$data_log]);
+        // dd($data_log);
     }
 
     /**

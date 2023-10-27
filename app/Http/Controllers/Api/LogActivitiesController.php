@@ -13,7 +13,8 @@ class LogActivitiesController extends Controller
      */
     public function index()
     {
-        //
+        // $data_log = LogActivities::all();
+        // dd($data_log);
     }
 
     /**
