@@ -87,10 +87,6 @@
           {
             background-color: #FFFFFF;
           }
-          .layout-navbar
-          {
-            border-bottom: 1px solid;
-          }
           .container, .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl
           {
             padding-left: unset;
