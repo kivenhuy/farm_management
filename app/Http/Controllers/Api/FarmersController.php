@@ -14,6 +14,7 @@ use App\Models\District;
 use App\Models\FamilyInfo;
 use App\Models\FarmCatalogue;
 use App\Models\FarmEquipment;
+use App\Models\FarmerCountable;
 use App\Models\FarmerDetails;
 use App\Models\FinanceInfo;
 use App\Models\InsuranceInfo;
@@ -708,6 +709,8 @@ class FarmersController extends Controller
         
         $user = New User();
         $farmer_details = New FarmerDetails();
+        $countable = FarmerCountable::find(1);
+        $farmer_code = 'FA'.date('Y').date('m').date('d').$countable->count_number;
         $email = "";
         if($request->email != "")
         {
@@ -749,11 +752,7 @@ class FarmersController extends Controller
                 }
             }    
         }
-
-        // $user->create($user_data);
-        $ldate = date('Ymd');
-        $current_timestamp = Carbon::now()->timestamp; 
-        $farmer_code = 'Farmer-'.$ldate.'-'.$current_timestamp;
+        
         $data_farmer_details =[
             'staff_id'=>$staff->id,
             'user_id'=>$user->id,
@@ -783,6 +782,7 @@ class FarmersController extends Controller
             $data_log_activities['status_code'] = 200;
             $data_log_activities['status_msg'] = 'Farmer Registration Successfully';
             $log_actitvities->store_log((object) $data_log_activities);
+            $countable->update(['count_number'=>$countable->count_number +=1]);
             return response()->json([
                 'result' => true,
                 'message' => 'Farmer Registration Successfully',
