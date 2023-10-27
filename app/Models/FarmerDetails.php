@@ -11,7 +11,8 @@ class FarmerDetails extends Model
 
     protected $with = ['farm_lands'];
     protected $table = 'farmer_details';
-    
+    protected $appends = ['avatar_url'];
+
     protected $fillable = [
         'staff_id',
         'user_id',
@@ -76,5 +77,18 @@ class FarmerDetails extends Model
     {
     	return $this->hasMany(FarmEquipment::class,'farmer_id', 'id');
     }
+
+    public function thumbnail()
+    {
+        return $this->belongsTo(Uploads::class,'farmer_photo', 'id');
+    }
     
+    public function getAvatarUrlAttribute()
+    {
+        if (!empty($this->thumbnail)) {
+            return asset($this->thumbnail->file_name);
+        }
+        
+        return '';
+    }
 }
