@@ -20,4 +20,9 @@ class Commune extends Model
     {
         return $this->hasMany(Commune::class);
     }
+
+    public function farmer_details()
+    {
+        return $this->hasMany(FarmerDetails::class, 'commune', 'id');
+    }
 }
