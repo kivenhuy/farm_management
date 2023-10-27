@@ -151,7 +151,6 @@
                 tooltip: {
                     valueSuffix: ' HA'
                 },
-                //series: {!! json_encode($communeByFarmArea) !!}
             });
         });
 
