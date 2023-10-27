@@ -19,4 +19,9 @@ class Country extends Model
     {
         return $this->hasMany(Province::class);
     }
+
+    public function farmerDetails()
+    {
+        return $this->hasMany(FarmerDetails::class, 'country', 'id');
+    }
 }
