@@ -68,11 +68,35 @@
                     
             </div>
         </div>
+        <div id="area-chart" class="mt-5">
+
+        </div>
+        <table id="datatable" style="display:none;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Total Land Holding</th>
+                    <th>Actual Area</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($communeByFarmAreas as $communeByFarmArea) 
+                    <tr>
+                        <td>{{ $communeByFarmArea['name'] }}</td>
+                        <td>{{ $communeByFarmArea['total_land_holding'] }}</td>
+                        <td>{{ $communeByFarmArea['actual_area'] }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 @endsection 
 
 @push('scripts')
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
             Highcharts.chart('basic-chart', {
@@ -111,11 +135,23 @@
                     }
                 },
                 series:  {!! json_encode($comunessData) !!},
-                drilldown: {
-                    series: [
+            });
 
-                    ],
-                }
+            Highcharts.chart('area-chart', {
+                data: {
+                    table: 'datatable'
+                },
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: 'Farm area by commune'
+                },
+                type: 'category',
+                tooltip: {
+                    valueSuffix: ' HA'
+                },
+                //series: {!! json_encode($communeByFarmArea) !!}
             });
         });
 
