@@ -46,8 +46,11 @@ class LogActivitiesController extends Controller
             'request_log'=>json_encode($data->request),
             'action'=>$data->action,
             'status_code'=>$data->status_code,
-            'status_msg'=>$data->status_msg
+            'status_msg'=>$data->status_msg,
+            'lat'=>$data->lat,
+            'lng'=>$data->lng
         ];
+        // dd($data_create);
         $log_activities->create($data_create);
     }
 

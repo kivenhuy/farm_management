@@ -77,14 +77,11 @@ class FarmLandController extends Controller
      */
     public function store(Request $request)
     {
-        $log_actitvities = new LogActivitiesController();
-        $staff = Auth::user()->staff;
-        $data_log_activities = [
-            'request' =>$request->all(),
-            'staff_id' => $staff->id,
-            'action' =>'create',
-            'type' => 359
-        ];
+        $data_log_activities = [];
+        $data_log_activities['action'] = 'create';
+        $data_log_activities['request'] = $request->all();
+        $data_log_activities['lat'] = $request->staff_lat;
+        $data_log_activities['lng'] = $request->staff_lng;
         $data_farm_land_lat_lng = json_decode($request->list_lat_lng);
         // dd($user->farmer_detail()->first()->id);
         $farmer_data = FarmerDetails::find($request->farmer);
@@ -150,7 +147,7 @@ class FarmLandController extends Controller
             }
             $data_log_activities['status_code'] = 200;
             $data_log_activities['status_msg'] = 'Farm Land Created Successfully';
-            $log_actitvities->store_log((object) $data_log_activities);
+            $this->create_log((object) $data_log_activities);
             return response()->json([
                 'result' => true,
                 'message' => 'Farm Land Created Successfully',
@@ -162,7 +159,7 @@ class FarmLandController extends Controller
         } catch (\Exception $e) {  
             $data_log_activities['status_code'] = 400;
             $data_log_activities['status_msg'] = $e->getMessage();
-            $log_actitvities->store_log((object) $data_log_activities);
+            $this->create_log((object) $data_log_activities);
             return response()->json([
                 'result' => true,
                 'message' => 'Farm Land Failed',
@@ -218,5 +215,24 @@ class FarmLandController extends Controller
     public function destroy(FarmLand $farmLand)
     {
         //
+    }
+
+    public function create_log($data)
+    {
+        // dd($data);
+        $staff = Auth::user()->staff;
+        $log_actitvities = new LogActivitiesController();
+        $data_log_activities = [
+            'staff_id' => $staff->id,
+            'type' => 359,
+            'action'=>$data->action,
+            'request'=>$data->request,
+            'status_code'=>$data->status_code,
+            'status_msg'=>$data->status_msg,
+            'lat'=>$data->lat,
+            'lng'=>$data->lng
+        ];
+        $log_actitvities->store_log((object) $data_log_activities);
+        
     }
 }

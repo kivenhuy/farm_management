@@ -16,5 +16,7 @@ class LogActivities extends Model
         'action',
         'status_code',
         'status_msg',
+        'lat',
+        'lng',
     ];
 }

@@ -43,14 +43,11 @@ class CropsController extends Controller
      */
     public function store(Request $request)
     {
-        $log_actitvities = new LogActivitiesController();
-        $staff = Auth::user()->staff;
-        $data_log_activities = [
-            'request' =>$request->all(),
-            'staff_id' => $staff->id,
-            'action' =>'create',
-            'type' => 357
-        ];
+        $data_log_activities = [];
+        $data_log_activities['action'] = 'create';
+        $data_log_activities['request'] = $request->all();
+        $data_log_activities['lat'] = $request->staff_lat;
+        $data_log_activities['lng'] = $request->staff_lng;
         $validator = Validator::make($request->all(), [
             'farm_land_id' => 'required|string',
             'season_id' => 'required|string',
@@ -68,7 +65,7 @@ class CropsController extends Controller
             $data_log_activities['status_code'] = 400;
             $data_log_activities['status_msg'] = $str_validation;
             try {
-                $log_actitvities->store_log((object) $data_log_activities);
+                $this->create_log((object) $data_log_activities);
             } catch (\Exception $e) {  
             
             }
@@ -106,7 +103,7 @@ class CropsController extends Controller
             {
                 $data_log_activities['status_code'] = 200;
                 $data_log_activities['status_msg'] = 'Crops Created Successfully';
-                $log_actitvities->store_log((object) $data_log_activities);
+                $this->create_log((object) $data_log_activities);
                 return response()->json([
                     'result' => true,
                     'message' => 'Crops Created Successfully',
@@ -119,7 +116,7 @@ class CropsController extends Controller
         } catch (\Exception $e) {  
             $data_log_activities['status_code'] = 400;
             $data_log_activities['status_msg'] = $e->getMessage();
-            $log_actitvities->store_log((object) $data_log_activities);
+            $this->create_log((object) $data_log_activities);
             return response()->json([
                 'result' => true,
                 'message' => 'Farm Land Failed',
@@ -179,5 +176,24 @@ class CropsController extends Controller
     public function destroy(Crops $crops)
     {
         //
+    }
+
+    public function create_log($data)
+    {
+        // dd($data);
+        $staff = Auth::user()->staff;
+        $log_actitvities = new LogActivitiesController();
+        $data_log_activities = [
+            'staff_id' => $staff->id,
+            'type' => 357,
+            'action'=>$data->action,
+            'request'=>$data->request,
+            'status_code'=>$data->status_code,
+            'status_msg'=>$data->status_msg,
+            'lat'=>$data->lat,
+            'lng'=>$data->lng
+        ];
+        $log_actitvities->store_log((object) $data_log_activities);
+        
     }
 }

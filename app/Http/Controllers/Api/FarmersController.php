@@ -169,50 +169,7 @@ class FarmersController extends Controller
      * Update the specified resource in storage.
      */
     // Personal Infomartion
-    public function update_personal_info(Request $request, string $id)
-    {
-        $data_family = $request->data_family;
-        $farmer_data = FarmerDetails::find($id);
-        if(!isset($farmer_data))
-        {
-            return response()->json([
-                'result' => false,
-                'message' => 'Farmer Not Exists',
-            ]);
-        }
-        // $family_info = new FamilyInfo();
-        $data_family_info = [
-            'education'=>$data_family['education'],
-            'marial_status'=>$data_family['marial_status'],
-            'parent_name'=>$data_family['parent_name'],
-            'spouse_name'=>$data_family['spouse_name'],
-            'no_of_family'=>$data_family['no_of_family'],
-            'total_child_under_18'=>json_encode($data_family['total_child_under_18']),
-            'total_child_under_18_going_school'=>$data_family['total_child_under_18_going_school']
-        ];
-        $family_info = FamilyInfo::updateOrCreate(['farmer_id'=>$farmer_data->id], $data_family_info );
-        if(isset($family_info))
-        {
-            return response()->json([
-                'result' => true,
-                'message' => 'Update Family Information Successfully',
-                'data'=>[
-                    'family_info'=>$family_info
-                ]
-                
-            ]);
-        }
-        else
-        {
-            return response()->json([
-                'result' => false,
-                'message' => 'Update Family Information Failed',
-            ]);
-        }
-    }
-
-    // Family Info
-    // public function update_family_info(Request $request, string $id)
+    // public function update_personal_info(Request $request, string $id)
     // {
     //     $data_family = $request->data_family;
     //     $farmer_data = FarmerDetails::find($id);
@@ -254,13 +211,75 @@ class FarmersController extends Controller
     //     }
     // }
 
+    // Family Info
+    public function update_family_info(Request $request, string $id)
+    {
+        $data_log_activities = [];
+        $data_log_activities['action'] = 'edit';
+        $data_log_activities['request'] = $request->all();
+        $data_family = $request->data_family;
+        $farmer_data = FarmerDetails::find($id);
+        if(!isset($farmer_data))
+        {
+            $data_log_activities['status_code'] = 404;
+            $data_log_activities['status_msg'] = 'Farmer Not Exists';
+            $this->create_log((object) $data_log_activities);
+            return response()->json([
+                'result' => false,
+                'message' => 'Farmer Not Exists',
+            ]);
+        }
+        // $family_info = new FamilyInfo();
+        $data_family_info = [
+            'education'=>$data_family['education'],
+            'marial_status'=>$data_family['marial_status'],
+            'parent_name'=>$data_family['parent_name'],
+            'spouse_name'=>$data_family['spouse_name'],
+            'no_of_family'=>$data_family['no_of_family'],
+            'total_child_under_18'=>json_encode($data_family['total_child_under_18']),
+            'total_child_under_18_going_school'=>$data_family['total_child_under_18_going_school']
+        ];
+        try {
+            $family_info = FamilyInfo::updateOrCreate(['farmer_id'=>$farmer_data->id], $data_family_info );
+            if(isset($family_info))
+            {
+                $data_log_activities['status_code'] = 200;
+                $data_log_activities['status_msg'] = 'Update Family Information Successfully';
+                $this->create_log((object) $data_log_activities);
+                return response()->json([
+                    'result' => true,
+                    'message' => 'Update Family Information Successfully',
+                    'data'=>[
+                        'family_info'=>$family_info
+                    ]
+                    
+                ]);
+            }
+        } 
+        catch (\Exception $e) {  
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $e->getMessage();
+            $this->create_log((object) $data_log_activities);
+            return response()->json([
+                'result' => true,
+                'message' => 'Update Family Information Failed',
+            ]);
+        }
+    }
+
     // Asset Info
     public function update_asset_info(Request $request, string $id)
     {
+        $data_log_activities = [];
+        $data_log_activities['action'] = 'edit';
+        $data_log_activities['request'] = $request->all();
         $data_asset = $request->data_asset;
         $farmer_data = FarmerDetails::find($id);
         if(!isset($farmer_data))
         {
+            $data_log_activities['status_code'] = 404;
+            $data_log_activities['status_msg'] = 'Farmer Not Exists';
+            $this->create_log((object) $data_log_activities);
             return response()->json([
                 'result' => false,
                 'message' => 'Farmer Not Exists',
@@ -273,20 +292,27 @@ class FarmersController extends Controller
             'consumer_electronic'=>$data_asset['consumer_electronic'],
             'vehicle'=>$data_asset['vehicle']
         ];
-        $asset_info = AssetInfo::updateOrCreate(['farmer_id'=>$farmer_data->id], $data_asset_info );
-        if(isset($asset_info))
-        {
-            return response()->json([
-                'result' => true,
-                'message' => 'Update Asset Information Successfully',
-                'data'=>[
-                    'asset_info'=>$asset_info
-                ]
-                
-            ]);
-        }
-        else
-        {
+        try {
+            $asset_info = AssetInfo::updateOrCreate(['farmer_id'=>$farmer_data->id], $data_asset_info );
+            if(isset($asset_info))
+            {
+                $data_log_activities['status_code'] = 200;
+                $data_log_activities['status_msg'] = 'Update Asset Information Successfully';
+                $this->create_log((object) $data_log_activities);
+                return response()->json([
+                    'result' => true,
+                    'message' => 'Update Asset Information Successfully',
+                    'data'=>[
+                        'asset_info'=>$asset_info
+                    ]
+                    
+                ]);
+            }
+        } 
+        catch (\Exception $e) { 
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $e->getMessage();
+            $this->create_log((object) $data_log_activities);
             return response()->json([
                 'result' => false,
                 'message' => 'Update Asset Information Failed',
@@ -675,14 +701,12 @@ class FarmersController extends Controller
     
     public function registration(Request $request)
     {
-        $log_actitvities = new LogActivitiesController();
+        $data_log_activities = [];
+        $data_log_activities['action'] = 'create';
+        $data_log_activities['lat'] = $request->staff_lat;
+        $data_log_activities['lng'] = $request->staff_lng;
+        $data_log_activities['request'] = $request->all();
         $staff = Auth::user()->staff;
-        $data_log_activities = [
-            'request' =>$request->all(),
-            'staff_id' => $staff->id,
-            'action' =>'create',
-            'type' => 308
-        ];
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required|string|unique:users,phone_number',
             'full_name' => '|nullable|string',
@@ -697,7 +721,8 @@ class FarmersController extends Controller
             $data_log_activities['status_code'] = 400;
             $data_log_activities['status_msg'] = $str_validation;
             try {
-                $log_actitvities->store_log((object) $data_log_activities);
+                $this->create_log((object) $data_log_activities);
+                // $log_actitvities->store_log();
             } catch (\Exception $e) {  
             
             }
@@ -781,7 +806,7 @@ class FarmersController extends Controller
             $farmer_data = $farmer_details->create($data_farmer_details);
             $data_log_activities['status_code'] = 200;
             $data_log_activities['status_msg'] = 'Farmer Registration Successfully';
-            $log_actitvities->store_log((object) $data_log_activities);
+            $this->create_log((object) $data_log_activities);
             $countable->update(['count_number'=>$countable->count_number +=1]);
             return response()->json([
                 'result' => true,
@@ -793,7 +818,8 @@ class FarmersController extends Controller
         } catch (\Exception $e) {  
             $data_log_activities['status_code'] = 400;
             $data_log_activities['status_msg'] = $e->getMessage();
-            $log_actitvities->store_log((object) $data_log_activities);
+            $this->create_log((object) $data_log_activities);
+            // $log_actitvities->store_log((object) $data_log_activities);
             User::find($user->id)->delete();
             return response()->json([
                 'result' => true,
@@ -830,7 +856,7 @@ class FarmersController extends Controller
         $data_education = [];
         $data_marial_status = [];
         $data_gender = [];
-        $education = FarmCatalogue::where('NAME','Education')->first();
+        $education = FarmCatalogue::where('NAME','Education Status')->first();
         if(isset($education))
         {
             $data_education = $education->catalogue_value()->get();
@@ -1146,5 +1172,23 @@ class FarmersController extends Controller
             ]
             
         ]);
+    }
+
+    public function create_log($data)
+    {
+        // dd($data);
+        $staff = Auth::user()->staff;
+        $log_actitvities = new LogActivitiesController();
+        $data_log_activities = [
+            'staff_id' => $staff->id,
+            'type' => 308,
+            'action'=>$data->action,
+            'request'=>$data->request,
+            'status_code'=>$data->status_code,
+            'status_msg'=>$data->status_msg,
+            'lat'=>$data->lat,
+            'lng'=>$data->lng
+        ];
+        $log_actitvities->store_log((object) $data_log_activities);
     }
 }
