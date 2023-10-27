@@ -147,7 +147,9 @@
                 title: {
                     text: 'Farm area by commune'
                 },
-                type: 'category',
+                xAxis: {
+                    type: 'category'
+                },
                 tooltip: {
                     valueSuffix: ' HA'
                 },
