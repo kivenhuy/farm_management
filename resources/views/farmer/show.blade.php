@@ -443,6 +443,58 @@
                             </div>
                         </div>
 
+                        <div class="card">
+                            <h5 class="card-header fw-bold card-header-status collapsed" data-bs-toggle="collapse" data-bs-target="#card-body-animal-husbandry">Animal Husbandry</h5>
+                            <div class="collapse" id="card-body-animal-husbandry">
+                                @php $animalHusbandries = $farmerDetail->animal_husbandry->count() ? $farmerDetail->animal_husbandry : []; @endphp
+                                {{-- @php dd($farmerDetail->animal_husbandry); @endphp --}}
+                                @forelse($animalHusbandries as $animalHusbandry)
+                                    <div class="card-body border-bottom  pb-5">
+                                        <div class="form-group row border-bottom">
+                                            <div class="col-md-6 d-flex align-items-center">
+                                                <label class="col-md-6 col-form-label fw-medium text-heading" for="">Farm Animal</label>
+                                                <span class="col-md-6">{{ ucwords($animalHusbandry?->farm_animal) }}</span>
+                                            </div>
+                                            <div class="col-md-6 d-flex align-items-center">
+                                                <label class="col-md-6 col-form-label fw-medium text-heading" for="">Animal Count</label>
+                                                <span class="col-md-6">{{ ucwords($animalHusbandry?->animal_count) }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row border-bottom">
+                                            <div class="col-md-6 d-flex align-items-center">
+                                                <label class="col-md-6 col-form-label fw-medium text-heading" for="">Fodder</label>
+                                                <span class="col-md-6">{{ ucwords($animalHusbandry?->fodder) }}</span>
+                                            </div>
+                                            <div class="col-md-6 d-flex align-items-center">
+                                                <label class="col-md-6 col-form-label fw-medium text-heading" for="">Animal Housing</label>
+                                                <span class="col-md-6">{{ ucwords($animalHusbandry?->animal_housing) }}</span>
+                                            </div>
+                                        </div>          
+                                        <div class="form-group row border-bottom">
+                                            <div class="col-md-6 d-flex align-items-center">
+                                                <label class="col-md-6 col-form-label fw-medium text-heading" for="">Revenue</label>
+                                                <span class="col-md-6">{{ number_format((int) $animalHusbandry?->revenue) . ' VND' }}</span>
+                                            </div>
+                                            <div class="col-md-6 d-flex align-items-center">
+                                                <label class="col-md-6 col-form-label fw-medium text-heading" for="">Breed Name</label>
+                                                <span class="col-md-6">{{ ucwords($animalHusbandry?->breed_name) }}</span>
+                                            </div>
+                                        </div>    
+                                        <div class="form-group row border-bottom">
+                                            <div class="col-md-6 d-flex align-items-center">
+                                                <label class="col-md-6 col-form-label fw-medium text-heading" for="">Animal For Growth</label>
+                                                <span class="col-md-6">{{ ucwords($animalHusbandry?->animal_for_growth) }}</span>
+                                            </div>
+                                        </div>                 
+                                    </div>
+                                @empty
+                                    <div class="card-body">
+                                        <p>No data found</p>
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="tab-pane fade" id="farm-detail">
