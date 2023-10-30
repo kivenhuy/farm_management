@@ -33,13 +33,20 @@
                             <td>{{ number_format($cropInformation->expected_expense) . ' VND'}}</td>
                             <td>{{ number_format($cropInformation->expected_income) . ' VND'}}</td>
                             <td>{{ $cropInformation->expected_yield . ' ' . $cropInformation->expected_yield_type }}</td>
-                            <td style="width: 250px;">
-                                <a href="{{ route('crop-informations.edit', ['crop_information' => $cropInformation]) }}" class="btn btn-primary btn-sm text-white" style="margin-right: 10px;"><i class="fa fa-edit"></i>Edit</a>    
+                            <td style="width: 200px;">
+                                <a class="rounded-circle btn-primary text-white p-2 avatar avatar-sm me-2" href="{{ route('crop-informations.edit', ['crop_information' => $cropInformation]) }}" title="Edit">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+
                                 <form method="POST" action="{{ route('crop-informations.destroy', ['crop_information' => $cropInformation]) }}" class="d-inline">
                                     {{ method_field('DELETE') }}
                                     @csrf
 
-                                    <button type="button" class="btn btn-sm btn-danger js-delete-crop" data-delete-crop-title="{{ $cropInformation->name }}"><i class="fa fa-trash"></i> Delete</button>
+                                    <a class="rounded-circle btn-danger text-white p-2 avatar avatar-sm js-delete-crop" href="javascript:void(0)" data-delete-crop-title="{{ $cropInformation->name }}" title="Delete">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+
+                                    {{-- <button type="button" class="btn btn-sm btn-danger js-delete-crop" data-delete-crop-title="{{ $cropInformation->name }}"><i class="fa fa-trash"></i> Delete</button> --}}
                                 </form>
                             </td>
                         </tr>

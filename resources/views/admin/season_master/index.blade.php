@@ -66,16 +66,19 @@
                             <td>{{ $seasonMaster->from_period}}</td>
                             <td>{{ $seasonMaster->to_period}}</td>
                             <td>{{ $seasonMaster->status == 'active' ? 'Active' : 'Inactive'}} </td>
-                            <td style="width: 250px;">
-                                <a href="{{ route('season-masters.edit', ['season_master' => $seasonMaster]) }}" class="btn btn-primary btn-sm text-white" style="margin-right: 10px;"><i class="fa fa-edit"></i>Edit</a>    
+                            <td style="width: 200px;">
+                                <a class="rounded-circle btn-primary text-white p-2 avatar avatar-sm me-2" href="{{ route('season-masters.edit', ['season_master' => $seasonMaster]) }}" title="Edit">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+
                                 <form method="POST" action="{{ route('season-masters.destroy', ['season_master' => $seasonMaster]) }}" class="d-inline">
                                     {{ method_field('DELETE') }}
                                     @csrf
-
-                                    <button type="button" class="btn btn-sm btn-danger js-delete-season" data-delete-season-title="{{ $seasonMaster->name }}"><i class="fa fa-trash"></i> Delete</button>
+                                    
+                                    <a class="rounded-circle btn-danger text-white p-2 avatar avatar-sm js-delete-season" href="javascript:void(0)" data-delete-season-title="{{ $seasonMaster->season->name }}" title="Delete">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
                                 </form>
-
-                                {{-- <a href="{{ }}" class="btn btn-danger">Delete</a>     --}}
                             </td>
                         </tr>
                     @endforeach
