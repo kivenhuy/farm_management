@@ -7,3 +7,15 @@
 .parsley-error {
   border-color: #dc3545;
 }
+
+.card-header-status {
+  cursor: pointer;
+  background-color: #25bcf1 !important;
+  color: white;
+}
+
+.card-header-status.collapsed {
+  background-color: white !important;
+  color: #25bcf1;
+}
+

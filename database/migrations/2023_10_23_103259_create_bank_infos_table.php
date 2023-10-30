@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('bank_infos', function (Blueprint $table) {
             $table->id();
+            $table->integer('farmer_id');
             $table->string('accout_type')->nullable();
             $table->string('accout_no')->nullable();
             $table->string('bank_name')->nullable();

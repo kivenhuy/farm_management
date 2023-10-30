@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('family_infos', function (Blueprint $table) {
             $table->id();
+            $table->integer('farmer_id');
             $table->string('education')->nullable();
             $table->string('marial_status')->nullable();
             $table->string('parent_name')->nullable();

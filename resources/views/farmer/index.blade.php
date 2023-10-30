@@ -24,10 +24,11 @@
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                       <tr>
-                          <th>Farmer Name</th>
                           <th>Farmer Code</th>
+                          <th>Farmer Name</th>
                           <th>Phone Number</th>
                           <th>Gender</th>
+                          <th>Field Officer</th>
                           <th>Action</th>
                       </tr>
                     </thead>
@@ -101,11 +102,11 @@
                     //     }
                     // },
                     columns: [
-                          {data: 'full_name', name: 'full_name', render: function(data){
-                              return (data=="")?"":data;
-                          }},
                           {data: 'farmer_code', name: 'farmer_code',render: function (data) {
                             return (data=="")?"":data;
+                          }},
+                          {data: 'full_name', name: 'full_name', render: function(data){
+                              return (data=="")?"":data;
                           }},
                           {data: 'phone_number', name: 'phone_number',render: function (data) {
                             return (data=="")?"":data;
@@ -113,6 +114,7 @@
                           {data: 'gender', name: 'gender',render: function (data) {
                             return (data=="")?"":data;
                           }},
+                          {data: 'staff_name', name: 'staff_name'},
                           {data: 'action', name: 'action'},
                       ]
         });
