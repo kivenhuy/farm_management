@@ -101,21 +101,21 @@
                                     <div class="form-group row border-bottom">
                                         <div class="col-md-6 d-flex align-items-center">
                                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Gender</label>
-                                            <span class="col-md-6">{{ ucwords($farmerDetail->gender) }}</span>
+                                            <span class="col-md-6">{{ ucwords($farmerDetail->gender ?? 'N/A') }}</span>
                                         </div>
                                         <div class="col-md-6 d-flex align-items-center">
                                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">DOB</label>
-                                            <span class="col-md-6">{{ $farmerDetail->dob }}</span>
+                                            <span class="col-md-6">{{ $farmerDetail->dob ?? 'N/A' }}</span>
                                         </div>
                                     </div>
                                     <div class="form-group row border-bottom">
                                         <div class="col-md-6 d-flex align-items-center">
                                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Enrollment Date</label>
-                                            <span class="col-md-6">{{ $farmerDetail->enrollment_date }}</span>
+                                            <span class="col-md-6">{{ $farmerDetail->enrollment_date ?? 'N/A' }}</span>
                                         </div>
                                         <div class="col-md-6 d-flex align-items-center">
                                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Enrollment Place</label>
-                                            <span class="col-md-6">{{ $farmerDetail->enrollment_place }}</span>
+                                            <span class="col-md-6">{{ $farmerDetail->enrollment_place ?? 'N/A' }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -129,29 +129,29 @@
                                     <div class="form-group row border-bottom">
                                         <div class="col-md-6 d-flex align-items-center">
                                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Country</label>
-                                            <span class="col-md-6">{{ $farmerDetail->countryRelation?->country_name }}</span>
+                                            <span class="col-md-6">{{ $farmerDetail->countryRelation?->country_name ?? 'N/A' }}</span>
                                         </div>
                                         <div class="col-md-6 d-flex align-items-center">
                                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Province</label>
-                                            <span class="col-md-6">{{ $farmerDetail->provinceRelation?->province_name }}</span>
+                                            <span class="col-md-6">{{ $farmerDetail->provinceRelation?->province_name ?? 'N/A' }}</span>
                                         </div>
                                     </div>
 
                                     <div class="form-group row border-bottom">
                                         <div class="col-md-6 d-flex align-items-center">
                                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">District</label>
-                                            <span class="col-md-6">{{ $farmerDetail->districtRelation?->district_name }}</span>
+                                            <span class="col-md-6">{{ $farmerDetail->districtRelation?->district_name ?? 'N/A' }}</span>
                                         </div>
                                         <div class="col-md-6 d-flex align-items-center">
                                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Commune</label>
-                                            <span class="col-md-6">{{ $farmerDetail->communeRelation?->commune_name }}</span>
+                                            <span class="col-md-6">{{ $farmerDetail->communeRelation?->commune_name ?? 'N/A' }}</span>
                                         </div>
                                     </div>
 
                                     <div class="form-group row border-bottom">
                                         <div class="col-md-6 d-flex align-items-center">
                                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Village</label>
-                                            <span class="col-md-6">{{ $farmerDetail->village }}</span>
+                                            <span class="col-md-6">{{ $farmerDetail->village ?? 'N/A' }}</span>
                                         </div>
                                     </div>
                                 </div>
