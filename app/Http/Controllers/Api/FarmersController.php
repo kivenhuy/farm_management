@@ -169,47 +169,140 @@ class FarmersController extends Controller
      * Update the specified resource in storage.
      */
     // Personal Infomartion
-    // public function update_personal_info(Request $request, string $id)
-    // {
-    //     $data_family = $request->data_family;
-    //     $farmer_data = FarmerDetails::find($id);
-    //     if(!isset($farmer_data))
-    //     {
-    //         return response()->json([
-    //             'result' => false,
-    //             'message' => 'Farmer Not Exists',
-    //         ]);
-    //     }
-    //     // $family_info = new FamilyInfo();
-    //     $data_family_info = [
-    //         'education'=>$data_family['education'],
-    //         'marial_status'=>$data_family['marial_status'],
-    //         'parent_name'=>$data_family['parent_name'],
-    //         'spouse_name'=>$data_family['spouse_name'],
-    //         'no_of_family'=>$data_family['no_of_family'],
-    //         'total_child_under_18'=>json_encode($data_family['total_child_under_18']),
-    //         'total_child_under_18_going_school'=>$data_family['total_child_under_18_going_school']
-    //     ];
-    //     $family_info = FamilyInfo::updateOrCreate(['farmer_id'=>$farmer_data->id], $data_family_info );
-    //     if(isset($family_info))
-    //     {
-    //         return response()->json([
-    //             'result' => true,
-    //             'message' => 'Update Family Information Successfully',
-    //             'data'=>[
-    //                 'family_info'=>$family_info
-    //             ]
-                
-    //         ]);
-    //     }
-    //     else
-    //     {
-    //         return response()->json([
-    //             'result' => false,
-    //             'message' => 'Update Family Information Failed',
-    //         ]);
-    //     }
-    // }
+    public function update_personal_info(Request $request)
+    {
+        $data_log_activities = [];
+        $data_log_activities['action'] = 'update';
+        $data_log_activities['lat'] = $request->staff_lat;
+        $data_log_activities['lng'] = $request->staff_lng;
+        $data_log_activities['request'] = $request->all();
+        $farmer_details = FarmerDetails::find($request->farmer_id);
+        if (!$farmer_details) {
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = "Farmer Not Exists";
+            try {
+                $this->create_log((object) $data_log_activities);
+                // $log_actitvities->store_log();
+            } catch (\Exception $e) {  
+            
+            }
+            return response()->json([
+                'result' => false,
+                'message' =>"Farmer Not Exists",
+            ]);
+        }
+        $staff = Auth::user()->staff;
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required|string|unique:users,phone_number',
+            'full_name' => '|nullable|string',
+            // 'password' => 'required|string|min:5',
+        ]);
+        if ($validator->fails()) {
+            $str_validation = "";
+            foreach ($validator->messages()->messages() as $key => $data)
+            {
+                $str_validation .= $data[0].",";
+            }
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $str_validation;
+            try {
+                $this->create_log((object) $data_log_activities);
+                // $log_actitvities->store_log();
+            } catch (\Exception $e) {  
+            
+            }
+            return response()->json([
+                'result' => false,
+                'message' => $validator->messages(),
+            ]);
+        }
+        $email = "";
+        if($request->email != "")
+        {
+            $email = $request->email;
+        }
+        $password = "";
+        if($request->password != "")
+        {
+            $password = Hash::make($request->password); 
+        }
+        $user_data = User::find($farmer_details->user_id);
+        $user_data->name = $request->full_name;
+        $user_data->username = $request->full_name; 
+        $user_data->email = $email; 
+        $user_data->password =  $password; 
+        $user_data->phone_number = $request->phone_number; 
+        $user_data->email_verified_at = ""; 
+        // dd($password);
+        $user_data->save();
+        $farmer_photo = [];
+        if (!empty($request->all()['farmer_photo'])) {
+            foreach ($request->all()['farmer_photo'] as $photo) {                        
+                $id = (new UploadsController)->upload_photo($photo,$user_data->id);
+
+                if (!empty($id)) {
+                    array_push($farmer_photo, $id);
+                }
+            }    
+        }
+        $id_proof_photo = [];
+        if (!empty($request->all()['id_proof_photo'])) {
+            
+            foreach ($request->all()['id_proof_photo'] as $photo) {                        
+                $id = (new UploadsController)->upload_photo($photo,$user_data->id);
+
+                if (!empty($id)) {
+                    array_push($id_proof_photo, $id);
+                }
+            }    
+        }
+        
+        $data_farmer_details =[
+            'staff_id'=>$farmer_details->staff_id,
+            'user_id'=>$farmer_details->user_id,
+            'enrollment_date' =>$farmer_details->enrollment_date,
+            'enrollment_place'=>$farmer_details->enrollment_place,
+            'full_name'=>$request->full_name,
+            'phone_number'=>$request->phone_number,
+            'identity_proof'=>$request->identity_proof,
+            'country'=>$request->country,
+            'province'=>$request->province,
+            'district'=>$request->district,
+            'commune'=>$request->commune,
+            'village'=>$request->village,
+            'lng'=>$request->lng,
+            'lat'=>$request->lat,
+            'proof_no'=>$request->proof_no,
+            'gender'=>$request->gender,
+            'farmer_code'=>$farmer_details->farmer_code,
+            'dob'=>$request->dob,
+            'is_online'=>$request->is_online,
+            'farmer_photo'=>implode(',', $farmer_photo),
+            'id_proof_photo'=>implode(',', $id_proof_photo),
+        ];
+       
+        try {
+            $farmer_data = $farmer_details->update($data_farmer_details);
+            $data_log_activities['status_code'] = 200;
+            $data_log_activities['status_msg'] = 'Farmer Update Successfully';
+            $this->create_log((object) $data_log_activities);
+            return response()->json([
+                'result' => true,
+                'message' => 'Farmer Update Successfully',
+                'data' =>[
+                    'farmer_data'=>$farmer_data
+                ]
+            ]);
+        } catch (\Exception $e) {  
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $e->getMessage();
+            $this->create_log((object) $data_log_activities);
+            return response()->json([
+                'result' => true,
+                'message' => 'Farmer Update Failed',
+            ]);
+        }
+    }
 
     // Family Info
     public function update_family_info(Request $request, string $id)

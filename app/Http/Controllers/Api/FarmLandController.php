@@ -204,9 +204,115 @@ class FarmLandController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, FarmLand $farmLand)
+    public function update(Request $request, $id)
     {
-        //
+        $data_log_activities = [];
+        $data_log_activities['action'] = 'update';
+        $data_log_activities['request'] = $request->all();
+        $data_log_activities['lat'] = $request->staff_lat;
+        $data_log_activities['lng'] = $request->staff_lng;
+        $farm_land_data = FarmLand::find($id);
+        $farmer_data = FarmerDetails::find($farm_land_data->farmer_id);
+        $farm_photo = [];
+        $land_document = [];
+        if (!empty($request->all()['farm_photo'])) {
+            
+            foreach ($request->all()['farm_photo'] as $photo) {                        
+                $id = (new UploadsController)->upload_photo($photo,$farmer_data->user_id);
+                if (!empty($id)) {
+                    array_push($farm_photo, $id);
+                }
+            }    
+        }
+      
+        if (!empty($request->all()['land_document'])) {
+            
+            foreach ($request->all()['land_document'] as $photo) {                        
+                $id = (new UploadsController)->upload_photo($photo,$farmer_data->user_id);
+
+                if (!empty($id)) {
+                    array_push($land_document, $id);
+                }
+            }    
+        }
+        $farm_land_data->land_document = json_decode($farm_land_data->land_document);
+        if(isset($request->list_lat_lng))
+        {
+            $data_farm_land_lat_lng = json_decode($request->list_lat_lng);
+            $farm_land_ploting = $farm_land_data->farm_land_lat_lng()->get();
+            if(isset($farm_land_ploting))
+            {
+                foreach( $farm_land_ploting as $data_farm_land_ploting)
+                {
+                    $data_farm_land_ploting->delete();
+                }
+            }
+            
+        }
+        else
+        {
+            $farm_land_ploting = [];
+        }
+        $data_farm_land = [
+            'farmer_id' => $farm_land_data->farmer_id,
+            'farm_name' => $farm_land_data->farm_name,
+            'total_land_holding' => $request->total_land_holding,
+            'lat' => $request->lat,
+            'lng' => $request->lng,
+            'actual_area' => $request->actual_area, 
+            'farm_photo' =>implode(',', $farm_photo),
+            'land_ownership'=> $request->land_ownership,
+            'approach_road'=> $request->approach_road, 
+            'land_topology'=> $request->land_topology, 
+            'land_gradient'=> $request->land_gradient, 
+            'land_document'=> implode(',', $land_document), 
+        ];
+        
+        try {
+            $data_update =  $farm_land_data->update($data_farm_land);
+            if($data_update)
+            {
+                $farm_land_lat_lng = new FarmLandLatLng;
+                foreach($data_farm_land_lat_lng as $key => $lat_lng)
+                {
+                    $farm_land_lat_lng_data = [
+                        'farmer_id'=> $farm_land_data->farmer_id,
+                        'farm_land_id'=> $farm_land_data->id,
+                        'order'=> $key + 1,
+                        'lat'=> $lat_lng[0], 
+                        'lng'=> $lat_lng[1] 
+                    ];
+                    $final_farm_land_lat_lng= $farm_land_lat_lng->create($farm_land_lat_lng_data);
+                }
+            }
+            $data_log_activities['status_code'] = 200;
+            $data_log_activities['status_msg'] = 'Farm Land Updated Successfully';
+            $this->create_log((object) $data_log_activities);
+            return response()->json([
+                'result' => true,
+                'message' => 'Farm Land Created Successfully',
+                'data'=>[
+                    'farm_land' =>$farm_land_data,
+                    'farm_land_lat_lng' =>$farm_land_ploting = $farm_land_data->farm_land_lat_lng()->get(),
+                ]
+            ]);
+        } catch (\Exception $e) {  
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $e->getMessage();
+            $this->create_log((object) $data_log_activities);
+            return response()->json([
+                'result' => true,
+                'message' => 'Farm Land Updated Fail',
+            ]);
+        }
+        // return response()->json([
+        //     'result' => true,
+        //     'message' => 'Get Farm Land Successfully',
+        //     'data' =>[
+        //         'farm_land_data'=>$farm_land_data,
+        //         'farm_land_ploting'=>(object) $farm_land_ploting,
+        //     ]
+        // ]);
     }
 
     /**
