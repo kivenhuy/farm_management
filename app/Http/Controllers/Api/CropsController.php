@@ -168,9 +168,88 @@ class CropsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Crops $crops)
+    public function update(Request $request, $id)
     {
-        //
+        $crop_data = Crops::find($id);
+        $data_log_activities = [];
+        $data_log_activities['action'] = 'update';
+        $data_log_activities['request'] = $request->all();
+        $data_log_activities['lat'] = $request->staff_lat;
+        $data_log_activities['lng'] = $request->staff_lng;
+        $validator = Validator::make($request->all(), [
+            'farm_land_id' => 'required|string',
+            'season_id' => 'required|string',
+            'crop_master_id' => 'required|string',
+            'crop_variety' => 'required|string',
+            'sowing_date' => 'required|string',
+            'expect_date' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            $str_validation = "";
+            foreach ($validator->messages()->messages() as $key => $data)
+            {
+                $str_validation .= $data[0].",";
+            }
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $str_validation;
+            try {
+                $this->create_log((object) $data_log_activities);
+            } catch (\Exception $e) {  
+            
+            }
+            return response()->json([
+                'result' => false,
+                'message' => $validator->messages(),
+            ]);
+        }
+        $user = Auth::user();
+        $crop_photo = [];
+        if (!empty($request->all()['photo'])) {
+            
+            foreach ($request->all()['photo'] as $photo) {                        
+                $id = (new UploadsController)->upload_photo($photo,$user->id);
+                if (!empty($id)) {
+                    array_push($crop_photo, $id);
+                }
+            }    
+        }
+        $crops = new Crops();
+        $data_crops = [
+            'farm_land_id'=>$crop_data->farm_land_id,
+            'season_id'=>$request->season_id,
+            'crop_id'=>$request->crop_master_id,
+            'crop_variety'=>$request->crop_variety,
+            'sowing_date'=>$request->sowing_date,
+            'expect_date'=>$request->expect_date,
+            'est_yield'=>$request->est_yield,
+            'photo'=>implode(',', $crop_photo), 
+        ];
+        try 
+        {
+            $final_crops = $crops->update($data_crops);
+            if($final_crops)
+            {
+                $data_log_activities['status_code'] = 200;
+                $data_log_activities['status_msg'] = 'Crops Created Successfully';
+                $this->create_log((object) $data_log_activities);
+                return response()->json([
+                    'result' => true,
+                    'message' => 'Crops Updated Successfully',
+                    'data'=> [
+                        'data_crops' =>$final_crops,
+                    ]
+                    
+                ]);
+            }
+        } catch (\Exception $e) {  
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $e->getMessage();
+            $this->create_log((object) $data_log_activities);
+            return response()->json([
+                'result' => true,
+                'message' => 'Farm Updated Fail',
+            ]);
+        }
     }
 
     /**
