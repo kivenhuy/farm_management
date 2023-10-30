@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('finance_infos', function (Blueprint $table) {
             $table->id();
+            $table->integer('farmer_id');
             $table->string('loan_taken_last_year')->nullable();
             $table->string('loan_taken_from')->nullable();
             $table->integer('loan_amount')->nullable();

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('asset_infos', function (Blueprint $table) {
             $table->id();
+            $table->integer('farmer_id');
             $table->string('housing_ownership')->nullable();
             $table->string('house_type')->nullable();
             $table->string('consumer_electronic')->nullable();

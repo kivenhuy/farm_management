@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('farm_land_lat_lngs', function (Blueprint $table) {
             $table->id();
+            $table->integer('farmer_id');
             $table->integer('user_id');
             $table->integer('farm_land_id');
             $table->string('lat');

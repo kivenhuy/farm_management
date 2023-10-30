@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('certificate_information', function (Blueprint $table) {
             $table->id();
+            $table->integer('farmer_id');
             $table->string('is_certified_farmer')->nullable();
             $table->string('certification_type')->nullable();
             $table->integer('year_of_ics')->nullable();
