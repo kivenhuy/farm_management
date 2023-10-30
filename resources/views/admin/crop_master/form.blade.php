@@ -105,14 +105,9 @@
                         <div class="col-12 col-md-2">
                             <label for="js-season-code">Expected Yield</label>
                         </div>
-                        <div class="col-12 col-md-3 d-flex">
-                            <input id="js-expected_yield" name="expected_yield" type="number" class="form-control" style="margin-right: 15px;" value="{{ $cropInformation->expected_yield }}" autocomplete="off" placeholder="Duration">
-                            <select name="expected_yield_type" id="js-duration-type" class="form-control">
-                                <option value="">Select Type</option>
-                                @foreach (\App\Models\CropInformation::EXPECTED_YIELD_TYPE as $code => $name)
-                                    <option value="{{  $code }}" {{ $code == $cropInformation->expected_yield_type ? 'selected' : ''}}>{{ $name }}</option>
-                                @endforeach
-                            </select>
+                        <div class="col-12 col-md-3 d-flex align-items-center">
+                            <input id="js-expected_yield" name="expected_yield" type="number" class="form-control" style="margin-right: 15px;" value="{{ $cropInformation->expected_yield }}" autocomplete="off" placeholder="Expected Yield">
+                            <span style="font-weight: 500">Km2</span>
                         </div>
                     </div>
                     
