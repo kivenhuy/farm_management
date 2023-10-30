@@ -30,7 +30,6 @@ class CropInformationRequest extends FormRequest
             'expected_expense' => 'nullable|numeric',
             'expected_income' => 'nullable|numeric',
             'expected_yield' => 'nullable|numeric',
-            'expected_yield_type' => 'nullable|string|in:hectare,acre',
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\CropInformation;
 use App\Models\FarmerDetails;
 use App\Models\FarmLand;
 use App\Models\User;
@@ -114,6 +115,8 @@ class AuthController extends Controller
             ->select('id','full_name', 'farmer_code','phone_number', 'farmer_photo')
             ->get();
 
+        $totalExpectedYield = CropInformation::sum('expected_yield');
+
         return response()->json([
             'result' => true,
             'message' => 'dashboard page',
@@ -123,6 +126,7 @@ class AuthController extends Controller
                 'total_plot' => $totalPlot,
                 'nearby_plot' => $nearbyPlot,
                 'farmer_list' => $farmer_list,
+                'totalExpectedYield' => $totalExpectedYield,
             ]
         ]);
     }
