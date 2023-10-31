@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('crops', function (Blueprint $table) {
             $table->id();
             $table->integer('farm_land_id');
-            $table->integer('season_master_id');
+            $table->integer('season_id');
             $table->integer('crop_id');
             $table->string('crop_variety');
             $table->string('sowing_date');

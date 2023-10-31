@@ -64,7 +64,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::put('farmer/update_animal_husbandry/{id}','update_animal_husbandry');
             Route::put('farmer/update_farm_equipment/{id}','update_farm_equipment');
             Route::put('farmer/update_certificate/{id}','update_certificate');
-            Route::put('farmer/update_personal_info/{id}','update_personal_info');
+            Route::post('farmer/update_personal_info','update_personal_info');
         });
 
         
@@ -75,6 +75,7 @@ Route::middleware('auth:sanctum')->group(function () {
          // Farm land
         Route::get("/farmland", [App\Http\Controllers\Api\FarmLandController::class, 'index'])->name('farmland.index');
         Route::get("/farmland/get_deatils/{id}", [App\Http\Controllers\Api\FarmLandController::class, 'show'])->name('farmland.show');
+        Route::post("/farmland/update_farmland/{id}", [App\Http\Controllers\Api\FarmLandController::class, 'update'])->name('farmland.update');
         Route::get("/farmland/dropdown_value", [App\Http\Controllers\Api\FarmLandController::class, 'create'])->name('farmland.create');
         Route::post("/add_farmland", [App\Http\Controllers\Api\FarmLandController::class, 'store'])->name('commnue.add_farmland');
 
@@ -82,6 +83,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get("/crops", [App\Http\Controllers\Api\CropsController::class, 'index'])->name('crops.index');
         Route::get("/crops_details/{id}", [App\Http\Controllers\Api\CropsController::class, 'show'])->name('crops.show');
         Route::get("/crops/get_dropdown", [App\Http\Controllers\Api\CropsController::class, 'create'])->name('crops.create');
+        Route::post("/crops/update_crops/{id}", [App\Http\Controllers\Api\CropsController::class, 'update'])->name('crops.update');
         Route::post("/add_crops", [App\Http\Controllers\Api\CropsController::class, 'store'])->name('crops.add_crops');
 
         // Dashboard

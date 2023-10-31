@@ -45,6 +45,17 @@ class FarmerDetails extends Model
     {
         return $this->hasMany(FarmLand::class, 'farmer_id', 'id');
     }
+    public function cultivation_crop()
+    {
+        return $this->hasManyThrough(
+            Crops::class,
+            FarmLand::class,
+            'farmer_id', // Foreign key on the Farm Land table...
+            'farm_land_id', // Foreign key on the Crops table...
+            'id', // Local key on the projects table...
+            'id' // Local key on the environments table...
+        );
+    }
     public function family_info()
     {
     	return $this->hasOne(FamilyInfo::class,'farmer_id', 'id');
