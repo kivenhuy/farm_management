@@ -163,8 +163,8 @@
     height: 100%;
   }
   .avatar_farmer{
-    width: 100%;
-    height: 100%;
+    width: 115px;
+    height: 115px;
     border-radius: 50%;
   }
   .img_cultivation 
