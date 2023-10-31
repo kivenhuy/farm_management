@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Crops extends Model
 {
     use HasFactory;
+    protected $table = 'crops';
+    
     protected $fillable = [
         'farm_land_id',
         'season_id',
@@ -22,16 +24,30 @@ class Crops extends Model
 
     public function farm_land()
     {
-        return $this->hasOne(FarmLand::class,'id','farm_land_id');
+        return $this->belongsTo(FarmLand::class,'farm_land_id','id');
     }
 
     public function season()
     {
-        return $this->hasOne(SeasonMaster::class,'id','season_id');
+        return $this->belongsTo(SeasonMaster::class,'season_id','id');
     }
 
     public function crops_master()
     {
-        return $this->hasOne(CropInformation::class,'id','crop_id');
+        return $this->belongsTo(CropInformation::class,'crop_id','id');
+    }
+
+    public function getCropPhotoUrlAttribute()
+    {
+        $photoIds = explode(',', $this->photo);
+        $url = [];
+        foreach ($photoIds as $photoId) {
+            $upload = Uploads::find($photoId);
+            if ($upload) {
+                $url[] = asset($upload->file_name);
+            }
+        }
+
+        return $url;
     }
 }

@@ -40,4 +40,17 @@ class FarmLand extends Model
         return $this->hasMany(Crops::class,'farm_land_id','id');
     }
     
+    public function getFarmPhotoUrlAttribute()
+    {
+        $photoIds = explode(',', $this->farm_photo);
+        $url = [];
+        foreach ($photoIds as $photoId) {
+            $upload = Uploads::find($photoId);
+            if ($upload) {
+                $url[] = asset($upload->file_name);
+            }
+        }
+
+        return $url;
+    }
 }
