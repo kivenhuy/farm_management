@@ -11,8 +11,10 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\FarmersController;
 use App\Http\Controllers\Admin\CropMasterController;
 use App\Http\Controllers\CatalogueValueController;
+use App\Http\Controllers\FarmLandController;
 use App\Http\Controllers\LogActivitiesController;
 use App\Models\CatalogueValue;
+use App\Models\FarmLand;
 use App\Models\LogActivities;
 use Illuminate\Support\Facades\Route;
 
@@ -37,7 +39,8 @@ Route::group(['middleware' => ['auth']], function () {
     //Route::get("/season-master", [HomeController::class, 'season_master'])->name('season_master');
 
      // Farmer Details
-    Route::get("/farmer", [FarmersController::class, 'index'])->name('farmer.index');
+    Route::get("/farmer", [FarmersController::class, 'index'])->name('farmer.');
+    Route::get("/farmer_location", [FarmersController::class, 'farmer_location'])->name('farmer_location.index');
     Route::get("/farmer/dtajax", [FarmersController::class, 'dtajax'])->name('farmer.dtajax');
     Route::get("/farmer/{id}", [FarmersController::class, 'show'])->name('farmer.show');
 
@@ -81,6 +84,10 @@ Route::group(['middleware' => ['auth']], function () {
     // Route::get("/commune/create", [LogActivities::class, 'create'])->name('commune.create');
     // Route::post("/add_commune", [LogActivities::class, 'store'])->name('commune.store');
     // Route::get("/commnue_filter_by_district/{id}", [LogActivities::class, 'filter_by_district'])->name('commnue.filter_by_district');
+
+    // Farm land
+    Route::get("/farm_land", [FarmLandController::class, 'index'])->name('farm_land.index');
+
 
 });
 

@@ -38,10 +38,16 @@
       ]
     },
     {
-      "name": "All Farmer",
+      "name": "All Farmers",
       "icon": "menu-icon tf-icons mdi mdi-account-cowboy-hat",
       "slug": "farmer",
       "url": "farmer"
+    },
+    {
+      "name": "Farm Land Location",
+      "icon": "menu-icon tf-icons mdi mdi-map-marker-down",
+      "slug": "farm_land",
+      "url": "farm_land"
     },
     {
       "name": "All Staff",
