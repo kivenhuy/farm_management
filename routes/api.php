@@ -74,6 +74,7 @@ Route::middleware('auth:sanctum')->group(function () {
         
          // Farm land
         Route::get("/farmland", [App\Http\Controllers\Api\FarmLandController::class, 'index'])->name('farmland.index');
+        Route::get("/get_all_farm_land/{id}", [App\Http\Controllers\Api\FarmLandController::class, 'get_all_farm_land'])->name('get_all_farm_land.index');
         Route::get("/farmland/get_details/{id}", [App\Http\Controllers\Api\FarmLandController::class, 'show'])->name('farmland.show');
         Route::post("/farmland/update_farmland/{id}", [App\Http\Controllers\Api\FarmLandController::class, 'update'])->name('farmland.update');
         Route::get("/farmland/dropdown_value", [App\Http\Controllers\Api\FarmLandController::class, 'create'])->name('farmland.create');
