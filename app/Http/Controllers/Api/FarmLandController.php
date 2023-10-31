@@ -17,7 +17,30 @@ class FarmLandController extends Controller
      */
     public function index()
     {
-        //
+    }
+
+    public function get_all_farm_land($id)
+    {
+        $farm_land_data = FarmLand::where('farmer_id',$id)->get();
+        foreach($farm_land_data as $each_farm_land_data)
+        {
+            if(isset($each_farm_land_data->cultivation))
+            {
+                $cultivation = $each_farm_land_data->cultivation;
+                $each_farm_land_data->total_cultivation = $cultivation->count();
+            }
+            else
+            {
+                $each_farm_land_data->total_cultivation = 0;
+            }
+        }
+        return response()->json([
+            'result' => true,
+            'message' => 'Get All Farm Land Created Successfully',
+            'data'=>[
+                'farm_land_data' =>$farm_land_data,
+            ]
+        ]);
     }
 
     /**
