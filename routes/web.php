@@ -39,7 +39,7 @@ Route::group(['middleware' => ['auth']], function () {
     //Route::get("/season-master", [HomeController::class, 'season_master'])->name('season_master');
 
      // Farmer Details
-    Route::get("/farmer", [FarmersController::class, 'index'])->name('farmer.');
+    Route::get("/farmer", [FarmersController::class, 'index'])->name('farmer.index');
     Route::get("/farmer_location", [FarmersController::class, 'farmer_location'])->name('farmer_location.index');
     Route::get("/farmer/dtajax", [FarmersController::class, 'dtajax'])->name('farmer.dtajax');
     Route::get("/farmer/{id}", [FarmersController::class, 'show'])->name('farmer.show');
