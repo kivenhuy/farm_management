@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('insurance_infos', function (Blueprint $table) {
             $table->id();
+            $table->integer('farmer_id');
             $table->string('life_insurance')->nullable();
             $table->string('provider_life_insurance')->nullable();
             $table->integer('life_insurance_amount')->nullable();

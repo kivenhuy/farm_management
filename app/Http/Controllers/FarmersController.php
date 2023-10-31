@@ -10,6 +10,7 @@ use App\Models\FarmerDetails;
 use App\Models\LogActivities;
 use Yajra\DataTables\DataTables;
 use App\Models\Province;
+use App\Models\Staff;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -56,35 +57,9 @@ class FarmersController extends Controller
      */
     public function show(string $id)
     {
-        $farmer_data = FarmerDetails::find($id);
-        $farmer_data->farmer_photo = uploaded_asset($farmer_data->farmer_photo);
-        $farmer_data->id_proof_photo = uploaded_asset($farmer_data->id_proof_photo);
-        $farmer_data->country = "N/A";
-        $farmer_data->province= "N/A";
-        $farmer_data->district= "N/A";
-        $farmer_data->commune = "N/A";
-        if(Country::find($farmer_data->country))
-        {
-            $farmer_data->country = Country::find($farmer_data->country)->country_name;
-        }
-        if(Province::find($farmer_data->province))
-        {
-            $farmer_data->province= Province::find($farmer_data->province)->province_name;
-        }
-        if( District::find($farmer_data->district))
-        {
-            $farmer_data->district= District::find($farmer_data->district)->district_name;
-        }
-        if(Commune::find($farmer_data->commune))
-        {
-            $farmer_data->commune= Commune::find($farmer_data->commune)->commune_name;
-        }
-        // $farmer_data->country= Country::find($farmer_data->country)->country_name;
-        // $farmer_data->province= Province::find($farmer_data->province)->province_name;
-        // $farmer_data->district= District::find($farmer_data->district)->district_name;
-        // $farmer_data->commune= Commune::find($farmer_data->commune)->commune_name;
-        // dd($farmer_data);
-        return view('farmer.show',['farmer_data'=>$farmer_data]);
+        $farmerDetail = FarmerDetails::find($id);
+        
+        return view('farmer.show',['farmerDetail'=> $farmerDetail]);
     }
 
     /**
@@ -118,9 +93,12 @@ class FarmersController extends Controller
         $data = $out->getData();
         for($i=0; $i < count($data->data); $i++) {
             $output = '';
-             $output .= ' <a href="'.url(route('farmer.show',['id'=>$data->data[$i]->id])).'" class="btn btn-primary btn-xs"  data-toggle="tooltip" title="Show Details" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-eye"></i></a>';
-            
-             $data->data[$i]->action = (string)$output;
+            $output .= ' <a href="'.url(route('farmer.show',['id'=>$data->data[$i]->id])).'" class="btn btn-primary btn-xs"  data-toggle="tooltip" title="Show Details" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-eye"></i></a>';
+             
+            $data->data[$i]->action = (string)$output;
+
+            $staff = Staff::find($data->data[$i]->staff_id);
+            $data->data[$i]->staff_name = $staff?->name;
         }
         $out->setData($data);
         // dd($out);

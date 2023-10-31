@@ -89,6 +89,26 @@ class FarmerDetails extends Model
     	return $this->hasMany(FarmEquipment::class,'farmer_id', 'id');
     }
 
+    public function countryRelation()
+    {
+        return $this->belongsTo(Country::class,'country', 'id');
+    }
+
+    public function provinceRelation()
+    {
+        return $this->belongsTo(Province::class,'province', 'id');
+    }
+
+    public function districtRelation()
+    {
+        return $this->belongsTo(District::class,'district', 'id');
+    }
+
+    public function communeRelation()
+    {
+        return $this->belongsTo(Commune::class, 'commune', 'id');
+    }
+
     public function thumbnail()
     {
         return $this->belongsTo(Uploads::class,'farmer_photo', 'id');
@@ -100,6 +120,6 @@ class FarmerDetails extends Model
             return asset($this->thumbnail->file_name);
         }
         
-        return '';
+        return asset('assets/img/avatars/1.png');
     }
 }
