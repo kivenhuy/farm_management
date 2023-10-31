@@ -378,7 +378,7 @@
                     </div>
                     <div>
                       <div class="mar-all mb-2" style=" text-align: end;">
-                        <a href="">
+                        <a href="farmer/${locations[i]['farmer_id']}">
                             <button type="submit" name="button" value="publish" class="btn btn-primary waves-effect waves-light">View More</button>
                         </a>
                     </div>
