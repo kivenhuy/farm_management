@@ -98,9 +98,17 @@ class FarmersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function farmer_location(Request $request)
     {
-        //
+        $farmer_data = FarmerDetails::all();
+        // foreach ($farmer_data as $each_farmer)
+        // {
+        //     $farm_land_data = $each_farmer->farm_lands()->get();
+        //     $cultivation_crop = $each_farmer->cultivation_crop()->get();
+        //     dd($cultivation_crop);
+        // }
+        // dd($farmer_data);
+        return view('farmer.farmer_location',['farmers_data'=>$farmer_data]);
     }
 
     public function dtajax(Request $request)

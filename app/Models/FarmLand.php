@@ -34,5 +34,10 @@ class FarmLand extends Model
     {
         return $this->hasMany(FarmLandLatLng::class,'farm_land_id','id');
     }
+
+    public function cultivation()
+    {
+        return $this->hasMany(Crops::class,'farm_land_id','id');
+    }
     
 }

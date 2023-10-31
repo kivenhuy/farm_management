@@ -150,7 +150,16 @@ class FarmersController extends Controller
         {
             $farmer_data->commune= Commune::find($farmer_data->commune)->commune_name;
         }
-        // $farmer_data->country= Country::find($farmer_data->country)->country_name;
+        $actual_area = 0;
+        $farm_land_data = $farmer_data->farm_lands()->get();
+        if(isset($farm_land_data))
+        {
+            foreach($farm_land_data as $each_farm_land)
+            {
+                $actual_area += $each_farm_land->actual_area;
+            }
+        }
+        $farmer_data->total_area = $actual_area;
         // $farmer_data->province= Province::find($farmer_data->province)->province_name;
         // $farmer_data->district= District::find($farmer_data->district)->district_name;
         // $farmer_data->commune= Commune::find($farmer_data->commune)->commune_name;

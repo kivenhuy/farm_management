@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FarmerDetails;
 use App\Models\LogActivities;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,11 @@ class LogActivitiesController extends Controller
      */
     public function index()
     {
+        
         $data_log = LogActivities::all();
-        return view('activities.index',['data_log'=>$data_log]);
-        // dd($data_log);
+        $farmer_data = FarmerDetails::all();
+        return view('activities.index',['data_log'=>$data_log,'farmers_data'=>$farmer_data]);
+        
     }
 
     /**

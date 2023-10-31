@@ -23,8 +23,8 @@
             var infowindow = new google.maps.InfoWindow();
   
             var marker, i;
-              
             for (i = 0; i < locations.length; i++) {  
+             console.log( locations[i]['lat'] + "," +locations[i]['lng'])
                   marker = new google.maps.Marker({
                     position: new google.maps.LatLng(locations[i]['lat'], locations[i]['lng']),
                     map: map
@@ -32,14 +32,12 @@
                     
                   google.maps.event.addListener(marker, 'click', (function(marker, i) {
                     return function() {
-                      infowindow.setContent(locations[i]['action']);
+                      // infowindow.setContent(locations[i]['action']);
                       infowindow.open(map, marker);
                     }
                   })(marker, i));
-  
             }
         }
-  
         window.initMap = initMap;
 </script>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key=AIzaSyAfLu--o47wFfFifI1F2gnK0T8l7oje08Q&callback=initMap">
