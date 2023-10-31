@@ -88,7 +88,7 @@
                 <div class="card-body border-bottom">
                     @php $photoUrls = !empty($farmLand->farm_photo_url) ? $farmLand->farm_photo_url : []; @endphp
                     @foreach($photoUrls as $photoUrl)
-                        <img src="{{ $photoUrl }}" class="d-block mb-3">
+                        <img src="{{ $photoUrl }}" class="d-block mb-3" style="max-width: 100%">
                     @endforeach
                 </div>
             </div>
