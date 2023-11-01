@@ -221,12 +221,13 @@ class FarmersController extends Controller
                 $fullName = $row[0] . ' ' . $row[1];
 
                 $phoneNumber = str_replace('o', '0', $row[2]);
-                $phoneNumber = preg_replace("([^0-9])",'', $phoneNumber);
+                $phoneNumber = str_replace('nt', '', $phoneNumber);
+                $phoneNumber = preg_replace("/[a-zA-Z]/", '', $phoneNumber);
 
-                if(empty($phone_number)) {
+                if(empty($phoneNumber)) {
                     $phoneNumber = str_replace('+', '0', fake()->unique()->e164PhoneNumber());
                 }
-
+                
                 $province = Province::where('province_name', $row[4])->first();
                 if (empty($province)) {
                     $province = Province::where('province_name', 'like', '%'.$row[2]. '%')->first();
