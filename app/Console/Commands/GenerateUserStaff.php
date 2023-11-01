@@ -32,7 +32,7 @@ class GenerateUserStaff extends Command
         return null;
 
         $faker = \Faker\Factory::create();
-        $firstNameArr = ['Huy', 'khang', 'bao', 'phuc', 'anh', 'khoa', 'phat', 'dat', 'khoi'];
+        $firstNameArr = ['huy', 'khang', 'bao', 'phuc', 'anh', 'khoa', 'phat', 'dat', 'khoi'];
         $lastNameArr = ['nguyen', 'tran', 'phan', 'le', 'bui', 'dang'];
         
         for ($i=1; $i<=31; $i++) {
