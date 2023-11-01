@@ -22,7 +22,7 @@
                     <td>{{ $crop->season->season->name }}</td>
                     <td>{{ $crop->crops_master->name }}</td>
                     <td>{{ $crop->crop_variety }}</td>
-                    <td>{{ number_format($crop->farm_land->total_land_holding/100, 2) . " Ha" }}</td>
+                    <td>{{ number_format($crop->farm_land->total_land_holding, 2) . " Ha" }}</td>
                     <td>{{ $crop->sowing_date }}</td>
                     <td>{{ $crop->est_yield . " Kg"  }}</td>
                     <td>
@@ -66,7 +66,7 @@
                     <div class="form-group row border-bottom">
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Cultivation Area HA</label>
-                            <span class="col-md-6">{{ number_format($crop->farm_land->total_land_holding/100, 2) . " Ha" }}</span>
+                            <span class="col-md-6">{{ number_format($crop->farm_land->total_land_holding, 2) . " Ha" }}</span>
                         </div>
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Sowing Date</label>
