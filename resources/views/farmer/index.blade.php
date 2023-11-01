@@ -11,6 +11,7 @@
             </div>
           </div>
           <div class="card-body">
+            @include('shared.form-alerts')
             <form method="post" action="{{ route('farmer.import_csv') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group row">
