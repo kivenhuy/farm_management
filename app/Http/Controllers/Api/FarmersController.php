@@ -275,6 +275,8 @@ class FarmersController extends Controller
     {
         $data_log_activities = [];
         $data_log_activities['action'] = 'edit';
+        $data_log_activities['lat'] = $request->staff_lat;
+        $data_log_activities['lng'] = $request->staff_lng;
         $data_log_activities['request'] = $request->all();
         $data_family = $request->data_family;
         $farmer_data = FarmerDetails::find($id);
@@ -331,6 +333,8 @@ class FarmersController extends Controller
     {
         $data_log_activities = [];
         $data_log_activities['action'] = 'edit';
+        $data_log_activities['lat'] = $request->staff_lat;
+        $data_log_activities['lng'] = $request->staff_lng;
         $data_log_activities['request'] = $request->all();
         $data_asset = $request->data_asset;
         $farmer_data = FarmerDetails::find($id);
