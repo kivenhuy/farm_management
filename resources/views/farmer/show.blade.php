@@ -13,12 +13,11 @@
                         <img class="img-fluid rounded mb-3 mt-4" src="{{ $farmerDetail->avatar_url }}" height="120" width="120" alt="User avatar">
                         <div class="user-info text-center">
                           <h4>{{ $farmerDetail->full_name }}</h4>
-                          <span class="text-danger">Farmer</span>
                         </div>
                       </div>
                     </div>
                     
-                    <h5 class="pb-3 border-bottom mb-3">Details</h5>
+                    <h5 class="pb-3 border-bottom mt-4 mb-3">Farmer Details</h5>
                     <div class="info-container">
                       <ul class="list-unstyled mb-4">
                         <li class="mb-3">

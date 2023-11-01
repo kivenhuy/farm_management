@@ -27,8 +27,8 @@
             <a class="back" href="javascript:void(0)"><span class="mdi mdi-arrow-left"></span> Back</a>
         </div>
         <div class="card">
-            <h5 class="card-header fw-bold card-header-status collapsed" data-bs-toggle="collapse" data-bs-target="#card-body-farm-information-{{ $farmLand->id}}">Farm Information</h5>
-            <div class="collapse" id="card-body-farm-information-{{ $farmLand->id}}">
+            <h5 class="card-header fw-bold card-header-status" data-bs-toggle="collapse" data-bs-target="#card-body-farm-information-{{ $farmLand->id}}">Farm Information</h5>
+            <div class="" id="card-body-farm-information-{{ $farmLand->id}}">
                 <div class="card-body border-bottom">
                     <div class="form-group row border-bottom">
                         <div class="col-md-6 d-flex align-items-center">
@@ -83,6 +83,17 @@
 
     <div class="farm-detail d-none" data-farmland-id={{ $farmLand->id }}>
         <div class="card">
+            <h5 class="card-header fw-bold card-header-status collapsed" data-bs-toggle="collapse" data-bs-target="#card-body-plot-area-{{ $farmLand->id}}">Plot Area</h5>
+            <div class="collapse" id="card-body-plot-area-{{ $farmLand->id}}">
+                <div class="card-body border-bottom">
+                    Implement later
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="farm-detail d-none" data-farmland-id={{ $farmLand->id }}>
+        <div class="card">
             <h5 class="card-header fw-bold card-header-status collapsed" data-bs-toggle="collapse" data-bs-target="#card-body-farm-photo-{{ $farmLand->id}}">Farm Photo</h5>
             <div class="collapse" id="card-body-farm-photo-{{ $farmLand->id}}">
                 <div class="card-body border-bottom">
@@ -90,17 +101,6 @@
                     @foreach($photoUrls as $photoUrl)
                         <img src="{{ $photoUrl }}" class="d-block mb-3" style="max-width: 100%">
                     @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="farm-detail d-none" data-farmland-id={{ $farmLand->id }}>
-        <div class="card">
-            <h5 class="card-header fw-bold card-header-status collapsed" data-bs-toggle="collapse" data-bs-target="#card-body-plot-area-{{ $farmLand->id}}">Plot Area</h5>
-            <div class="collapse" id="card-body-plot-area-{{ $farmLand->id}}">
-                <div class="card-body border-bottom">
-                    Implement later
                 </div>
             </div>
         </div>
