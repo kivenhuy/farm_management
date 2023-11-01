@@ -49,30 +49,13 @@ class FarmersController extends Controller
         }
         $staff_data = $user_login->staff->first();
         $farmer_data = FarmerDetails::where('staff_id',$staff_data->id)->get();
-        foreach ($farmer_data as $details_farmer_data)
-        {
-            $details_farmer_data->farmer_photo = uploaded_asset($details_farmer_data->farmer_photo);
-            $details_farmer_data->country = "N/A";
-            $details_farmer_data->province= "N/A";
-            $details_farmer_data->district= "N/A";
-            $details_farmer_data->commune = "N/A";
-            if(Country::find($details_farmer_data->country))
-            {
-                $details_farmer_data->country = Country::find($details_farmer_data->country)->country_name;
-            }
-            if(Province::find($details_farmer_data->province))
-            {
-                $details_farmer_data->province= Province::find($details_farmer_data->province)->province_name;
-            }
-            if( District::find($details_farmer_data->district))
-            {
-                $details_farmer_data->district= District::find($details_farmer_data->district)->district_name;
-            }
-            if(Commune::find($details_farmer_data->commune))
-            {
-                $details_farmer_data->commune= Commune::find($details_farmer_data->commune)->commune_name;
-            }
-        }
+        $farmer_data = FarmerDetails::with([
+            'countryRelation',
+            'provinceRelation',
+            'districtRelation',
+            'communeRelation',
+        ])->where('staff_id',$staff_data->id)->get();
+
         return response()->json([
             'result' => true,
             'message' => 'Get All Farmer Successfully',
