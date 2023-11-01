@@ -35,13 +35,16 @@ class GenerateUserStaff extends Command
         for ($i=1; $i<=31; $i++) {
             $firstNameKey = array_rand($firstNameArr);
             $lastfirstNameKey = array_rand($lastNameArr);
+            $phoneNumber = str_replace('+', '0', fake()->unique()->e164PhoneNumber());;
+
+            // Username
             $user = new User();
             $user->name = $firstNameArr[$firstNameKey ] . ' ' . $lastNameArr[$lastfirstNameKey];
             $user->user_type = 'staff';
             $user->username = $firstNameArr[$firstNameKey ] . ' ' . $lastNameArr[$lastfirstNameKey] . rand(10,99);
             $user->email = $firstNameArr[$firstNameKey ] . $lastNameArr[$lastfirstNameKey] . rand(10,99) . '@gmail.com';
             $user->password = Hash::make('12345678');
-            $user->phone_number = str_replace('+', '0', fake()->unique()->e164PhoneNumber());
+            $user->phone_number = $phoneNumber;
             $user->save();
 
             // Staff
@@ -53,7 +56,7 @@ class GenerateUserStaff extends Command
             $staff->last_name = $lastNameArr[$lastfirstNameKey];
             $staff->gender = 'Male';
             $staff->email = $firstNameArr[$firstNameKey ] . $lastNameArr[$lastfirstNameKey] . rand(10,99) . '@gmail.com';
-            $staff->phone_number = str_replace('+', '0', fake()->unique()->e164PhoneNumber());
+            $staff->phone_number = $phoneNumber;
             $staff->status = 'active';
             $staff->save();
         }
