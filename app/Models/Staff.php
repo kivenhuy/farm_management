@@ -30,7 +30,7 @@ class Staff extends Model
 
     public function farmer_details()
     {
-        return $this->hasMany(FarmerDetails::class);
+        return $this->hasMany(FarmerDetails::class,'staff_id','id');
     }
 
     public function getNameAttribute()
