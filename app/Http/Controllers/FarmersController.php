@@ -248,9 +248,9 @@ class FarmersController extends Controller
                     'full_name' => $fullName,
                     'phone_number' => $phoneNumber,
                     'country' => 1,
-                    'province' => $province->id,
-                    'district' => $dicstrict->id,
-                    'commune' => $commune->id,
+                    'province' => $province->id ?? 0,
+                    'district' => $dicstrict->id ?? 0,
+                    'commune' => $commune->id ?? 0,
                     'village' => $village,
                     // auto generate field
                     'enrollment_date' => now()->toDateString(),
