@@ -16,7 +16,7 @@ class HomeController extends Controller
     {
         $staffs = Staff::withCount('farmer_details')->where('status', 'active')->get();
         $farmerCount = FarmerDetails::count();
-        $totalLandHolding = FarmLand::sum('total_land_holding')/100;
+        $totalLandHolding = FarmLand::sum('total_land_holding');
         $totalFarmlands = FarmLand::count();
 
         $staffsFormat = [];
@@ -47,13 +47,13 @@ class HomeController extends Controller
         if ($communes->count()) {
             foreach ($communes as $commune) {
                 $farmerDetailIds = FarmerDetails::where('commune', $commune->id)->pluck('id')->toArray();
-                $totalLandHolding = FarmLand::whereIn('farmer_id', $farmerDetailIds)->sum('total_land_holding')/100;
-                $actual_area = FarmLand::whereIn('farmer_id', $farmerDetailIds)->sum('actual_area')/100;
+                $totalLandHoldingByCommune = FarmLand::whereIn('farmer_id', $farmerDetailIds)->sum('total_land_holding');
+                $actualAreaByCommune = FarmLand::whereIn('farmer_id', $farmerDetailIds)->sum('actual_area');
                 
                 $communeByFarmAreas[] = [
                     'name' => $commune->commune_name,
-                    'total_land_holding' => $totalLandHolding,
-                    'actual_area' => $actual_area,
+                    'total_land_holding' => $totalLandHoldingByCommune,
+                    'actual_area' => $actualAreaByCommune,
                 ];
             }
         }

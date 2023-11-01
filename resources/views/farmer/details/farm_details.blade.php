@@ -12,7 +12,7 @@
         @foreach($farmLands as $farmLand)
             <tr>
                 <td>{{ ucwords($farmLand->farm_name) }}</td>
-                <td>{{ number_format($farmLand->total_land_holding/100, 2) . " Ha" }}</td>
+                <td>{{ number_format($farmLand->total_land_holding, 2) . " Ha" }}</td>
                 <td>
                     <a href="javascript:void(0)" class="js-view-farm" data-farm-id="{{ $farmLand->id }}">View Farm</a>
                 </td>
@@ -27,8 +27,8 @@
             <a class="back" href="javascript:void(0)"><span class="mdi mdi-arrow-left"></span> Back</a>
         </div>
         <div class="card">
-            <h5 class="card-header fw-bold card-header-status collapsed" data-bs-toggle="collapse" data-bs-target="#card-body-farm-information-{{ $farmLand->id}}">Farm Information</h5>
-            <div class="collapse" id="card-body-farm-information-{{ $farmLand->id}}">
+            <h5 class="card-header fw-bold card-header-status" data-bs-toggle="collapse" data-bs-target="#card-body-farm-information-{{ $farmLand->id}}">Farm Information</h5>
+            <div class="" id="card-body-farm-information-{{ $farmLand->id}}">
                 <div class="card-body border-bottom">
                     <div class="form-group row border-bottom">
                         <div class="col-md-6 d-flex align-items-center">
@@ -37,17 +37,17 @@
                         </div>
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Total Land Holding</label>
-                            <span class="col-md-6">{{ number_format($farmLand?->total_land_holding/100, 2) . ' Ha' }}</span>
+                            <span class="col-md-6">{{ number_format($farmLand?->total_land_holding, 2) . ' Ha' }}</span>
                         </div>
                     </div>
                     <div class="form-group row border-bottom">
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Farm Land Ploting</label>
-                            <span class="col-md-6">{{ number_format($farmLand?->farm_land_ploting/100, 2) . ' Ha' }}</span>
+                            <span class="col-md-6">{{ number_format($farmLand?->farm_land_ploting, 2) . ' Ha' }}</span>
                         </div>
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Actual Area</label>
-                            <span class="col-md-6">{{ number_format($farmLand?->actual_area/100, 2) . ' Ha' }}</span>
+                            <span class="col-md-6">{{ number_format($farmLand?->actual_area, 2) . ' Ha' }}</span>
                         </div>
                     </div>          
                     <div class="form-group row border-bottom">
@@ -83,13 +83,10 @@
 
     <div class="farm-detail d-none" data-farmland-id={{ $farmLand->id }}>
         <div class="card">
-            <h5 class="card-header fw-bold card-header-status collapsed" data-bs-toggle="collapse" data-bs-target="#card-body-farm-photo-{{ $farmLand->id}}">Farm Photo</h5>
-            <div class="collapse" id="card-body-farm-photo-{{ $farmLand->id}}">
+            <h5 class="card-header fw-bold card-header-status collapsed" data-bs-toggle="collapse" data-bs-target="#card-body-plot-area-{{ $farmLand->id}}">Plot Area</h5>
+            <div class="collapse" id="card-body-plot-area-{{ $farmLand->id}}">
                 <div class="card-body border-bottom">
-                    @php $photoUrls = !empty($farmLand->farm_photo_url) ? $farmLand->farm_photo_url : []; @endphp
-                    @foreach($photoUrls as $photoUrl)
-                        <img src="{{ $photoUrl }}" class="d-block mb-3" style="max-width: 100%">
-                    @endforeach
+                    Implement later
                 </div>
             </div>
         </div>
@@ -97,10 +94,13 @@
 
     <div class="farm-detail d-none" data-farmland-id={{ $farmLand->id }}>
         <div class="card">
-            <h5 class="card-header fw-bold card-header-status collapsed" data-bs-toggle="collapse" data-bs-target="#card-body-plot-area-{{ $farmLand->id}}">Plot Area</h5>
-            <div class="collapse" id="card-body-plot-area-{{ $farmLand->id}}">
+            <h5 class="card-header fw-bold card-header-status collapsed" data-bs-toggle="collapse" data-bs-target="#card-body-farm-photo-{{ $farmLand->id}}">Farm Photo</h5>
+            <div class="collapse" id="card-body-farm-photo-{{ $farmLand->id}}">
                 <div class="card-body border-bottom">
-                    Implement later
+                    @php $photoUrls = !empty($farmLand->farm_photo_url) ? $farmLand->farm_photo_url : []; @endphp
+                    @foreach($photoUrls as $photoUrl)
+                        <img src="{{ $photoUrl }}" class="d-block mb-3" style="max-width: 100%">
+                    @endforeach
                 </div>
             </div>
         </div>

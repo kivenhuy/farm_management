@@ -114,6 +114,8 @@ class AuthController extends Controller
 
         $farmer_list = FarmerDetails::with('farm_lands:id,farm_name,actual_area,farmer_id')
             ->select('id','full_name', 'farmer_code','phone_number', 'farmer_photo')
+            ->latest()
+            ->take(5)
             ->get();
 
         $totalExpectedYield = Crops::sum('est_yield');
