@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Commune;
 use App\Models\Country;
 use App\Models\District;
+use App\Models\FarmerCountable;
 use App\Models\FarmerDetails;
 use App\Models\LogActivities;
 use Yajra\DataTables\DataTables;
@@ -200,4 +201,66 @@ class FarmersController extends Controller
     //         'farmer_data' =>$farmer_data
     //     ]);
     // }
+
+    public function importCSV(Request $request)
+    {
+        $faker = \Faker\Factory::create();
+
+        $filePath = $request->csvFile->path(); // csvFile is request name input
+        if ($file = fopen($filePath, "r")) {
+            while(($row = fgetcsv($file, 1000, ",")) !== FALSE) {     
+                $staff = Staff::where('id', '!=', 1)->has('farmer_details','<', 200)->first();
+                if (empty($staff)) {
+                    $staff = Staff::find(3);
+                }
+
+                $fullName = $row[0] . ' ' . $row[1];
+
+                $phoneNumber = str_replace('o', '0', $row[2]);
+                if(empty($phone_number)) {
+                    $phoneNumber = str_replace('+', '0', fake()->unique()->e164PhoneNumber());
+                }
+
+                $province = Province::where('province_name', $row[4])->first();
+                if (empty($province)) {
+                    $province = Province::where('province_name', 'like', '%'.$row[2]. '%')->first();
+                }
+
+                $dicstrict = District::where('district_name', $row[5])->first();
+                if (empty($province)) {
+                    $dicstrict = District::where('district_name', 'like', '%'.$row[3]. '%')->first();
+                }
+
+                $commune = Commune::where('commune_name', $row[6])->first();
+                if (empty($commune)) {
+                    $commune = Commune::where('commune_name', 'like', '%'.$row[6]. '%')->first();
+                }
+
+                $village = $row[7];
+
+                $countable = FarmerCountable::find(1);
+                $farmer_code = 'FA'.date('Y').date('m').date('d').$countable->count_number;
+                $countable->update(['count_number'=>$countable->count_number +=1]);
+
+                FarmerDetails::create([
+                    'user_id' => 3,
+                    'staff_id' => $staff->id,
+                    'full_name' => $fullName,
+                    'phone_number' => $phoneNumber,
+                    'country' => 1,
+                    'province' => $province->id,
+                    'district' => $dicstrict->id,
+                    'commune' => $commune->id,
+                    'village' => $village,
+                    // auto generate field
+                    'enrollment_date' => now()->toDateString(),
+                    'gender' => 'Male',
+                    'farmer_code' => $farmer_code,
+                ]);
+            }
+            fclose($file);
+        }
+
+        return back();
+    }
 }
