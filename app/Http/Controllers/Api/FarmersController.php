@@ -159,9 +159,8 @@ class FarmersController extends Controller
         }
         $staff = Auth::user()->staff;
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'required|string|unique:users,phone_number',
-            'full_name' => '|nullable|string',
-            // 'password' => 'required|string|min:5',
+            'phone_number' => 'nullable|string',
+            'full_name' => 'nullable|string',
         ]);
         if ($validator->fails()) {
             $str_validation = "";
@@ -193,11 +192,11 @@ class FarmersController extends Controller
             $password = Hash::make($request->password); 
         }
         $user_data = User::find($farmer_details->user_id);
-        $user_data->name = $request->full_name;
-        $user_data->username = $request->full_name; 
+        $user_data->name = $request->full_name ?? $user_data->name;
+        $user_data->username = $request->full_name ?? $user_data->username; 
         $user_data->email = $email; 
         $user_data->password =  $password; 
-        $user_data->phone_number = $request->phone_number; 
+        $user_data->phone_number = $request->phone_number ?? $user_data->phone_number; 
         $user_data->email_verified_at = ""; 
         // dd($password);
         $user_data->save();
@@ -229,7 +228,7 @@ class FarmersController extends Controller
             'enrollment_date' =>$farmer_details->enrollment_date,
             'enrollment_place'=>$farmer_details->enrollment_place,
             'full_name'=>$request->full_name,
-            'phone_number'=>$request->phone_number,
+            'phone_number'=> $request->phone_number ?? $farmer_details->phone_number,
             'identity_proof'=>$request->identity_proof,
             'country'=>$request->country,
             'province'=>$request->province,
@@ -243,8 +242,8 @@ class FarmersController extends Controller
             'farmer_code'=>$farmer_details->farmer_code,
             'dob'=>$request->dob,
             'is_online'=>$request->is_online,
-            'farmer_photo'=>implode(',', $farmer_photo),
-            'id_proof_photo'=>implode(',', $id_proof_photo),
+            'farmer_photo'=>!empty($farmer_photo) ? implode(',', $farmer_photo) : $farmer_details->farmer_photo,
+            'id_proof_photo'=> !empty($id_proof_photo) ? implode(',', $id_proof_photo) : $farmer_details->id_proof_photo,
         ];
        
         try {
