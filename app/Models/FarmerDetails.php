@@ -11,7 +11,7 @@ class FarmerDetails extends Model
 
     protected $with = ['farm_lands'];
     protected $table = 'farmer_details';
-    protected $appends = ['avatar_url'];
+    protected $appends = ['avatar_url', 'id_proof_photo_url'];
 
     protected $fillable = [
         'staff_id',
@@ -121,5 +121,19 @@ class FarmerDetails extends Model
         }
         
         return asset('assets/img/avatars/1.png');
+    }
+
+    public function getIdProofPhotoUrlAttribute()
+    {
+        $photoIds = explode(',', $this->id_proof_photo);
+        $url = [];
+        foreach ($photoIds as $photoId) {
+            $upload = Uploads::find($photoId);
+            if ($upload) {
+                $url[] = asset($upload->file_name);
+            }
+        }
+
+        return $url;
     }
 }
