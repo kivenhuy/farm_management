@@ -28,6 +28,9 @@ class GenerateUserStaff extends Command
      */
     public function handle()
     {
+        // already run in server
+        return null;
+
         $faker = \Faker\Factory::create();
         $firstNameArr = ['Huy', 'khang', 'bao', 'phuc', 'anh', 'khoa', 'phat', 'dat', 'khoi'];
         $lastNameArr = ['nguyen', 'tran', 'phan', 'le', 'bui', 'dang'];
