@@ -39,7 +39,7 @@ class CommuneController extends Controller
             'status'=>$request->status 
         ];
         $commune->create($data);
-        return redirect()->route("country.index")->with('success','Commune created successfull');
+        return redirect()->route("commune.index")->with('success','Commune created successfull');
     }
 
     /**
