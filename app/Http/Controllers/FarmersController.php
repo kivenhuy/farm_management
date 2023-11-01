@@ -261,6 +261,6 @@ class FarmersController extends Controller
             fclose($file);
         }
 
-        return back();
+        return back()->with(['success' => 'Import farmer succesfully']);
     }
 }
