@@ -38,7 +38,7 @@ class GenerateUserStaff extends Command
         for ($i=1; $i<=31; $i++) {
             $firstNameKey = array_rand($firstNameArr);
             $lastfirstNameKey = array_rand($lastNameArr);
-            $phoneNumber = str_replace('+', '0', fake()->unique()->e164PhoneNumber());;
+            $phoneNumber = str_replace('+', '0', fake()->unique()->e164PhoneNumber());
 
             // Username
             $user = new User();
