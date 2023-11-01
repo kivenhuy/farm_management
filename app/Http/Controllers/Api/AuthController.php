@@ -93,8 +93,7 @@ class AuthController extends Controller
             'lng' => 'nullable|numeric',
             'nearby_km' => 'nullable|numeric',
         ]);
-
-        $farmerDetail = Auth::user()->staff->farmer_details->take(10);
+        $farmerDetail = Auth::user()->staff->farmer_details->take(5);
         $totalFarmer = $farmerDetail->count();
         $totalHectares = FarmLand::whereIn('farmer_id', $farmerDetail->pluck('id'))->sum('total_land_holding');
         $totalPlot = FarmLand::whereIn('farmer_id', $farmerDetail->pluck('id'))->sum('actual_area');
@@ -128,7 +127,7 @@ class AuthController extends Controller
                 'total_hectares' => $totalHectares,
                 'total_plot' => $totalPlot,
                 'nearby_plot' => $nearbyPlot,
-                'farmer_list' => $farmer_list,
+                'farmer_list' => $farmerDetail,
                 'totalExpectedYield' => $totalExpectedYield,
             ]
         ]);
