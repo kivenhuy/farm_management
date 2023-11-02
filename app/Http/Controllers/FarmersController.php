@@ -222,7 +222,7 @@ class FarmersController extends Controller
 
                 $phoneNumber = str_replace('o', '0', $row[2]);
                 $phoneNumber = str_replace('nt', '', $phoneNumber);
-                $phoneNumber = preg_replace("/[a-zA-Z]/", '', $phoneNumber);
+                $phoneNumber = preg_replace("/[^0-9]/", '', $phoneNumber);
 
                 // if(empty($phoneNumber)) {
                 //     $phoneNumber = str_replace('+', '0', fake()->unique()->e164PhoneNumber());
