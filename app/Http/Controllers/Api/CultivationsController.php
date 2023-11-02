@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\CropInformation;
-use App\Models\Crops;
+use App\Models\Cultivations;
 use App\Models\FarmLand;
 use App\Models\Season;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class CropsController extends Controller
+class CultivationsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -88,7 +88,7 @@ class CropsController extends Controller
                 }
             }    
         }
-        $crops = new Crops();
+        $crops = new Cultivations();
         $data_crops = [
             'farm_land_id'=>$request->farm_land_id,
             'season_id'=>$request->season_id,
@@ -140,15 +140,15 @@ class CropsController extends Controller
      */
     public function show(string $id)
     {
-        $crop_data = Crops::find($id);
+        $crop_data = Cultivations::find($id);
         $farm_land = $crop_data->farm_land()->get();
         $season_master = $crop_data->season()->get();
         $crop_master = $crop_data->crops_master()->get();
         return response()->json([
             'result' => true,
-            'message' => 'Get Data Crops Successfully',
+            'message' => 'Get Data Cultivations Successfully',
             'data'=> [
-                'crop_data' =>$crop_data,
+                'cultivation_data' =>$crop_data,
                 'farm_land' =>$farm_land,
                 'season_master' =>$season_master,
                 'crop_master' =>$crop_master
@@ -160,7 +160,7 @@ class CropsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Crops $crops)
+    public function edit(Cultivations $crops)
     {
         //
     }
@@ -170,7 +170,7 @@ class CropsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $crop_data = Crops::find($id);
+        $crop_data = Cultivations::find($id);
         $data_log_activities = [];
         $data_log_activities['action'] = 'update';
         $data_log_activities['request'] = $request->all();
@@ -213,7 +213,7 @@ class CropsController extends Controller
                 }
             }    
         }
-        $crops = new Crops();
+        $crops = new Cultivations();
         $data_crops = [
             'farm_land_id'=>$crop_data->farm_land_id,
             'season_id'=>$request->season_id,
@@ -255,9 +255,23 @@ class CropsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Crops $crops)
+    public function destroy(Cultivations $crops)
     {
         //
+    }
+
+    public function get_crop_variety($id)
+    {
+        $crop_information = CropInformation::find($id);
+        return response()->json([
+            'result' => true,
+            'message' => 'Get Crop Variety Successfully',
+            'data'=> [
+                'crop_variety' =>$crop_information->crop_variety,
+            ]
+            
+        ]);
+
     }
 
     public function create_log($data)

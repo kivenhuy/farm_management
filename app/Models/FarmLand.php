@@ -37,7 +37,7 @@ class FarmLand extends Model
 
     public function cultivation()
     {
-        return $this->hasMany(Crops::class,'farm_land_id','id');
+        return $this->hasMany(Cultivations::class,'farm_land_id','id');
     }
     
     public function getFarmPhotoUrlAttribute()

@@ -62,10 +62,24 @@
       "url": "season-masters"
     },
     {
-      "name": "Crop Informations",
+      "name": "Crop",
       "icon": "menu-icon tf-icons mdi mdi-barley",
-      "slug": "crop-informations",
-      "url": "crop-informations"
+      "slug": "location",
+      "submenu": [
+        {
+         
+          "name": "Crop Informations",
+          "icon": "menu-icon tf-icons  mdi mdi-information-box",
+          "slug": "crop-informations",
+          "url": "crop-informations"
+        },
+        {
+          "name": "Crop Variety",
+          "icon": "menu-icon tf-icons  mdi mdi-feather",
+          "slug": "crop_variety",
+          "url": "crop_variety"
+        }
+      ]
     },
     {
       "name": "Catalogue Value",

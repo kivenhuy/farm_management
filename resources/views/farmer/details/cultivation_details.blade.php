@@ -1,9 +1,9 @@
 @php 
     $farmLandIds = $farmerDetail->farm_lands->pluck('id');
-    $crops = \App\Models\Crops::whereIn('farm_land_id', $farmLandIds)->get();
+    $cultivations = \App\Models\Cultivations::whereIn('farm_land_id', $farmLandIds)->get();
 @endphp
 
-@if (!empty($crops))
+@if (!empty($cultivations))
     <table class="table table-bordered js-crop-table">
         <thead>
         <tr class="bg-danger">
@@ -17,7 +17,7 @@
         </tr>
         </thead>
         <tbody>
-            @foreach($crops as $crop)
+            @foreach($cultivations as $crop)
                 <tr>
                     <td>{{ $crop->season->season->name }}</td>
                     <td>{{ $crop->crops_master->name }}</td>
@@ -34,7 +34,7 @@
     </table>
 @endif
 
-@foreach($crops as $crop)
+@foreach($cultivations as $crop)
     <div class="crop-detail d-none" data-crop-id={{ $crop->id }}>
         <div class="text-end mb-3">
             <a class="back" href="javascript:void(0)"><span class="mdi mdi-arrow-left"></span> Back</a>

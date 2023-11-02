@@ -34,6 +34,11 @@ class CropInformation extends Model
         return $this->belongsTo(Uploads::class,'photo','id');
     }
 
+    public function crop_variety()
+    {
+        return $this->hasMany(CropVariety::class,'crop_id','id');
+    }
+
     public function getPhotoUrlAttribute()
     {
         if (!empty($this->thumbnail)) {
