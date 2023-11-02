@@ -224,9 +224,9 @@ class FarmersController extends Controller
                 $phoneNumber = str_replace('nt', '', $phoneNumber);
                 $phoneNumber = preg_replace("/[a-zA-Z]/", '', $phoneNumber);
 
-                if(empty($phoneNumber)) {
-                    $phoneNumber = str_replace('+', '0', fake()->unique()->e164PhoneNumber());
-                }
+                // if(empty($phoneNumber)) {
+                //     $phoneNumber = str_replace('+', '0', fake()->unique()->e164PhoneNumber());
+                // }
                 
                 $province = Province::where('province_name', $row[4])->first();
                 if (empty($province)) {
