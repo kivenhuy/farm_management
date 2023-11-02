@@ -60,17 +60,18 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6" id="basic-chart">
-
-            </div>
-            <div class="col-md-6" id="location-chart">
-                    
-            </div>
-        </div>
-        <div id="area-chart" class="mt-5">
+        <div class="mb-4" id="basic-chart">
 
         </div>
+
+        <div class="mb-4" id="location-chart">
+                
+        </div>
+
+        <div id="area-chart" class="mt-5 mb-4">
+
+        </div>
+
         <table id="datatable" style="display:none;">
             <thead>
                 <tr>
