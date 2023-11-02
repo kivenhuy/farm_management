@@ -63,7 +63,6 @@ class CropMasterController extends Controller
         $cropInformation->expected_expense = $cropInformationRequest->expected_expense;
         $cropInformation->expected_income = $cropInformationRequest->expected_income;
         $cropInformation->expected_yield = $cropInformationRequest->expected_yield;
-        $cropInformation->expected_yield_type = $cropInformationRequest->expected_yield_type;
 
         $cropInformation->save();
 
