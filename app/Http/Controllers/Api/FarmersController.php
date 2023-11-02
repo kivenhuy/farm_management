@@ -910,6 +910,7 @@ class FarmersController extends Controller
         }
         if ( $farmer_data->family_info ) {
             $family_info = $farmer_data->family_info; 
+            $family_info->total_child_under_18 = json_decode($family_info->total_child_under_18); 
         } else {
             $family_info = [];
         }
