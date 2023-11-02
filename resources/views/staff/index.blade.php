@@ -84,6 +84,13 @@
 <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}" ></script>
 
 <script type="text/javascript">
+
+    function userCheated() {
+            // The user cheated by leaving this window (e.g opening another window)
+            // Do something
+        alert("New Tab Opened");
+    }
+
     $(document).ready(function()
     {   
         var rfq_table = $("#example1").DataTable
