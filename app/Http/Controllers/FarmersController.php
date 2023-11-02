@@ -89,7 +89,7 @@ class FarmersController extends Controller
 
     public function dtajax(Request $request)
     {
-        $farmer = FarmerDetails::all()->sortDesc();
+        $farmer = FarmerDetails::select('farmer_code','full_name','phone_number','gender','staff_id')->all()->sortDesc();
         $out =  DataTables::of($farmer)->make(true);
         $data = $out->getData();
         for($i=0; $i < count($data->data); $i++) {
