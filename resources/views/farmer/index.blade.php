@@ -4,7 +4,7 @@
     <!-- Main content -->
     <div class="container-fluid">
 
-        <div class="card mb-3">
+        {{-- <div class="card mb-3">
           <div class="card-header row gutters-5">
             <div class="col">
                 <h5 class="mb-md-0 h6">Import Farmer</h5>
@@ -29,7 +29,7 @@
                 </div>
             </form>
           </div>
-        </div>
+        </div> --}}
 
         <div class="row">
           <div class="col-12">
