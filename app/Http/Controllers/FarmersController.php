@@ -224,23 +224,23 @@ class FarmersController extends Controller
                 $phoneNumber = str_replace('nt', '', $phoneNumber);
                 $phoneNumber = preg_replace("/[a-zA-Z]/", '', $phoneNumber);
 
-                if(empty($phoneNumber)) {
-                    $phoneNumber = str_replace('+', '0', fake()->unique()->e164PhoneNumber());
-                }
+                // if(empty($phoneNumber)) {
+                //     $phoneNumber = str_replace('+', '0', fake()->unique()->e164PhoneNumber());
+                // }
                 
-                $province = Province::where('province_name', $row[4])->first();
+                $province = Province::where('province_name', ucwords($row[4]))->first();
                 if (empty($province)) {
-                    $province = Province::where('province_name', 'like', '%'.$row[2]. '%')->first();
+                    $province = Province::where('province_name', 'like', '%'.ucwords($row[4]). '%')->first();
                 }
 
-                $dicstrict = District::where('district_name', $row[5])->first();
+                $dicstrict = District::where('district_name', ucwords($row[5]))->first();
                 if (empty($province)) {
-                    $dicstrict = District::where('district_name', 'like', '%'.$row[3]. '%')->first();
+                    $dicstrict = District::where('district_name', 'like', '%'.$row[5]. '%')->first();
                 }
 
-                $commune = Commune::where('commune_name', $row[6])->first();
+                $commune = Commune::where('commune_name', ucwords($row[6]))->first();
                 if (empty($commune)) {
-                    $commune = Commune::where('commune_name', 'like', '%'.$row[6]. '%')->first();
+                    $commune = Commune::where('commune_name', 'like', '%'. ucwords($row[6]) . '%')->first();
                 }
 
                 $village = $row[7];
