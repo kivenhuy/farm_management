@@ -209,7 +209,7 @@ class FarmersController extends Controller
         $filePath = $request->csvFile->path(); // csvFile is request name input
         if ($file = fopen($filePath, "r")) {
             while(($row = fgetcsv($file, 1000, ",")) !== FALSE) {     
-                if ($row[0] == "First Name") {
+                if (ucwords($row[0]) == "First Name") {
                     continue;
                 }
 
@@ -218,7 +218,7 @@ class FarmersController extends Controller
                     $staff = Staff::find(3);
                 }
 
-                $fullName = $row[0] . ' ' . $row[1];
+                $fullName = trim($row[0] . ' ' . $row[1]);
 
                 $phoneNumber = str_replace('o', '0', $row[2]);
                 $phoneNumber = str_replace('nt', '', $phoneNumber);
