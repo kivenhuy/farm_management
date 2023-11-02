@@ -107,7 +107,7 @@
                         </div>
                         <div class="col-12 col-md-3 d-flex align-items-center">
                             <input id="js-expected_yield" name="expected_yield" type="number" class="form-control" style="margin-right: 15px;" value="{{ $cropInformation->expected_yield }}" autocomplete="off" placeholder="Expected Yield">
-                            <span style="font-weight: 500">Ha</span>
+                            <span style="font-weight: 500">HA</span>
                         </div>
                     </div>
                     
