@@ -227,6 +227,15 @@
 @push('scripts')
 
 <script type="text/javascript">
+  $(".link").on("click", function(event) {
+
+  if (event.ctrlKey || event.shiftKey || event.metaKey || event.which == 2) {
+    
+  }
+  // ... load only necessary things for normal clicks
+  });
+
+
   function initMap() {
     const myLatLng = { lat: 10.7719514, lng: 106.726354 };
     const map = new google.maps.Map(document.getElementById("map"), {

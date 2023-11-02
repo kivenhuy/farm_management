@@ -34,7 +34,7 @@
 
   <link rel="stylesheet" href="{{ asset('custom\css\jquery.datetimepicker.min.css')}}">
   <link rel="stylesheet" href="{{ asset('custom\css\style.css?v=')}}{{ now()->timestamp}}">
-  <script type="text/javascript" src="https://maps.google.com/maps/api/js?key={{ env('Google_api_key') }}&callback=initMap" ></script>
+  
   @yield('style')
   <script>
     var AIZ = AIZ || {};
