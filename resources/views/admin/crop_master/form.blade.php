@@ -15,8 +15,8 @@
                     </div>
                     <div class="col">
                         <div class="mar-all mb-2" style=" text-align: end;">
-                            <a href="{{route('farmer.index')}}">
-                                <button type="submit" name="button" value="publish" class="btn btn-primary waves-effect waves-light">Back</button>
+                            <a href="{{route('crop-informations.index')}}">
+                                <button type="button" name="button" value="publish" class="btn btn-primary waves-effect waves-light">Back</button>
                             </a>
                         </div>
                     </div>

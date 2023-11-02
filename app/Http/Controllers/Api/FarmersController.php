@@ -909,7 +909,7 @@ class FarmersController extends Controller
             ]);
         }
         if ( $farmer_data->family_info ) {
-            $family_info = $farmer_data->family_info->first();
+            $family_info = $farmer_data->family_info; 
         } else {
             $family_info = [];
         }
@@ -958,7 +958,7 @@ class FarmersController extends Controller
             ]);
         }
         if ( $farmer_data->asset_info ) {
-            $asset_info = $farmer_data->asset_info->first();
+            $asset_info = $farmer_data->asset_info;
         } else {
             $asset_info = [];
         }
@@ -1018,7 +1018,7 @@ class FarmersController extends Controller
             ]);
         }
         if ($farmer_data->bank_info ) {
-            $bank_info = $farmer_data->bank_info()->get();
+            $bank_info = $farmer_data->bank_info;
         } else {
             $bank_info = [];
         }
@@ -1057,7 +1057,7 @@ class FarmersController extends Controller
             ]);
         }
         if ($farmer_data->finance_info ) {
-            $finance_info = $farmer_data->finance_info()->first();
+            $finance_info = $farmer_data->finance_info;
         } else {
             $finance_info = [];
         }
@@ -1090,7 +1090,7 @@ class FarmersController extends Controller
             ]);
         }
         if ($farmer_data->insurance_info ) {
-            $insurance_info = $farmer_data->insurance_info()->get();
+            $insurance_info = $farmer_data->insurance_info;
         } else {
             $insurance_info = [];
         }
@@ -1120,7 +1120,7 @@ class FarmersController extends Controller
             ]);
         }
         if ($farmer_data->animal_husbandry ) {
-            $animal_husbandry = $farmer_data->animal_husbandry()->get();
+            $animal_husbandry = $farmer_data->animal_husbandry;
         } else {
             $animal_husbandry = [];
         }
@@ -1172,7 +1172,7 @@ class FarmersController extends Controller
             ]);
         }
         if ($farmer_data->certificate_info ) {
-            $certificate_info = $farmer_data->certificate_info()->get();
+            $certificate_info = $farmer_data->certificate_info;
         } else {
             $certificate_info = [];
         }
@@ -1216,7 +1216,7 @@ class FarmersController extends Controller
             ]);
         }
         if ($farmer_data->farm_equipment ) {
-            $farm_equipment_info = $farmer_data->farm_equipment()->get();
+            $farm_equipment_info = $farmer_data->farm_equipment;
         } else {
             $farm_equipment_info = [];
         }
