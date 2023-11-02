@@ -48,7 +48,7 @@ class FarmerDetails extends Model
     public function cultivation_crop()
     {
         return $this->hasManyThrough(
-            Crops::class,
+            Cultivations::class,
             FarmLand::class,
             'farmer_id', // Foreign key on the Farm Land table...
             'farm_land_id', // Foreign key on the Crops table...

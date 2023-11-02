@@ -11,9 +11,11 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\FarmersController;
 use App\Http\Controllers\Admin\CropMasterController;
 use App\Http\Controllers\CatalogueValueController;
+use App\Http\Controllers\CropVarietyController;
 use App\Http\Controllers\FarmLandController;
 use App\Http\Controllers\LogActivitiesController;
 use App\Models\CatalogueValue;
+use App\Models\CropVariety;
 use App\Models\FarmLand;
 use App\Models\LogActivities;
 use Illuminate\Support\Facades\Route;
@@ -89,6 +91,11 @@ Route::group(['middleware' => ['auth']], function () {
     // Farm land
     Route::get("/farm_land", [FarmLandController::class, 'index'])->name('farm_land.index');
 
+    // Crop Variety
+    Route::get("/crop_variety", [CropVarietyController::class, 'index'])->name('crop_variety.index');
+    Route::get("/crop_variety/create", [CropVarietyController::class, 'create'])->name('crop_variety.create');
+    Route::post("/crop_variety/store", [CropVarietyController::class, 'store'])->name('crop_variety.store');
+    Route::get("/crop_variety/dtajax", [CropVarietyController::class, 'dtajax'])->name('crop_variety.dtajax');
 
 });
 

@@ -11,16 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cultivations', function (Blueprint $table) {
+        Schema::create('crop_varieties', function (Blueprint $table) {
             $table->id();
-            $table->integer('farm_land_id');
-            $table->integer('season_id');
             $table->integer('crop_id');
-            $table->string('crop_variety');
-            $table->string('sowing_date');
-            $table->string('expect_date');
-            $table->string('est_yield');
-            $table->longText('photo')->nullable();
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -30,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cultivations');
+        Schema::dropIfExists('crop_varieties');
     }
 };
