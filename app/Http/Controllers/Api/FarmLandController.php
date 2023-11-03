@@ -282,18 +282,24 @@ class FarmLandController extends Controller
         }
         $data_farm_land = [
             'farmer_id' => $farm_land_data->farmer_id,
-            'farm_name' => $farm_land_data->farm_name,
-            'total_land_holding' => $request->total_land_holding,
+            'farm_name' => $request->farm_name ?? $farm_land_data->farm_name,
+            'total_land_holding' => $request->total_land_holding ?? $farm_land_data->total_land_holding,
             'lat' => $request->lat,
             'lng' => $request->lng,
             'actual_area' => $request->actual_area, 
-            'farm_photo' =>implode(',', $farm_photo),
-            'land_ownership'=> $request->land_ownership,
-            'approach_road'=> $request->approach_road, 
-            'land_topology'=> $request->land_topology, 
-            'land_gradient'=> $request->land_gradient, 
-            'land_document'=> implode(',', $land_document), 
+            'land_ownership'=> $request->land_ownership ?? $farm_land_data->land_ownership,
+            'approach_road'=> $request->approach_road ?? $farm_land_data->approach_road, 
+            'land_topology'=> $request->land_topology ?? $farm_land_data->land_topology, 
+            'land_gradient'=> $request->land_gradient ?? $farm_land_data->land_gradient, 
         ];
+
+        if (!empty($farm_photo)) {
+            $data_farm_land['farm_photo'] = implode(',', $farm_photo);
+        }
+
+        if (!empty($land_document)) {
+            $data_farm_land['land_document'] = implode(',', $land_document);
+        }
         
         try {
             $data_update =  $farm_land_data->update($data_farm_land);
@@ -356,7 +362,7 @@ class FarmLandController extends Controller
         $staff = Auth::user()->staff;
         $log_actitvities = new LogActivitiesController();
         $data_log_activities = [
-            'staff_id' => $staff->id,
+            'staff_id' => $staff->id ?? 0,
             'type' => 359,
             'action'=>$data->action,
             'request'=>$data->request,
