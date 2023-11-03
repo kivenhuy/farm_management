@@ -213,9 +213,9 @@ class CultivationsController extends Controller
                 }
             }    
         }
-        $crops = new Cultivations();
+        // $crops = new Cultivations();
         $data_crops = [
-            'farm_land_id'=>$crop_data->farm_land_id,
+            'farm_land_id'=>$request->farm_land_id ?? $crop_data->farm_land_id,
             'season_id'=>$request->season_id,
             'crop_id'=>$request->crop_master_id,
             'crop_variety'=>$request->crop_variety,
@@ -226,7 +226,7 @@ class CultivationsController extends Controller
         ];
         try 
         {
-            $final_crops = $crops->update($data_crops);
+            $final_crops = $crop_data->update($data_crops);
             if($final_crops)
             {
                 $data_log_activities['status_code'] = 200;
@@ -280,7 +280,7 @@ class CultivationsController extends Controller
         $staff = Auth::user()->staff;
         $log_actitvities = new LogActivitiesController();
         $data_log_activities = [
-            'staff_id' => $staff->id,
+            'staff_id' => $staff->id ?? 0,
             'type' => 357,
             'action'=>$data->action,
             'request'=>$data->request,

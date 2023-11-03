@@ -69,13 +69,13 @@
         {
          
           "name": "Crop Informations",
-          "icon": "menu-icon tf-icons  mdi mdi-information-box",
+          "icon": "menu-icon tf-icons  mdi mdi-information-box me-2",
           "slug": "crop-informations",
           "url": "crop-informations"
         },
         {
           "name": "Crop Variety",
-          "icon": "menu-icon tf-icons  mdi mdi-feather",
+          "icon": "menu-icon tf-icons  mdi mdi-feather me-2",
           "slug": "crop_variety",
           "url": "crop_variety"
         },
