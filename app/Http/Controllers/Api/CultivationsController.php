@@ -222,7 +222,7 @@ class CultivationsController extends Controller
             'sowing_date'=>$request->sowing_date,
             'expect_date'=>$request->expect_date,
             'est_yield'=>$request->est_yield,
-            'photo'=>implode(',', $crop_photo), 
+            'photo'=> !empty($crop_photo) ? implode(',', $crop_photo) : $crop_data->photo, 
         ];
         try 
         {
