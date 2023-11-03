@@ -78,6 +78,18 @@
           "icon": "menu-icon tf-icons  mdi mdi-feather",
           "slug": "crop_variety",
           "url": "crop_variety"
+        },
+        {
+          "name": "Crop Stage",
+          "icon": "menu-icon tf-icons mdi mdi-home-silo me-2",
+          "slug": "crop-stages",
+          "url": "crop-stages"
+        },
+        {
+          "name": "Crop Activity",
+          "icon": "menu-icon tf-icons mdi mdi-tractor me-2",
+          "slug": "crop-activities",
+          "url": "crop-activities"
         }
       ]
     },
