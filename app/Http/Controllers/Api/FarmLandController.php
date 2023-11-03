@@ -201,7 +201,11 @@ class FarmLandController extends Controller
      */
     public function show($id)
     {
-        $farm_land_data = FarmLand::find($id);
+        $farm_land_data = FarmLand::with([
+            'cultivation',
+            'cultivation.season.season',
+            'cultivation.crops_master',
+            ])->find($id);
         // dd($farm_land_data);
         $farmer_name = FarmerDetails::find($farm_land_data->farmer_id)->full_name;
         $farm_land_data->farmer_name = $farmer_name;

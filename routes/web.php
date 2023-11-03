@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CropActivityController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CommuneController;
 use App\Http\Controllers\CountryController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Admin\SeasonMasterController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\FarmersController;
 use App\Http\Controllers\Admin\CropMasterController;
+use App\Http\Controllers\Admin\CropStageController;
 use App\Http\Controllers\CatalogueValueController;
 use App\Http\Controllers\CropVarietyController;
 use App\Http\Controllers\FarmLandController;
@@ -39,6 +41,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('crop-informations', CropMasterController::class);
     Route::resource('catalogue-values', CatalogueValueController::class)->only('index');
     //Route::get("/season-master", [HomeController::class, 'season_master'])->name('season_master');
+    Route::resource('crop-stages', CropStageController::class);
+    Route::post('update-crop-stage-status', [CropStageController::class, 'updateStatus'])->name('crop_stage.update_status');
+    Route::resource('crop-activities', CropActivityController::class);
+    Route::post('update-crop-activity-status', [CropActivityController::class, 'updateStatus'])->name('crop_activity.update_status');
 
      // Farmer Details
     Route::get("/farmer", [FarmersController::class, 'index'])->name('farmer.index');
