@@ -203,7 +203,7 @@ class FarmLandController extends Controller
     {
         $farm_land_data = FarmLand::with([
             'cultivation',
-            'cultivation.season.season',
+            'cultivation.season',
             'cultivation.crops_master',
             ])->find($id);
         // dd($farm_land_data);
