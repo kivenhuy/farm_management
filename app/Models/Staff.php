@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+
 
 class Staff extends Model
 {
@@ -36,5 +38,16 @@ class Staff extends Model
     public function getNameAttribute()
     {
         return $this->first_name .' '. $this->last_name;
+    }
+
+    public function farm_land(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+        FarmLand::class, 
+        FarmerDetails::class,
+        'staff_id', // Foreign key on the environments table...
+        'farmer_id', // Foreign key on the deployments table...
+        'id', // Local key on the projects table...
+        'id')->join('cultivations','farm_lands.id','=','cultivations.farm_land_id')->select('cultivations.*');
     }
 }
