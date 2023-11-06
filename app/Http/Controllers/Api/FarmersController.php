@@ -47,7 +47,7 @@ class FarmersController extends Controller
                 'message' => 'Staff Not Exist Try Again',
             ]);
         }
-        $staff_data = $user_login->staff->first();
+        $staff_data = $user_login->staff;
         $farmer_data = FarmerDetails::where('staff_id',$staff_data->id)->get();
         $farmer_data = FarmerDetails::with([
             'countryRelation',
