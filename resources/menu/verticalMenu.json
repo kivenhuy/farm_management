@@ -104,6 +104,31 @@
       "icon": "menu-icon tf-icons mdi mdi-note",
       "slug": "staff_activities",
       "url": "staff_activities"
+    },
+    {
+      "name": "Report",
+      "icon": "menu-icon tf-icons mdi mdi-poll",
+      "slug": "staff_activities",
+      "submenu": [
+        {
+          "url": "farmer_report",
+          "name": "Farmer Report",
+          "icon": "menu-icon tf-icons mdi mdi-chart-bar",
+          "slug": "farmer_report"
+        },
+        {
+          "url": "farmland_report",
+          "name": "FarmLand Report",
+          "icon": "menu-icon tf-icons mdi mdi-chart-pie",
+          "slug": "farmland_report"
+        },
+        {
+          "url": "cultivation_report",
+          "name": "Cultivation Report",
+          "icon": "menu-icon tf-icons mdi mdi-chart-gantt",
+          "slug": "cultivation_report"
+        }
+      ]
     }
   ]
 }
