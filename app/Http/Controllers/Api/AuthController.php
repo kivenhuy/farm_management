@@ -117,7 +117,7 @@ class AuthController extends Controller
             ->take(5)
             ->get();
 
-        $totalExpectedYield = Cultivations::sum('est_yield');
+        $totalExpectedYield = Auth::user()->staff->farm_land->sum('est_yield');
 
         return response()->json([
             'result' => true,
