@@ -16,6 +16,7 @@ use App\Http\Controllers\CatalogueValueController;
 use App\Http\Controllers\CropVarietyController;
 use App\Http\Controllers\FarmLandController;
 use App\Http\Controllers\LogActivitiesController;
+use App\Http\Controllers\ReportController;
 use App\Models\CatalogueValue;
 use App\Models\CropVariety;
 use App\Models\FarmLand;
@@ -103,5 +104,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post("/crop_variety/store", [CropVarietyController::class, 'store'])->name('crop_variety.store');
     Route::get("/crop_variety/dtajax", [CropVarietyController::class, 'dtajax'])->name('crop_variety.dtajax');
 
+    // Report
+    Route::get("/farmer_report", [ReportController::class, 'farmer_report'])->name('farmer_report.index');
+    Route::get("/farmer_report/farmer_report_ajax", [ReportController::class, 'farmer_report_ajax'])->name('farmer_report.farmer_report_ajax');
+    Route::get("/farmland_report", [ReportController::class, 'farmland_report'])->name('farmland_report.index');
+    Route::get("/farmland_report/farmland_report_ajax", [ReportController::class, 'farmland_report_ajax'])->name('farmer_report.farmland_report_ajax');
+    Route::get("/farmland_report/singel_farmland_location/{id}", [ReportController::class, 'singel_farmland_location'])->name('farmer_report.singel_farmland_location');
+    Route::get("/cultivation_report", [ReportController::class, 'cultivation_report'])->name('cultivation_report.index');
+    Route::get("/cultivation_report/cultivation_report_ajax", [ReportController::class, 'cultivation_report_ajax'])->name('farmer_report.cultivation_report_ajax');
 });
 
