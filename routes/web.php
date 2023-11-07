@@ -46,12 +46,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('season-masters', SeasonMasterController::class)->names('season-masters');
     Route::resource('crop-informations', CropMasterController::class);
     Route::resource('catalogue-values', CatalogueValueController::class)->only('index');
+    
     Route::resource('crop-stages', CropStageController::class);
     Route::post('update-crop-stage-status', [CropStageController::class, 'updateStatus'])->name('crop_stage.update_status');
     Route::resource('crop-activities', CropActivityController::class);
     Route::post('update-crop-activity-status', [CropActivityController::class, 'updateStatus'])->name('crop_activity.update_status');
+    
     Route::resource('crop-calendars', CropCalendarController::class);
     Route::get('ajax-get-calendar-view', [CropCalendarController::class, 'ajaxGetCalendarView'])->name('ajax.get-calendar-view');
+    Route::post('update-crop-calendar-status', [CropCalendarController::class, 'updateStatus'])->name('crop_calendar.update_status');
 
      // Farmer Details
     Route::get("/farmer", [FarmersController::class, 'index'])->name('farmer.index');

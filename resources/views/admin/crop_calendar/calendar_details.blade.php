@@ -42,7 +42,7 @@
     </td>
     <td>
         <label class="switch ms-3">
-            <input type="checkbox" name="calendar_detail[{{ $itemIndex }}][is_base_on_sowing_date]" class="switch-input js-switch-status" {{ $calendarDetail->is_base_on_sowing_date ? 'checked' : '' }}>
+            <input type="checkbox" name="calendar_detail[{{ $itemIndex }}][is_base_on_sowing_date]" class="switch-input js-switch-status" {{ $calendarDetail->is_base_on_sowing_date === 0 ? '' : 'checked' }}>
             <span class="switch-toggle-slider">
               <span class="switch-on"></span>
               <span class="switch-off"></span>
