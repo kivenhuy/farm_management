@@ -107,6 +107,16 @@ class FarmersController extends Controller
         
     }
     
+
+    public function distribute_transation(Request $request)
+    {
+      
+        $result = [];
+        // $result = $response->json();
+        $out =  Datatables::of($result)->make(false);
+        return $out;   
+    }
+    
     // public function registration(Request $request)
     // {
     //     $validator = Validator::make($request->all(), [

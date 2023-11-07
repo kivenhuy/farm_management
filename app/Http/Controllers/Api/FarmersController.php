@@ -542,7 +542,7 @@ class FarmersController extends Controller
             //     $insurance_info = $creat_insurance->create($data_insurance_info);
             //     array_push($all_insurance_update,$insurance_info);  
             // }
-            $insurance_info = BankInfo::updateOrCreate(['id'=>$sub_data_insurance['id']], $data_insurance_info );
+            $insurance_info = InsuranceInfo::updateOrCreate(['id'=>$sub_data_insurance['id']], $data_insurance_info );
             array_push($all_insurance_update,$insurance_info);  
         }
         if(count($all_insurance_update)>0)

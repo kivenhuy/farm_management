@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get("/farmer", [FarmersController::class, 'index'])->name('farmer.index');
     Route::get("/farmer_location", [FarmersController::class, 'farmer_location'])->name('farmer_location.index');
     Route::get("/farmer/dtajax", [FarmersController::class, 'dtajax'])->name('farmer.dtajax');
+    Route::get("/farmer/distribute_transation", [FarmersController::class, 'distribute_transation'])->name('farmer.distribute_transation');
     Route::get("/farmer/{id}", [FarmersController::class, 'show'])->name('farmer.show');
     Route::post("/import-csv", [FarmersController::class, 'importCSV'])->name('farmer.import_csv');
 

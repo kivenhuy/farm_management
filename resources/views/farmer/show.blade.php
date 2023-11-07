@@ -4,7 +4,7 @@
     <div class="container-fluid">
 
         <div class="row">
-            <div class="col-md-3">
+              <div class="col-md-3">
                 <!-- User Card -->
                 <div class="card mb-4">
                   <div class="card-body">
@@ -76,6 +76,16 @@
                             <i class="mdi mdi-barley mdi-20px me-1"></i>Cultivation Detail
                         </a>
                     </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="javascript:void(0);" data-bs-toggle="tab" data-bs-target="#transaction">
+                          <i class="mdi mdi-chart-timeline mdi-20px me-1"></i>Transaction
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);" data-bs-toggle="tab" data-bs-target="#contract">
+                        <i class="mdi mdi-file-document-edit mdi-20px me-1"></i>Contract
+                    </a>
+                </li>
                     <span class="tab-slider" style="left: 0px; width: 145.609px; bottom: 0px;"></span>
                 </ul>
                 <!--/ User Tabs -->
@@ -93,6 +103,16 @@
                         @include('farmer.details.cultivation_details')
                         
                     </div>
+
+                    <div class="tab-pane fade" id="transaction">
+                      @include('farmer.details.transaction')
+                      
+                  </div>
+
+                  <div class="tab-pane fade" id="contract">
+                    @include('farmer.details.contract')
+                    
+                </div>
                 </div>
             
               </div>
