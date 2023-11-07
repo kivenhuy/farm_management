@@ -106,4 +106,11 @@ class CropCalendarController extends Controller
 
         return view('admin.crop_calendar.calendar_details', ['calendarDetail' => new CropCalendarDetail, 'itemIndex' => $itemIndex]);
     }
+
+    public function updateStatus(Request $request)
+    {
+        $cropCalendar = CropCalendar::find($request->id);
+        $cropCalendar->status = $request->status;
+        $cropCalendar->save();
+    }
 }

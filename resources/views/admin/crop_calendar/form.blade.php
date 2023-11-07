@@ -115,6 +115,10 @@
                 </div>
             </div>
 
+
+            <h3 class="mt-5">Crop Activities</h3>
+            <p>The list of activities that needs to be carried out as part of above crop is entered here</p>
+
             <div style="overflow-x: scroll;">
                 <table class="table table-bordered" style="width:2500px;">
                     <thead>
