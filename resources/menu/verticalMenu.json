@@ -90,6 +90,12 @@
           "icon": "menu-icon tf-icons mdi mdi-tractor me-2",
           "slug": "crop-activities",
           "url": "crop-activities"
+        },
+        {
+          "name": "Crop Calendar",
+          "icon": "menu-icon tf-icons mdi mdi-calendar-week me-2",
+          "slug": "crop-calendars",
+          "url": "crop-calendars"
         }
       ]
     },
