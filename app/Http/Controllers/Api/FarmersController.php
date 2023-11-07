@@ -911,7 +911,7 @@ class FarmersController extends Controller
             $family_info = $farmer_data->family_info; 
             $family_info->total_child_under_18 = json_decode($family_info->total_child_under_18); 
         } else {
-            $family_info = [];
+            $family_info = null;
         }
        
         
@@ -960,7 +960,7 @@ class FarmersController extends Controller
         if ( $farmer_data->asset_info ) {
             $asset_info = $farmer_data->asset_info;
         } else {
-            $asset_info = [];
+            $asset_info = null;
         }
         $data_housing_owner = [];
         $data_house_type = [];
@@ -1020,7 +1020,7 @@ class FarmersController extends Controller
         if ($farmer_data->bank_info ) {
             $bank_info = $farmer_data->bank_info;
         } else {
-            $bank_info = [];
+            $bank_info =null;
         }
         $data_account_type = [];
         $account_type = FarmCatalogue::where('NAME','Account Type')->first();
@@ -1059,7 +1059,7 @@ class FarmersController extends Controller
         if ($farmer_data->finance_info ) {
             $finance_info = $farmer_data->finance_info;
         } else {
-            $finance_info = [];
+            $finance_info = null;
         }
         $data_purpose = [];
         $purpose = FarmCatalogue::where('NAME','Purpose')->first();
@@ -1092,7 +1092,7 @@ class FarmersController extends Controller
         if ($farmer_data->insurance_info ) {
             $insurance_info = $farmer_data->insurance_info;
         } else {
-            $insurance_info = [];
+            $insurance_info = null;
         }
         $data_crop = CropInformation::All();
         return response()->json([
@@ -1122,7 +1122,7 @@ class FarmersController extends Controller
         if ($farmer_data->animal_husbandry ) {
             $animal_husbandry = $farmer_data->animal_husbandry;
         } else {
-            $animal_husbandry = [];
+            $animal_husbandry = null;
         }
         $farm_animal = FarmCatalogue::where('NAME','Animal Husbandry')->first();
         if(isset($farm_animal))
@@ -1174,7 +1174,7 @@ class FarmersController extends Controller
         if ($farmer_data->certificate_info ) {
             $certificate_info = $farmer_data->certificate_info;
         } else {
-            $certificate_info = [];
+            $certificate_info = null;
         }
         $identity_proof = FarmCatalogue::where('NAME','Identity Proof')->first();
         if(isset($appoarch_road))
@@ -1218,7 +1218,7 @@ class FarmersController extends Controller
         if ($farmer_data->farm_equipment ) {
             $farm_equipment_info = $farmer_data->farm_equipment;
         } else {
-            $farm_equipment_info = [];
+            $farm_equipment_info = null;
         }
         $farm_equipment = FarmCatalogue::where('NAME','Farm Equipments')->first();
         if(isset($farm_equipment))
