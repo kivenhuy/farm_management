@@ -13,6 +13,8 @@ use App\Http\Controllers\FarmersController;
 use App\Http\Controllers\Admin\CropMasterController;
 use App\Http\Controllers\Admin\CropStageController;
 use App\Http\Controllers\CatalogueValueController;
+use App\Http\Controllers\Admin\CropCalendarController;
+use App\Http\Controllers\AjaxOptionsController;
 use App\Http\Controllers\CropVarietyController;
 use App\Http\Controllers\FarmLandController;
 use App\Http\Controllers\LogActivitiesController;
@@ -37,15 +39,19 @@ Route::group(["prefix"=> ""], function () {
 
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('ajax-option-get-provinces', [AjaxOptionsController::class,'getProvinces'])->name('ajax_options.get-provinces');
+    Route::get('ajax-option-get-districts', [AjaxOptionsController::class,'getDistricts'])->name('ajax_options.get-districts');
+
     Route::get("/dashboard", [HomeController::class, 'dashboard'])->name('dashboard');
     Route::resource('season-masters', SeasonMasterController::class)->names('season-masters');
     Route::resource('crop-informations', CropMasterController::class);
     Route::resource('catalogue-values', CatalogueValueController::class)->only('index');
-    //Route::get("/season-master", [HomeController::class, 'season_master'])->name('season_master');
     Route::resource('crop-stages', CropStageController::class);
     Route::post('update-crop-stage-status', [CropStageController::class, 'updateStatus'])->name('crop_stage.update_status');
     Route::resource('crop-activities', CropActivityController::class);
     Route::post('update-crop-activity-status', [CropActivityController::class, 'updateStatus'])->name('crop_activity.update_status');
+    Route::resource('crop-calendars', CropCalendarController::class);
+    Route::get('ajax-get-calendar-view', [CropCalendarController::class, 'ajaxGetCalendarView'])->name('ajax.get-calendar-view');
 
      // Farmer Details
     Route::get("/farmer", [FarmersController::class, 'index'])->name('farmer.index');
