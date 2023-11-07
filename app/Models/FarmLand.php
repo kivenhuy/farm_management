@@ -29,6 +29,10 @@ class FarmLand extends Model
             'land_document',
     ];
 
+    public function farmer_details()
+    {
+        return $this->belongsTo(FarmerDetails::class,'farmer_id','id');
+    }
 
     public function farm_land_lat_lng()
     {
