@@ -48,19 +48,18 @@ class FarmersController extends Controller
             ]);
         }
         $staff_data = $user_login->staff;
-        $farmer_data = FarmerDetails::where('staff_id',$staff_data->id)->get();
+        $farmer_data = FarmerDetails::where('staff_id',$staff_data->id);
         $farmer_data = FarmerDetails::with([
             'countryRelation',
             'provinceRelation',
             'districtRelation',
             'communeRelation',
         ])->where('staff_id',$staff_data->id)->get();
-
         return response()->json([
             'result' => true,
             'message' => 'Get All Farmer Successfully',
             'data' =>[
-                'farmer_data'=>$farmer_data
+                'farmer_data'=> FarmerDetails::where('staff_id',$staff_data->id)->paginate()
             ]
         ]);
     }
