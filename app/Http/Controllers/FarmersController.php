@@ -89,22 +89,40 @@ class FarmersController extends Controller
 
     public function dtajax(Request $request)
     {
-        $farmer = FarmerDetails::all()->sortDesc();
-        $out =  DataTables::of($farmer)->make(true);
-        $data = $out->getData();
-        for($i=0; $i < count($data->data); $i++) {
-            $output = '';
-            $output .= ' <a href="'.url(route('farmer.show',['id'=>$data->data[$i]->id])).'" class="btn btn-primary btn-xs"  data-toggle="tooltip" title="Show Details" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-eye"></i></a>';
-             
-            $data->data[$i]->action = (string)$output;
+        if($request->ajax())
+        {
+            if($request->name == "" && $request->phone_number == "" )
+            {
+                $farmer = FarmerDetails::all(['id','farmer_code','full_name','phone_number','gender','staff_id'])->sortDesc();
+            }
+            elseif($request->name != "" || $request->phone_number != "" )
+            {
+                $farmer = FarmerDetails::where('enrollment_date','!=',"");
+                if($request->name != "")
+                {
+                    $farmer = $farmer->where('full_name',$request->name);
+                }
+                if($request->phone_number != "")
+                {
+                    $farmer = $farmer->where('phone_number',$request->phone_number);
+                }
+                $farmer = $farmer->get()->sortDesc();
+            }
+            $out =  DataTables::of($farmer)->make(true);
+            $data = $out->getData();
+            for($i=0; $i < count($data->data); $i++) {
+                $output = '';
+                $output .= ' <a href="'.url(route('farmer.show',['id'=>$data->data[$i]->id])).'" class="btn btn-primary btn-xs"  data-toggle="tooltip" title="Show Details" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-eye"></i></a>';
+                
+                $data->data[$i]->action = (string)$output;
 
-            $staff = Staff::find($data->data[$i]->staff_id);
-            $data->data[$i]->staff_name = $staff?->name;
+                $staff = Staff::find($data->data[$i]->staff_id);
+                $data->data[$i]->staff_name = $staff?->name;
+            }
+            $out->setData($data);
+            // dd($out);
+            return $out;
         }
-        $out->setData($data);
-        // dd($out);
-        return $out;
-        
     }
     
 

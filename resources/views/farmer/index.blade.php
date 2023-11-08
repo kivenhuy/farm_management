@@ -124,13 +124,20 @@
 <script type="text/javascript">
 $(document).ready(function()
 {
-    fill_datatable("a");
+    fill_datatable();
 
     function fill_datatable(name = '',action='',phone='')
-  {
-    var keywork = (name=='')?((phone=='')?"":phone):name;
-    var type = (name=='')?((phone=='')?"":"phone_number"):"name";
-    console.log(keywork);
+    {
+      var keywork = (name=='')?
+                    ((phone=='')?
+                          "":
+                    phone):
+                  name;
+    var type = (name=='')?
+                ((phone=='')?
+                      "":
+                "phone"):
+              "name";
     var rfq_table = $("#example1").DataTable
     ({
       lengthChange: true,
@@ -139,13 +146,14 @@ $(document).ready(function()
       searching: false,
       bSort:false,
       serverSide: true,
-      ajax: "{{route('farmer.dtajax')}}",
-      data:
-      {
-        search:type,
-        value:keywork,
-      },
-     
+       ajax: {
+            url:"{{route('farmer.dtajax')}}",
+            data:
+            {
+              name:name,
+              phone_number:phone,
+            }
+          },
       // error: function (xhr) {
       //     if (xhr.status == 401) {
       //     window.location.href = "{!! route('login') !!}";
@@ -185,9 +193,6 @@ $(document).ready(function()
     });
   }
 
-    
-
-
     $('#filter').click(function(){
       var name = $('#name').val();
       var phone = $('#phone').val();
@@ -224,7 +229,7 @@ $(document).ready(function()
       // $('#email').val('');
       $('#phone').val('');
       $('#example1').DataTable().destroy();
-      fill_datatable('a');
+      fill_datatable(name = '',action='',phone='');
   });
   });
     

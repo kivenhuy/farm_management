@@ -7,6 +7,7 @@ use App\Models\CropInformation;
 use App\Models\Cultivations;
 use App\Models\FarmLand;
 use App\Models\Season;
+use App\Models\SRP;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -104,6 +105,18 @@ class CultivationsController extends Controller
             $final_crops = $crops->create($data_crops);
             if($final_crops)
             {
+                $srps = new SRP();
+                $data_srps = [
+                    'farmer_id'=>$request->farmer_id,
+                    'staff_id'=>$user->staff->id,
+                    'farm_land_id'=>$request->farm_land_id,
+                    'season_id'=>$request->season_id,
+                    'culitavtion_id'=>$final_crops->id,
+                    'score'=>0,
+                    'sowing_date'=>$request->sowing_date,
+                ];
+                
+                $final_srps = $srps->create($data_srps);
                 $data_log_activities['status_code'] = 200;
                 $data_log_activities['status_msg'] = 'Crops Created Successfully';
                 $this->create_log((object) $data_log_activities);
@@ -121,8 +134,8 @@ class CultivationsController extends Controller
             $data_log_activities['status_msg'] = $e->getMessage();
             $this->create_log((object) $data_log_activities);
             return response()->json([
-                'result' => true,
-                'message' => 'Farm Land Failed',
+                'result' => false,
+                'message' => $e,
             ]);
         }
         // else
