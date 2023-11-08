@@ -124,7 +124,7 @@ class AuthController extends Controller
             'message' => 'dashboard page',
             'data' => [
                 'total_farmmer' => $totalFarmer,
-                'total_hectares' => $totalHectares,
+                'total_hectares' => round($totalHectares/10000, 2),
                 'total_plot' =>round($totalPlot/10000, 2),
                 'nearby_plot' => $nearbyPlot,
                 'farmer_list' => $farmerDetail,
