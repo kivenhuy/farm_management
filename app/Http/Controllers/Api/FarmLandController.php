@@ -209,6 +209,7 @@ class FarmLandController extends Controller
         // dd($farm_land_data);
         $farmer_name = FarmerDetails::find($farm_land_data->farmer_id)->full_name;
         $farm_land_data->farmer_name = $farmer_name;
+        $farm_land_data->actual_area =round($farm_land_data->actual_area/10000, 2);
         $farm_land_data->farm_photo = uploaded_asset($farm_land_data->farm_photo);
         return response()->json([
             'result' => true,
