@@ -65,6 +65,10 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::put('farmer/update_farm_equipment/{id}','update_farm_equipment');
             Route::put('farmer/update_certificate/{id}','update_certificate');
             Route::post('farmer/update_personal_info','update_personal_info');
+
+
+            // SRP Transaction
+            Route::post('farmer/srp_transaction_tranining',[App\Http\Controllers\Api\TrainingController::class, 'store'])->name('training.store');
         });
 
         
