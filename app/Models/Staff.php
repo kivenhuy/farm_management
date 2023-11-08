@@ -50,4 +50,15 @@ class Staff extends Model
         'id', // Local key on the projects table...
         'id')->join('cultivations','farm_lands.id','=','cultivations.farm_land_id')->select('cultivations.*');
     }
+
+    public function farm_land_count(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+        FarmLand::class, 
+        FarmerDetails::class,
+        'staff_id', // Foreign key on the environments table...
+        'farmer_id', // Foreign key on the deployments table...
+        'id', // Local key on the projects table...
+        'id');
+    }
 }
