@@ -25,6 +25,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 class FarmersController extends Controller
 {
@@ -770,7 +772,7 @@ class FarmersController extends Controller
         $staff = Auth::user()->staff;
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required|string|unique:users,phone_number',
-            'full_name' => '|nullable|string',
+            'full_name' => 'nullable|string',
             // 'password' => 'required|string|min:5',
         ]);
         if ($validator->fails()) {
@@ -793,55 +795,80 @@ class FarmersController extends Controller
             ]);
         }
         
-        $user = New User();
-        $farmer_details = New FarmerDetails();
+        $farmer_details = new FarmerDetails();
         $countable = FarmerCountable::find(1);
         $farmer_code = 'FA'.date('Y').date('m').date('d').$countable->count_number;
         $email = "";
-        if($request->email != "")
-        {
+        if($request->email != ""){
             $email = $request->email;
+        } elseif (!empty($request->full_name)) {
+            $email = strtolower(str_replace(" ","_", $request->full_name)) . rand(10,90) . '@gmail.com';
+        } else {
+            $email = $request->phone_number . '@gmail.com';
         }
+
         $password = "";
         if($request->password != "")
         {
             $password = Hash::make($request->password); 
         }
-        $user = new User(); 
-        $user->name = $request->full_name; 
-        $user->user_type = "farmer"; 
-        $user->username = $request->full_name; 
-        $user->email = $email; 
-        $user->password =  $password; 
-        $user->phone_number = $request->phone_number; 
-        $user->email_verified_at = ""; 
-        // dd($password);
-        $user->save();
-        $farmer_photo = [];
-        if (!empty($request->all()['farmer_photo'])) {
-            foreach ($request->all()['farmer_photo'] as $photo) {                        
-                $id = (new UploadsController)->upload_photo($photo,$user->id);
+        // $user = new User(); 
+        // $user->name = $request->full_name; 
+        // $user->user_type = "farmer"; 
+        // $user->username = $request->full_name; 
+        // $user->email = $email; 
+        // $user->password =  $password; 
+        // $user->phone_number = $request->phone_number; 
+        // $user->email_verified_at = ""; 
+        // $user->save();
 
-                if (!empty($id)) {
-                    array_push($farmer_photo, $id);
-                }
-            }    
-        }
-        $id_proof_photo = [];
-        if (!empty($request->all()['id_proof_photo'])) {
+        $heromarketUrl = env('HEROMARKET_URL');
+        $signupApiUrl = $heromarketUrl . '/api/v2/auth/signup';
+        $response = null;
+
+        try {
+            $phone_number = (int) $request->phone_number;
+            $phone_number = '+84' . $phone_number;
+
+            $response = Http::post($signupApiUrl, [
+                'create_seller_from_upstream' => 1,
+                'bussiness_name' => $request->full_name,
+                'email' => $email,
+                'password' => '123456789',   
+                'password_confirmation' => '123456789',   
+                'country_code' => '84',
+                'phone' => $phone_number,
+                'country' => 238,
+                'city' => 48358,
+                'state' => 4056,
+                'address' => 'Vietnam, Long An city, Long An',
+                'user_type' => 'seller',
+                'lat' => $request->lat,
+                'lng' => $request->lng,
+                'is_enterprise' => 0,
+                'categories_id' => 1,
+            ]);
+
+        } catch (\Exception $exception) {
             
-            foreach ($request->all()['id_proof_photo'] as $photo) {                        
-                $id = (new UploadsController)->upload_photo($photo,$user->id);
-
-                if (!empty($id)) {
-                    array_push($id_proof_photo, $id);
-                }
-            }    
+            \Log::error($exception->getMessage());
+            $data_log_activities['status_code'] = 400;
+            $data_log_activities['status_msg'] = $exception->getMessage();
+            $this->create_log((object) $data_log_activities);
         }
-        
+
+        // return immediately if cannot register seller
+        if ($response->getStatusCode() != 200) {
+            return response()->json([
+                'result'=> false, 
+                'message'=> 'Cannot register seller',
+                'body' => json_decode($response->body()),
+            ], 500);
+        }
+
         $data_farmer_details =[
             'staff_id'=>$staff->id,
-            'user_id'=>$user->id,
+            'user_id'=>0,
             'enrollment_date' =>$request->enrollment_date,
             'enrollment_place'=>$request->enrollment_place,
             'full_name'=>$request->full_name,
@@ -859,12 +886,46 @@ class FarmersController extends Controller
             'farmer_code'=>$farmer_code,
             'dob'=>$request->dob,
             'is_online'=>$request->is_online,
-            'farmer_photo'=>implode(',', $farmer_photo),
-            'id_proof_photo'=>implode(',', $id_proof_photo),
+            // 'farmer_photo'=>implode(',', $farmer_photo),
+            // 'id_proof_photo'=>implode(',', $id_proof_photo),
         ];
        
         try {
             $farmer_data = $farmer_details->create($data_farmer_details);
+
+            $farmer_photo = [];
+            if (!empty($request->all()['farmer_photo'])) {
+                foreach ($request->all()['farmer_photo'] as $photo) {                        
+                    $id = (new UploadsController)->upload_photo($photo,$farmer_data->id);
+
+                    if (!empty($id)) {
+                        array_push($farmer_photo, $id);
+                    }
+                }    
+            }
+
+            $id_proof_photo = [];
+            if (!empty($request->all()['id_proof_photo'])) {
+                
+                foreach ($request->all()['id_proof_photo'] as $photo) {                        
+                    $id = (new UploadsController)->upload_photo($photo,$farmer_data->id);
+
+                    if (!empty($id)) {
+                        array_push($id_proof_photo, $id);
+                    }
+                }    
+            }
+
+            if (!empty($farmer_photo)) {
+                $farmer_data->farmer_photo = implode(',', $farmer_photo);
+                $farmer_data->save();
+            }
+
+            if (!empty($id_proof_photo)) {
+                $farmer_data->id_proof_photo = implode(',', $id_proof_photo);
+                $farmer_data->save();
+            }
+
             $data_log_activities['status_code'] = 200;
             $data_log_activities['status_msg'] = 'Farmer Registration Successfully';
             $this->create_log((object) $data_log_activities);
@@ -881,7 +942,7 @@ class FarmersController extends Controller
             $data_log_activities['status_msg'] = $e->getMessage();
             $this->create_log((object) $data_log_activities);
             // $log_actitvities->store_log((object) $data_log_activities);
-            User::find($user->id)->delete();
+            
             return response()->json([
                 'result' => true,
                 'message' => 'Farmer Registration Failed',
@@ -1242,7 +1303,7 @@ class FarmersController extends Controller
         $staff = Auth::user()->staff;
         $log_actitvities = new LogActivitiesController();
         $data_log_activities = [
-            'staff_id' => $staff->id,
+            'staff_id' => $staff?->id,
             'type' => 308,
             'action'=>$data->action,
             'request'=>$data->request,
