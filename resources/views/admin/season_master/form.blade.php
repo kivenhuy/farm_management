@@ -18,7 +18,16 @@
                             <label for="js-season-name">Season Name</label>
                         </div>
                         <div class="col-12 col-md-3">
-                            <input id="js-season-name" name="season-name" type="text" class="form-control">
+                            <input id="js-season-name" name="season-name" type="text" placeholder="Season Name" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-12 col-md-2">
+                            <label for="js-season-code">Season Code</label>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <input id="js-season-code" name="season-code" type="text" placeholder="Season Code" class="form-control">
                         </div>
                     </div>
 

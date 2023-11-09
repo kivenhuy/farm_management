@@ -11,7 +11,7 @@ class Staff extends Model
 {
     use HasFactory;
 
-    protected $with = ['farmer_details'];
+    // protected $with = ['farmer_details'];
 
     protected $fillable = [
         'user_id',
