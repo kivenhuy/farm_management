@@ -9,7 +9,7 @@ class SeasonMaster extends Model
 {
     use HasFactory;
     protected $table = 'season_masters';
-    protected $appends = ['season_name'];
+    // protected $appends = ['season_name'];
 
     public function season()
     {

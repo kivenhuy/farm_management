@@ -19,7 +19,7 @@
         <tbody>
             @foreach($cultivations as $crop)
                 <tr>
-                    <td>{{ $crop->season->season->name }}</td>
+                    <td>{{ $crop->season_name }}</td>
                     <td>{{ $crop->crops_master->name }}</td>
                     <td>{{ $crop->crop_variety }}</td>
                     <td>{{ number_format($crop->farm_land->total_land_holding, 2) . " Ha" }}</td>
@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Harvest Season</label>
-                            <span class="col-md-6">{{ $crop->season->season->name }}</span>
+                            <span class="col-md-6">{{ $crop->season->season_name }}</span>
                         </div>
                     </div>
                     <div class="form-group row border-bottom">
