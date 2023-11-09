@@ -106,7 +106,7 @@ class StaffController extends Controller
 
     public function dtajax(Request $request)
     {
-        $staff = Staff::all()->sortDesc();
+        $staff = Staff::query();
         $out =  DataTables::of($staff)->make(true);
         $data = $out->getData();
         for($i=0; $i < count($data->data); $i++) {

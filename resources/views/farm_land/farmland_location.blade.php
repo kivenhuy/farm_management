@@ -4,6 +4,21 @@
     <!-- Main content -->
     <div class="container">
       <h2>All Farm Land</h2>
+      <div class="card">
+        <div class="card-body">
+          <div class="row" style="margin-bottom: 20px">
+            <div class="col-6">
+
+              <div class="input-group input-group-md">
+                <select class="form-control form-control-user" id="season"  name="season" value="" style="">
+                  
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
       <div id="map" style="height: 500px;"></div>
     </div>
 

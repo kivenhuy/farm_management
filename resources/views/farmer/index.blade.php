@@ -148,6 +148,7 @@ $(document).ready(function()
       serverSide: true,
        ajax: {
             url:"{{route('farmer.dtajax')}}",
+            pages: 20,
             data:
             {
               name:name,

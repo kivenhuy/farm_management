@@ -95,7 +95,8 @@ class FarmersController extends Controller
         {
             if($request->name == "" && $request->phone_number == "" )
             {
-                $farmer = FarmerDetails::all(['id','farmer_code','full_name','phone_number','gender','staff_id'])->sortDesc();
+                // $farmer = FarmerDetails::all(['id','farmer_code','full_name','phone_number','gender','staff_id'])->sortDesc();
+                $farmer = FarmerDetails::query();
             }
             elseif($request->name != "" || $request->phone_number != "" )
             {
