@@ -34,6 +34,9 @@ Route::group(['prefix' => 'auth'], function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('logout', 'App\Http\Controllers\Api\AuthController@logout');
     
+
+    // Staff
+    Route::get("/staff_details", [App\Http\Controllers\Api\StaffController::class, 'index'])->name('staff.index');
     
     Route::controller(FarmersController::class)->group(function () {
 
