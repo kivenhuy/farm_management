@@ -107,6 +107,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Farm land
     Route::get("/farm_land", [FarmLandController::class, 'index'])->name('farm_land.index');
+    Route::post("/farm_land/filter_farmland", [FarmLandController::class, 'filter_farmland'])->name('farm_land.filter_farmland');
 
     // Crop Variety
     Route::get("/crop_variety", [CropVarietyController::class, 'index'])->name('crop_variety.index');
