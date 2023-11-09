@@ -7,29 +7,25 @@
     <table class="table table-bordered js-crop-table">
         <thead>
         <tr class="bg-danger">
-            <th class="text-white">Harvest Season</th>
-            <th class="text-white">Cultivated Crop</th>
-            <th class="text-white">Variety</th>
-            <th class="text-white">Cultivation Area</th>
-            <th class="text-white">Sowing Date</th>
-            <th class="text-white">Est Yield</th>
-            <th class="text-white">Action</th>
+            <th class="text-white">Contract</th>
+            <th class="text-white">View Details</th>
         </tr>
         </thead>
         <tbody>
-            @foreach($cultivations as $crop)
+            {{-- @foreach($cultivations as $crop) --}}
                 <tr>
-                    <td>{{ $crop->season->season->name }}</td>
-                    <td>{{ $crop->crops_master->name }}</td>
-                    <td>{{ $crop->crop_variety }}</td>
-                    <td>{{ number_format($crop->farm_land->total_land_holding, 2) . " Ha" }}</td>
-                    <td>{{ $crop->sowing_date }}</td>
-                    <td>{{ $crop->est_yield . " Kg"  }}</td>
+                    <td>First Contract</td>
                     <td>
-                        <a href="javascript:void(0)" class="js-view-crop" data-crop-id="{{ $crop->id }}">View Crop</a>
+                        <a href="https://up.farm-angel.com/storage/uploads/all/z1oPcA1UcaazPluOvwNUYQzfpvWAXK5qt5jDuV0o.pdf" target="_blank class="js-view-crop" >View Contract</a>
                     </td>
                 </tr>
-            @endforeach
+                <tr>
+                    <td>Second Contract</td>
+                    <td>
+                        <a href="https://up.farm-angel.com/storage/uploads/all/FxkV4uJvklnJeBTogs0Cpwubn0sKTsnf8NgIppqb.pdf" target="_blank class="js-view-crop" >View Contract</a>
+                    </td>
+                </tr>
+            {{-- @endforeach --}}
         </tbody>
     </table>
 @endif
@@ -43,16 +39,6 @@
             <h5 class="card-header fw-bold card-header-status" data-bs-toggle="collapse" data-bs-target="#card-body-cultivation-information-{{ $crop->id}}">Cultivation Information</h5>
             <div class="" id="card-body-cultivation-information-{{ $crop->id}}">
                 <div class="card-body border-bottom">
-                    <div class="form-group row border-bottom">
-                        <div class="col-md-6 d-flex align-items-center">
-                            <label class="col-md-6 col-form-label fw-medium text-heading" for="">Crop Category</label>
-                            <span class="col-md-6">{{ ucwords($crop?->crops_master->crop_category->name) }}</span>
-                        </div>
-                        <div class="col-md-6 d-flex align-items-center">
-                            <label class="col-md-6 col-form-label fw-medium text-heading" for="">Harvest Season</label>
-                            <span class="col-md-6">{{ $crop->season->season->name }}</span>
-                        </div>
-                    </div>
                     <div class="form-group row border-bottom">
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Cultivated Crop</label>

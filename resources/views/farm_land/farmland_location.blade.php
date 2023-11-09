@@ -22,7 +22,7 @@
         </div>
         </div>
       </div>
-      <div id="map" style="height: 500px;"></div>
+      <div id="map" style="height: 700px;"></div>
     </div>
 
 
@@ -243,8 +243,9 @@
   }
 </style>
 @push('scripts')
-
+<script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
 <script type="text/javascript">
+  // import { MarkerClusterer } from "https://cdn.skypack.dev/@googlemaps/markerclusterer@2.3.1";
   $(".link").on("click", function(event) {
 
   if (event.ctrlKey || event.shiftKey || event.metaKey || event.which == 2) {
@@ -277,9 +278,9 @@
   {
     const myLatLng = { lat: 10.7719514, lng: 106.726354 };
     const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 15,
+      zoom: 8,
       center: myLatLng,
-      mapTypeId:'satellite',
+      mapTypeId:'hybrid',
     });
 
     // alert($data + $key);
@@ -299,25 +300,170 @@
     }
     
   
-            var infowindow = new google.maps.InfoWindow();
-  
+            var infowindow = new google.maps.InfoWindow(
+              {
+                disableAutoPan: true,
+              }
+            );
             var marker, i;
-            
-            for (i = 0; i < locations.length; i++) { 
-              
-                  marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(locations[i]['lat'], locations[i]['lng']),
-                    map: map
-                  });
-                    
-                  // const flightPlanCoordinates = locations[i]['plot_data'];
+            const labels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-                  // const flightPath = new google.maps.Polyline({
-                  //   path: flightPlanCoordinates,
-                  //   geodesic: true,
-                  //   strokeColor: "#FF0000",
-                  //   strokeOpacity: 1.0,
-                  //   strokeWeight: 2,
+            const markers = locations.map((position, i) => {
+            // console.log(position);
+              const label = labels[i % labels.length];
+              const pinGlyph = new google.maps.LatLng(position['lat'], position['lng']);
+              const marker = new google.maps.Marker({
+                position: new google.maps.LatLng(position['lat'], position['lng']),
+                content: pinGlyph.element,
+              });
+
+              var myTrip = new Array();
+              if((position['plot_data']).length > 0)
+              {
+                
+                for (j = 0; j < position['plot_data'].length; j++) { 
+                  console.log(position['plot_data'][j]['lat']);
+                  
+                  myTrip.push(new google.maps.LatLng(position['plot_data'][j]['lat'], position['plot_data'][j]['lng']));
+                }
+              }
+              
+              const flightPath = new google.maps.Polyline({
+                path: myTrip,
+                geodesic: true,
+                strokeColor: "#FF0000",
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+              });
+              flightPath.setMap(map);
+                  
+              const content = document.createElement("div");
+                  content.classList.add("window_form_farmer");
+                  content.innerHTML = `
+                  <div class="backgorund"></div>
+                    <div class="form_image_and_name">
+                      <div class="image">
+                        <img class="avatar_farmer" src="${locations[i]['farmer_photo']}" alt="">
+                      </div>
+                      <div class="name">
+                        <div>
+                          <p>${locations[i]['farmer_name']}</p>
+                        </div>
+                        <div>
+                          <p>${locations[i]['farmer_code']}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form_information_cultivation">
+                        <div class="cultivation">
+                          <div>
+                            <img class="img_cultivation" src="https://hero.farm-angel.com/public/uploads/all/T0yt5PpBElTPbNHPStLyiJjZN8XCj9L2G1Oa0pEr.png" alt="">
+                          </div>
+                          <div class="details_cultivation">
+                            <div class="text_for_details">
+                              <label for="">Crop</label>
+                              <p>
+                                ${locations[i]['crop_name']}
+                              </p>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <div class="total_land_holding">
+                          <div>
+                            <img class="img_landholding" src="https://hero.farm-angel.com/public/uploads/all/68bJ8FPMziQNnYRZ1Ay51GcmqdU8lrsQYMomt0CU.png" alt="">
+                          </div>
+                          <div>
+                            <div class="text_for_details">
+                              <label for="" >Total Land Holding</label>
+                              <p>${locations[i]['actual_area']} km</p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="form_information_details_farmer">
+                      <div class="form_left">
+                        <div>
+                          <label for="">Farm Name</label>
+                        </div>
+                        <div>
+                          ${locations[i]['farm_name']}
+                        </div>
+                      </div>
+                      <div class="form_right">
+                        <div>
+                          <label for="">Organization</label>
+                        </div>
+                        <div>
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form_information_details_farmer">
+                      <div class="form_left">
+                        <div>
+                          <label for="">Village</label>
+                        </div>
+                        <div>
+                          
+                        </div>
+                      </div>
+                      <div class="form_right">
+                        <div>
+                          <label for="">Estiamte Harvest Date</label>
+                        </div>
+                        <div>
+                          ${locations[i]['harvest_date']}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form_information_details_farmer">
+                      <div class="form_left">
+                        <div>
+                          <label for="">Season</label>
+                        </div>
+                        <div style="display: block;word-wrap: break-word;max-width: 100px;">
+                          ${locations[i]['season_period_from']} to ${locations[i]['season_period_to']}
+                        </div>
+                      </div>
+                      <div class="form_right">
+                        <div>
+                          <label for="">Yield-(Kgs)</label>
+                        </div>
+                        <div>
+                          ${locations[i]['est_yeild']}
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="mar-all mb-2" style=" text-align: end;">
+                        <a href="farmer/${locations[i]['farmer_id']}">
+                            <button type="submit" name="button" value="publish" class="btn btn-primary waves-effect waves-light">View More</button>
+                        </a>
+                    </div>
+                    </div>
+              `;
+
+              google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                return function() {
+                  infowindow.setContent(content);
+                  infowindow.open(map, marker);
+                }
+              })(marker, i));
+              
+              return marker;
+            });
+
+            // Add a marker clusterer to manage the markers.
+            new markerClusterer.MarkerClusterer({ markers, map });
+            for (i = 0; i < locations.length; i++) { 
+                 
+                  // marker = new google.maps.Marker({
+
+
+
+                  //   position: new google.maps.LatLng(locations[i]['lat'], locations[i]['lng']),
+                  //   map: map
                   // });
                   var myTrip = new Array();
                   if((locations[i]['plot_data']).length > 0)
@@ -336,7 +482,7 @@
                     strokeColor: "#FF0000",
                     strokeOpacity: 1.0,
                     strokeWeight: 2,
-                    });
+                  });
                   flightPath.setMap(map);
                   
                   const content = document.createElement("div");
@@ -458,7 +604,8 @@
   }
   window.initMap = initMap;
 </script>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key={{env('GOOGLE_MAP_KEY')}}&callback=initMap">
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key={{env('GOOGLE_MAP_KEY')}}&callback=initMap&v=weekly">
 </script>
+
 
 @endpush

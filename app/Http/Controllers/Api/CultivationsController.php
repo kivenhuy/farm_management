@@ -7,6 +7,7 @@ use App\Models\CropInformation;
 use App\Models\Cultivations;
 use App\Models\FarmLand;
 use App\Models\Season;
+use App\Models\SeasonMaster;
 use App\Models\SRP;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,9 +28,9 @@ class CultivationsController extends Controller
      */
     public function create()
     {
-        $season = Season::all();
+        $season = SeasonMaster::all();
         $crop_information  = CropInformation::all();
-        $farm_land = FarmLand::all();
+        $farm_land = Auth::user()->staff->farm_land_count;
         return response()->json([
             'result' => true,
             'message' => 'Get Data Crops Successfully',
