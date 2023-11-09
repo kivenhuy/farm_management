@@ -11,7 +11,10 @@
 
               <div class="input-group input-group-md">
                 <select class="form-control form-control-user" id="season"  name="season" value="" style="">
-                  
+                  <option value="">Select Season</option>
+                  @foreach($season_data as $sub_season_data)
+                    <option value="{{$sub_season_data->id}}">{{$sub_season_data->season_name}}</option>
+                  @endforeach
                 </select>
               </div>
             </div>
@@ -250,8 +253,28 @@
   // ... load only necessary things for normal clicks
   });
 
-
-  function initMap() {
+  $(document).ready(function()
+  {
+    $('#season').on('change', function() {
+      var value = this.value;
+      $.ajax
+      ({
+          type: "POST",
+          url: "{{route('farm_land.filter_farmland')}}", 
+          data:
+          {
+            season_id:this.value
+          },
+          success: function(result,value)
+          {
+            
+            initMap(result,value);
+          }
+      });
+    });
+  });
+  function initMap($data='',$key = 0) 
+  {
     const myLatLng = { lat: 10.7719514, lng: 106.726354 };
     const map = new google.maps.Map(document.getElementById("map"), {
       zoom: 15,
@@ -259,7 +282,22 @@
       mapTypeId:'satellite',
     });
 
-    var locations = {{ Js::from($farm_land_data) }};
+    // alert($data + $key);
+    if($data=='' && $key == 0)
+    {
+      // alert('aaa');
+      var locations = {{ Js::from($farm_land_data) }};
+    }
+    else if($data=='' && $key != 0)
+    {
+      var locations = $data;
+    }
+    else
+    {
+      // alert('bbb');
+      var locations = $data;
+    }
+    
   
             var infowindow = new google.maps.InfoWindow();
   
@@ -268,7 +306,6 @@
             for (i = 0; i < locations.length; i++) { 
               
                   marker = new google.maps.Marker({
-                    
                     position: new google.maps.LatLng(locations[i]['lat'], locations[i]['lng']),
                     map: map
                   });
@@ -418,8 +455,8 @@
                   
             }
             
-        }
-        window.initMap = initMap;
+  }
+  window.initMap = initMap;
 </script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key={{env('GOOGLE_MAP_KEY')}}&callback=initMap">
 </script>

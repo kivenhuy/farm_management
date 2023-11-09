@@ -131,7 +131,7 @@ class FarmersController extends Controller
         ])->find($id);
         $farmer_data->farmer_photo = uploaded_asset($farmer_data->farmer_photo);
         
-        $farmer_data->total_area    = $farmer_data->farm_lands->sum('actual_area');
+        $farmer_data->total_area    = round($farmer_data->farm_lands->sum('actual_area')/10000, 2);
 
         return response()->json([
             'result' => true,
@@ -268,7 +268,7 @@ class FarmersController extends Controller
                 'result' => true,
                 'message' => 'Farmer Update Successfully',
                 'data' =>[
-                    'farmer_data'=>$farmer_data
+                    'farmer_data'=>FarmerDetails::find($request->farmer_id)
                 ]
             ]);
         } catch (\Exception $e) {  
