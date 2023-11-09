@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Commune;
 use App\Models\Country;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\District;
 use App\Models\FarmerCountable;
 use App\Models\FarmerDetails;
@@ -59,8 +60,9 @@ class FarmersController extends Controller
     public function show(string $id)
     {
         $farmerDetail = FarmerDetails::find($id);
-        
-        return view('farmer.show',['farmerDetail'=> $farmerDetail]);
+        $url_farmer_details = env('UPSTREAM_URL').'farmer/'.$id;
+        $qrcode = QrCode::size(200)->generate($url_farmer_details);
+        return view('farmer.show',['farmerDetail'=> $farmerDetail,'qrcode'=>$qrcode]);
     }
 
     /**
