@@ -90,36 +90,56 @@
     {   
         var rfq_table = $("#example1").DataTable
         ({
-                lengthChange: true,
-                responsive: true,
-                processing: true,
-                searching: false,
-                bSort:false,
-                serverSide: true,
-                    ajax: "{{route('staff.dtajax')}}",
-                    pages: 20,
+          lengthChange: true,
+          responsive: true,
+          processing: true,
+          searching: false,
+          bSort:false,
+          serverSide: true,
+          deferRender: true,
+          ajax: {
+                url:"{{route('staff.dtajax')}}",
+                pages: 20
+              },
+                    // ajax: ,
+                    // pages: 20,
                     // error: function (xhr) {
                     //     if (xhr.status == 401) {
                     //     window.location.href = "{!! route('login') !!}";
                     //     }
                     // },
-                    columns: [
-                          {data: 'first_name', name: 'staff_name', render: function(data,type,row){
-                              return row.first_name + " " + row.last_name
-                          }},
-                          {data: 'phone_number', name: 'phone_number',render: function (data) {
-                            return (data=="")?"":data;
-                          }},
-                          {data: 'email', name: 'email',render: function (data) {
-                            return (data=="")?"":data;
-                          }},
-                          {data: 'gender', name: 'gender',render: function (data) {
-                            return (data=="")?"":data;
-                          }},
-                          {data: 'status', name: 'status',render: function (data) {
-                            return (data=="active")?"Active":"Block";
-                          }},
-                      ]
+        columns: [
+              {data: 'first_name', name: 'staff_name', render: function(data,type,row){
+                  return row.first_name + " " + row.last_name
+              }},
+              {data: 'phone_number', name: 'phone_number',render: function (data) {
+                return (data=="")?"":data;
+              }},
+              {data: 'email', name: 'email',render: function (data) {
+                return (data=="")?"":data;
+              }},
+              {data: 'gender', name: 'gender',render: function (data) {
+                return (data=="")?"":data;
+              }},
+              {data: 'status', name: 'status',render: function (data) {
+                return (data=="active")?"Active":"Block";
+              }},
+          ],
+          drawCallback:function(setting){
+          
+          $('[data-toggle="tooltip"]').tooltip();
+          var abc = $(this).find('.dataTables_empty').length;
+          console.log("aaaaaa" + abc);
+          if ($(this).find('.dataTables_empty').length == 1) {
+                // $('th').hide();
+                // $('#example1_info').hide();
+                $('#example1_paginate').hide();
+          }
+        },
+        fnDrawCallback: function () {
+          var abc = $(this).find('.dataTables_empty').length;
+          console.log("aaaaaa" + abc);
+        }
         });
     });
 
