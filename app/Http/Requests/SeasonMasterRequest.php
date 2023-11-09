@@ -22,7 +22,7 @@ class SeasonMasterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'season_code' => 'required|string|in:winter_spring,summer_autumn,autumn_winter,other',
+            'season_code' => 'required|string',
             'from_period'=> 'required|date',
             'to_period'=> 'required|date',
             'status' => 'required|in:active,inactive'
