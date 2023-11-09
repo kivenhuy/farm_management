@@ -15,9 +15,9 @@ class HomeController extends Controller
     public function dashboard()
     {
         $staffs = Staff::withCount('farmer_details')->where('status', 'active')->get();
-        $farmerCount = FarmerDetails::count();
-        $totalLandHolding = FarmLand::sum('total_land_holding');
-        $totalFarmlands = FarmLand::count();
+        $farmerCount = FarmerDetails::where('status', 'active')->count();
+        $totalLandHolding = FarmLand::where('status', 'active')->sum('total_land_holding');
+        $totalFarmlands = FarmLand::where('status', 'active')->count();
 
         $staffsFormat = [];
         foreach ($staffs as $staff) {

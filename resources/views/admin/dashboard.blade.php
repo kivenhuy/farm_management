@@ -82,11 +82,13 @@
             </thead>
             <tbody>
                 @foreach($communeByFarmAreas as $communeByFarmArea) 
+                  @if ($communeByFarmArea['total_land_holding'] > 0 && $communeByFarmArea['actual_area'] > 0)
                     <tr>
                         <td>{{ $communeByFarmArea['name'] }}</td>
                         <td>{{ $communeByFarmArea['total_land_holding'] }}</td>
                         <td>{{ $communeByFarmArea['actual_area'] }}</td>
                     </tr>
+                  @endif
                 @endforeach
             </tbody>
         </table>
@@ -102,7 +104,8 @@
         document.addEventListener('DOMContentLoaded', function () {
             Highcharts.chart('basic-chart', {
                 chart: {
-                    type: 'column'
+                    type: 'column',
+                    height: 600,
                 },
                 title: {
                     text: 'Farmers by Field Officer'
@@ -122,7 +125,8 @@
         $(document).ready(function() {
             var locationChart = Highcharts.chart('location-chart', {
                 chart: {
-                    type: 'column'
+                    type: 'column',
+                    height: 600,
                 },
                 title: {
                     text: 'Farmers by Commune'
@@ -138,12 +142,14 @@
                 series:  {!! json_encode($comunessData) !!},
             });
 
+            // example(change type=bar): https://jsfiddle.net/a24cLdon/
             Highcharts.chart('area-chart', {
                 data: {
-                    table: 'datatable'
+                    table: 'datatable',
                 },
                 chart: {
-                    type: 'bar'
+                    type: 'bar',
+                    height: 600,
                 },
                 title: {
                     text: 'Farm area by commune'
