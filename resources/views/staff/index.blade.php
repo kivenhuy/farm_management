@@ -85,11 +85,6 @@
 
 <script type="text/javascript">
 
-    function userCheated() {
-            // The user cheated by leaving this window (e.g opening another window)
-            // Do something
-        alert("New Tab Opened");
-    }
 
     $(document).ready(function()
     {   
@@ -102,6 +97,7 @@
                 bSort:false,
                 serverSide: true,
                     ajax: "{{route('staff.dtajax')}}",
+                    pages: 20,
                     // error: function (xhr) {
                     //     if (xhr.status == 401) {
                     //     window.location.href = "{!! route('login') !!}";

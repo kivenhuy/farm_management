@@ -15,15 +15,10 @@
                 <div class="card-body">
                     <div class="form-group row">
                         <div class="col-12 col-md-2">
-                            <label for="js-season-code">Season</label>
+                            <label for="js-season-name">Season Name</label>
                         </div>
                         <div class="col-12 col-md-3">
-                            <select name="season_code" id="js-season-code" class="form-control" required>
-                                <option value="">Select Season</option>
-                                @foreach (\App\Models\Season::get()->pluck('name', 'code') as $code => $name)
-                                    <option value="{{  $code }}" {{ $code == $seasonMaster->season_code ? 'selected' : ''}}>{{ $name }}</option>
-                                @endforeach
-                            </select>
+                            <input id="js-season-name" name="season-name" type="text" class="form-control">
                         </div>
                     </div>
 
