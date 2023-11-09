@@ -14,9 +14,9 @@
                         <label for="js-season-code">Season</label>
                         <select name="season_code" id="js-season-code" class="form-control">
                             <option value="">Select Season</option>
-                            @foreach (\App\Models\Season::get()->pluck('name', 'code') as $code => $name)
+                            {{-- @foreach (\App\Models\Season::get()->pluck('name', 'code') as $code => $name)
                                 <option value="{{  $code }}" {{ $code == $seasonCode ? 'selected' : ''}}>{{ $name }}</option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                 @if($seasonMasters->count())
                     @foreach ($seasonMasters as $seasonMaster)  
                         <tr>
-                            <td>{{ $seasonMaster->season->name}}</td>
+                            <td>{{ $seasonMaster->season_name}}</td>
                             <td>{{ $seasonMaster->from_period}}</td>
                             <td>{{ $seasonMaster->to_period}}</td>
                             <td>{{ $seasonMaster->status == 'active' ? 'Active' : 'Inactive'}} </td>
@@ -75,7 +75,7 @@
                                     {{ method_field('DELETE') }}
                                     @csrf
                                     
-                                    <a class="rounded-circle btn-danger text-white p-2 avatar avatar-sm js-delete-season" href="javascript:void(0)" data-delete-season-title="{{ $seasonMaster->season->name }}" title="Delete">
+                                    <a class="rounded-circle btn-danger text-white p-2 avatar avatar-sm js-delete-season" href="javascript:void(0)" data-delete-season-title="{{ $seasonMaster->season_name }}" title="Delete">
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 </form>

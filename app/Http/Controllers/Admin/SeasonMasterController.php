@@ -70,7 +70,9 @@ class SeasonMasterController extends Controller
 
     private function createOrUpdate(SeasonMasterRequest $seasonMasterRequest, SeasonMaster $seasonMaster)
     {
+        // dd($seasonMasterRequest);
         $isNewSeasonMaster = empty($seasonMaster->id);
+        $seasonMaster->season_name = $seasonMasterRequest->season_name;
         $seasonMaster->season_code = $seasonMasterRequest->season_code;
         $seasonMaster->from_period = $seasonMasterRequest->from_period;
         $seasonMaster->to_period = $seasonMasterRequest->to_period;

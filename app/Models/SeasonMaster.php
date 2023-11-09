@@ -16,8 +16,8 @@ class SeasonMaster extends Model
         return $this->belongsTo(Season::class, 'season_code', 'code');
     }
 
-    public function getSeasonNameAttribute()
-    {
-        return $this->season->name;
-    }
+    // public function getSeasonNameAttribute()
+    // {
+    //     return $this->season->name;
+    // }
 }
