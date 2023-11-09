@@ -871,15 +871,10 @@ class FarmersController extends Controller
 
         // return immediately if cannot register seller
         if ($response?->getStatusCode() != 200) {
-            \Log::error('Cannot register seller' .  $response->body());
+            \Log::error('Cannot register seller' .  $response?->body());
             $data_log_activities['status_code'] = 400;
-            $data_log_activities['status_msg'] = $response->body();
+            $data_log_activities['status_msg'] = 'Cannot register seller' . $response?->body();
             $this->create_log((object) $data_log_activities);
-            // return response()->json([
-            //     'result'=> false, 
-            //     'message'=> 'Cannot register seller',
-            //     'body' => json_decode($response->body()),
-            // ], 500);
         }
 
         $data_farmer_details =[
