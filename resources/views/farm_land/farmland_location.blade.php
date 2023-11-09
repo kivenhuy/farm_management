@@ -241,7 +241,7 @@
     const map = new google.maps.Map(document.getElementById("map"), {
       zoom: 15,
       center: myLatLng,
-      mapTypeId: 'satellite',
+      mapTypeId:'satellite',
     });
 
     var locations = {{ Js::from($farm_land_data) }};

@@ -37,9 +37,11 @@ class FarmersController extends Controller
     //     $this->;
     // }
 
-    public function index()
+    public function index(Request $request)
     {
+        
         $user_login = Auth::user();
+        // dd();
         if(!($user_login->staff))
         {
             return response()->json([
@@ -48,6 +50,8 @@ class FarmersController extends Controller
             ]);
         }
         $staff_data = $user_login->staff;
+        $data = $user_login->staff->farmer_details()->where("full_name",$request->search)->orWhere("phone_number",$request->search)->orWhere("farmer_code",$request->search)->paginate();
+        // dd($data);
         $farmer_data = FarmerDetails::where('staff_id',$staff_data->id);
         $farmer_data = FarmerDetails::with([
             'countryRelation',
@@ -59,7 +63,7 @@ class FarmersController extends Controller
             'result' => true,
             'message' => 'Get All Farmer Successfully',
             'data' =>[
-                'farmer_data'=> FarmerDetails::where('staff_id',$staff_data->id)->paginate()
+                'farmer_data'=> $data
             ]
         ]);
     }
