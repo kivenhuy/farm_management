@@ -93,22 +93,15 @@ class FarmersController extends Controller
     {
         if($request->ajax())
         {
-            if($request->name == "" && $request->phone_number == "" )
+            // dd($request->data);
+            if($request->search == "")
             {
                 // $farmer = FarmerDetails::all(['id','farmer_code','full_name','phone_number','gender','staff_id'])->sortDesc();
                 $farmer = FarmerDetails::query();
             }
-            elseif($request->name != "" || $request->phone_number != "" )
+            else
             {
-                $farmer = FarmerDetails::where('enrollment_date','!=',"");
-                if($request->name != "")
-                {
-                    $farmer = $farmer->where('full_name',$request->name);
-                }
-                if($request->phone_number != "")
-                {
-                    $farmer = $farmer->where('phone_number',$request->phone_number);
-                }
+                $farmer = FarmerDetails::where("full_name", 'like', '%'.$request->search.'%')->orWhere("phone_number",$request->search)->orWhere("farmer_code",$request->search);
                 $farmer = $farmer->get()->sortDesc();
             }
             $out =  DataTables::of($farmer)->make(true);

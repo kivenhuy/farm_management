@@ -58,7 +58,7 @@ class FarmersController extends Controller
         }
         else
         {
-            $data = $user_login->staff->farmer_details()->where("full_name",$request->search)->orWhere("phone_number",$request->search)->orWhere("farmer_code",$request->search)->paginate();
+            $data = $user_login->staff->farmer_details()->where("full_name", 'like', '%'.$request->search.'%')->orWhere("phone_number",$request->search)->orWhere("farmer_code",$request->search)->paginate();
         }
         
         // dd($data);

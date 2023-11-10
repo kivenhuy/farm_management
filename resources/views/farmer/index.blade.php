@@ -9,18 +9,18 @@
           <div class="card">
             <div class="card-body">
               <div class="row" style="margin-bottom: 20px">
-                <div class="col-6">
+                <div class="col-12">
 
                   <div class="input-group input-group-md">
-                    <input type="text" class="form-control form-control-user @error('name') is-invalid @enderror" id="name" placeholder="Name" name="name" value="" style="">  
+                    <input type="text" class="form-control form-control-user @error('name') is-invalid @enderror" id="name" placeholder="Search Information Farmer" name="name" value="" style="">  
                   </div>
                 </div>
-                <div class="col-6">
+                {{-- <div class="col-6">
 
                   <div class="input-group input-group-md">
                     <input type="number" class="form-control form-control-user @error('phone') is-invalid @enderror" id="phone" placeholder="Phone" name="phone" value="" style="">  
                   </div>
-                </div>
+                </div> --}}
               </div>
               <div class="row align-items-center d-flex">
                 <div class="container">
@@ -126,20 +126,12 @@ $(document).ready(function()
 {
     fill_datatable();
 
-    function fill_datatable(name = '',action='',phone='')
+    function fill_datatable(data = '')
     {
-      var keywork = (name=='')?
-                    ((phone=='')?
-                          "":
-                    phone):
-                  name;
-    var type = (name=='')?
-                ((phone=='')?
-                      "":
-                "phone"):
-              "name";
+      console.log(data)
     var rfq_table = $("#example1").DataTable
     ({
+      
       lengthChange: true,
       responsive: true,
       processing: true,
@@ -151,8 +143,7 @@ $(document).ready(function()
             pages: 20,
             data:
             {
-              name:name,
-              phone_number:phone,
+              search:data,
             }
           },
       // error: function (xhr) {
@@ -195,9 +186,8 @@ $(document).ready(function()
   }
 
     $('#filter').click(function(){
-      var name = $('#name').val();
-      var phone = $('#phone').val();
-      if( name == '' && phone == '')
+      var data = $('#name').val();
+      if( data == '')
       {
         toastr["error"]("Please input data to search!")
         toastr.options = {
@@ -221,16 +211,14 @@ $(document).ready(function()
       else
       {
         $('#example1').DataTable().destroy();
-        fill_datatable(name,action="search",phone);
+        fill_datatable(data);
       }
     });
 
   $('#reset').click(function(){
-      $('#name').val('');
-      // $('#email').val('');
-      $('#phone').val('');
+      var data = $('#name').val('');
       $('#example1').DataTable().destroy();
-      fill_datatable(name = '',action='',phone='');
+      fill_datatable(data);
   });
   });
     
