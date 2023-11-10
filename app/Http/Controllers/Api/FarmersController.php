@@ -134,7 +134,7 @@ class FarmersController extends Controller
         
         $farmer_data->total_area    = round($farmer_data->farm_lands->sum('actual_area')/10000, 2);
 
-        if($staff->id == $farmer_data->id)
+        if($staff->id == $farmer_data->staff_id)
         {
             return response()->json([
                 'result' => true,
