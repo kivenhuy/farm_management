@@ -15,7 +15,7 @@ class SRP extends Model
         'staff_id',
         'farm_land_id',
         'season_id',
-        'culitavtion_id',
+        'cultivation_id',
         'score',
         'sowing_date',
     ];
