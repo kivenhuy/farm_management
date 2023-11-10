@@ -53,7 +53,7 @@ class ReportController extends Controller
         $data = $out->getData();
         for($i=0; $i < count($data->data); $i++) {
             $output = '';
-            $output .= ' <a href="'.url(route('farmer.show',['id'=>$data->data[$i]->id])).'" class="btn btn-primary btn-xs"  data-toggle="tooltip" title="Show Details" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-map-marker"></i></a>';
+            $output .= ' <a href="'.url(route('farmer_report.singel_farmland_location',['id'=>$data->data[$i]->id])).'" class="btn btn-primary btn-xs"  data-toggle="tooltip" title="Show Details" style="display:inline;padding:2px 5px 3px 5px;"><i class="fa fa-map-marker"></i></a>';
             $data->data[$i]->action = (string)$output;
 
             $farmer_details = FarmerDetails::find($data->data[$i]->farmer_id, ['staff_id', 'farmer_code','full_name','phone_number']);
@@ -121,7 +121,7 @@ class ReportController extends Controller
         
         $farm_land_data->plot_data = $plot_data;
         // dd($farm_land_data);
-        return view('farm_land.singel_farmland_location',['farm_land_data'=>$farm_land_data]);
+        return view('farm_land.single_farmland_loaction',['farm_land_data'=>$farm_land_data]);
     }
 
     public function cultivation_report()  

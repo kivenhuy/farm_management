@@ -177,7 +177,6 @@ $('#dimmer').dimmer('show');
           },
           success: function(result,value)
           {
-            
             initMap(result,value);
           }
       });

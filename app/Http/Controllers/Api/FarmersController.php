@@ -123,6 +123,7 @@ class FarmersController extends Controller
      */
     public function show(string $id)
     {
+        $staff = Auth::user()->staff;
         $farmer_data = FarmerDetails::with([
             'countryRelation',
             'provinceRelation',
@@ -133,13 +134,24 @@ class FarmersController extends Controller
         
         $farmer_data->total_area    = round($farmer_data->farm_lands->sum('actual_area')/10000, 2);
 
-        return response()->json([
-            'result' => true,
-            'message' => 'Get Farmer Successfully',
-            'data' =>[
-                'farmer_data'=>$farmer_data
-            ]
-        ]);
+        if($staff->id == $farmer_data->id)
+        {
+            return response()->json([
+                'result' => true,
+                'message' => 'Get Farmer Successfully',
+                'data' =>[
+                    'farmer_data'=>$farmer_data
+                ]
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'result' => true,
+                'message' => 'This farmer is not under your management',
+                'data' =>(object)[],
+            ]);
+        }
     }
 
 
