@@ -1,4 +1,6 @@
-@php $farmLands = $farmerDetail->farm_lands->count() ? $farmerDetail->farm_lands : []; @endphp
+@php $farmLands = $farmerDetail->farm_lands->count() ? $farmerDetail->farm_lands : []; 
+// dd($farmLands->farm_land_lat_lng);
+@endphp
 
 <table class="table table-bordered js-farm-table">
     <thead>
@@ -86,7 +88,12 @@
             <h5 class="card-header fw-bold card-header-status collapsed" data-bs-toggle="collapse" data-bs-target="#card-body-plot-area-{{ $farmLand->id}}">Plot Area</h5>
             <div class="collapse" id="card-body-plot-area-{{ $farmLand->id}}">
                 <div class="card-body border-bottom">
-                    Implement later
+                    <div id="map" style="height: 700px;">
+                        @php
+                            $farmLand->plot_data = $farmLand->farm_land_lat_lng;
+                            // dd($plot_data);
+                        @endphp
+                    </div>
                 </div>
             </div>
         </div>
@@ -123,5 +130,69 @@
                 $('.js-farm-table').show();
             });
         });
+
+        function initMap() {
+            const myLatLng = { lat: 10.7719514, lng: 106.726354 };
+            const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 8,
+            center: myLatLng,
+            mapTypeId: 'satellite',
+            });
+
+            var locations = {{ Js::from($farmLand) }};
+  
+            var infowindow = new google.maps.InfoWindow();
+  
+            var marker, i;
+              
+                  marker = new google.maps.Marker({
+                    
+                    position: new google.maps.LatLng(locations['lat'], locations['lng']),
+                    map: map
+                  });
+                    
+                  // const flightPlanCoordinates = locations[i]['plot_data'];
+
+                  // const flightPath = new google.maps.Polyline({
+                  //   path: flightPlanCoordinates,
+                  //   geodesic: true,
+                  //   strokeColor: "#FF0000",
+                  //   strokeOpacity: 1.0,
+                  //   strokeWeight: 2,
+                  // });
+                  var myTrip = new Array();
+                  if((locations['plot_data']).length > 0)
+                  {
+                    for (j = 0; j < locations['plot_data'].length; j++) { 
+                      console.log(locations['plot_data'][j]['lat']);
+                      myTrip.push(new google.maps.LatLng(locations['plot_data'][j]['lat'], locations['plot_data'][j]['lng']));
+                    }
+                    myTrip.push(new google.maps.LatLng(locations['plot_data'][0]['lat'], locations['plot_data'][0]['lng']));
+                  } 
+        
+                  const flightPath = new google.maps.Polyline({
+                    path: myTrip,
+                    geodesic: true,
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2,
+                    });
+                  flightPath.setMap(map);
+                  
+                  const content = document.createElement("div");
+                  content.classList.add("window_form_farmer");
+
+                  google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                      infowindow.setContent(content);
+                      infowindow.open(map, marker);
+                    }
+                  })(marker, i));
+        }
+        window.initMap = initMap;
+
     </script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false&key={{env('GOOGLE_MAP_KEY')}}&callback=initMap&v=weekly"></script>
+
+
 @endpush

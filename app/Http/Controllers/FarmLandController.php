@@ -20,60 +20,64 @@ class FarmLandController extends Controller
      */
     public function index()
     {
-        
-        $farm_land_data = FarmLand::all();
-        foreach ($farm_land_data as $each_farm_land)
-        {
-            $plot_data = [];
-            $data_farmer = FarmerDetails::select(['full_name','farmer_code','farmer_photo'])->find($each_farm_land->farmer_id);
-            $cultivation_data = $each_farm_land->cultivation()->first();
-            if(isset($cultivation_data))
-            {
-                $season_data = SeasonMaster::find($cultivation_data->season_id);
-                $crop_information = CropInformation::find($cultivation_data->crop_id);
-                $each_farm_land->crop_name = $crop_information->name;
-                $each_farm_land->season_period_from = $season_data->from_period;
-                $each_farm_land->season_period_to = $season_data->to_period;
-                $each_farm_land->est_yeild = $cultivation_data->est_yield;
-                $each_farm_land->harvest_date = $cultivation_data->expect_date;
-            }
-            else
-            {
-                $each_farm_land->crop_name = 'N/A';
-                $each_farm_land->season_period_from = 'N/A';
-                $each_farm_land->season_period_to = 'N/A';
-                $each_farm_land->est_yeild = 'N/A';
-                $each_farm_land->harvest_date ='N/A';
-            }
-            $each_farm_land->farmer_name = $data_farmer->full_name;
-            $each_farm_land->farmer_code = $data_farmer->farmer_code;
-            $each_farm_land->farmer_photo = uploaded_asset($data_farmer->farmer_photo);
-            $data_ploting = $each_farm_land->farm_land_lat_lng()->get();
-            foreach($data_ploting as $each_data_ploting)
-            {
-                if($each_data_ploting->order == 1)
-                {
-                    $each_farm_land->lat = $each_data_ploting->lat;
-                    $each_farm_land->lng = $each_data_ploting->lng;
-                }
-                $subplot = [
-                    'lat'=>$each_data_ploting->lat,
-                    'lng'=>$each_data_ploting->lng
-                ];
-                array_push($plot_data,$subplot);
+        // dd(FarmLandLatLng::all()->take(10));
+        $farm_land_data = FarmLand::with('farmer_details:id,farmer_code,full_name,farmer_photo','farm_land_lat_lng')->get();
+        // dd($farm_land_data[0]);
+        // foreach ($farm_land_data as $each_farm_land)
+        // {
+        //     $plot_data = [];
+        //     $data_farmer = $each_farm_land->farmer_details;
+        //     $cultivation_data = $each_farm_land->cultivation()->first();
+        //     if(isset($cultivation_data))
+        //     {
+        //         $season_data = SeasonMaster::find($cultivation_data->season_id);
+        //         $crop_information = CropInformation::find($cultivation_data->crop_id);
+        //         $each_farm_land->crop_name = $crop_information->name;
+        //         $each_farm_land->season_period_from = $season_data->from_period;
+        //         $each_farm_land->season_period_to = $season_data->to_period;
+        //         $each_farm_land->est_yeild = $cultivation_data->est_yield;
+        //         $each_farm_land->harvest_date = $cultivation_data->expect_date;
+        //     }
+        //     else
+        //     {
+        //         $each_farm_land->crop_name = 'N/A';
+        //         $each_farm_land->season_period_from = 'N/A';
+        //         $each_farm_land->season_period_to = 'N/A';
+        //         $each_farm_land->est_yeild = 'N/A';
+        //         $each_farm_land->harvest_date ='N/A';
+        //     }
+        //     $each_farm_land->farmer_name = $data_farmer->full_name;
+        //     $each_farm_land->farmer_code = $data_farmer->farmer_code;
+        //     $each_farm_land->farmer_photo = uploaded_asset($data_farmer->farmer_photo);
+        //     // $data_ploting = $each_farm_land->farm_land_lat_lng()->get()->toArray();
+        //     // array_push($data_ploting,$data_ploting[0]);
+        //     // dd($data_ploting);
+        //     // foreach($data_ploting as $each_data_ploting)
+        //     // {
+        //     //     if($each_data_ploting->order == 1)
+        //     //     {
+        //     //         $each_farm_land->lat = $each_data_ploting->lat;
+        //     //         $each_farm_land->lng = $each_data_ploting->lng;
+        //     //     }
+        //     //     $subplot = [
+        //     //         'lat'=>$each_data_ploting->lat,
+        //     //         'lng'=>$each_data_ploting->lng
+        //     //     ];
+        //     //     array_push($plot_data,$subplot);
                 
-            }
-            if(count($data_ploting)>0)
-            {
-                $subplot_final = [
-                    'lat'=>$data_ploting[0]->lat,
-                    'lng'=>$data_ploting[0]->lng
-                ];
-                array_push($plot_data,$subplot_final);
-            }
+        //     // }
+        //     // if(count($data_ploting)>0)
+        //     // {
+        //     //     $subplot_final = [
+        //     //         'lat'=>$data_ploting[0]->lat,
+        //     //         'lng'=>$data_ploting[0]->lng
+        //     //     ];
+        //     //     array_push($plot_data,$subplot_final);
+        //     // }
             
-            $each_farm_land->plot_data = $plot_data;
-        }
+        //     // $each_farm_land->plot_data = $data_ploting;
+        //     // dd($farm_land_data);
+        // }
         $season_data = SeasonMaster::all();
         return view('farm_land.farmland_location',['farm_land_data'=>$farm_land_data,'season_data'=>$season_data]);
         
@@ -89,59 +93,59 @@ class FarmLandController extends Controller
 
     public function filter_farmland(Request $request)
     {
-        $farm_land_data = FarmLand::where('season_id',$request->season_id)->get();
-        foreach ($farm_land_data as $each_farm_land)
-        {
-            $plot_data = [];
-            $data_farmer = FarmerDetails::select(['full_name','farmer_code','farmer_photo'])->find($each_farm_land->farmer_id);
-            $cultivation_data = $each_farm_land->cultivation()->first();
-            if(isset($cultivation_data))
-            {
-                $season_data = SeasonMaster::find($cultivation_data->season_id);
-                $crop_information = CropInformation::find($cultivation_data->crop_id);
-                $each_farm_land->crop_name = $crop_information->name;
-                $each_farm_land->season_period_from = $season_data->from_period;
-                $each_farm_land->season_period_to = $season_data->to_period;
-                $each_farm_land->est_yeild = $cultivation_data->est_yield;
-                $each_farm_land->harvest_date = $cultivation_data->expect_date;
-            }
-            else
-            {
-                $each_farm_land->crop_name = 'N/A';
-                $each_farm_land->season_period_from = 'N/A';
-                $each_farm_land->season_period_to = 'N/A';
-                $each_farm_land->est_yeild = 'N/A';
-                $each_farm_land->harvest_date ='N/A';
-            }
-            $each_farm_land->farmer_name = $data_farmer->full_name;
-            $each_farm_land->farmer_code = $data_farmer->farmer_code;
-            $each_farm_land->farmer_photo = uploaded_asset($data_farmer->farmer_photo);
-            $data_ploting = $each_farm_land->farm_land_lat_lng()->get();
-            foreach($data_ploting as $each_data_ploting)
-            {
-                if($each_data_ploting->order == 1)
-                {
-                    $each_farm_land->lat = $each_data_ploting->lat;
-                    $each_farm_land->lng = $each_data_ploting->lng;
-                }
-                $subplot = [
-                    'lat'=>$each_data_ploting->lat,
-                    'lng'=>$each_data_ploting->lng
-                ];
-                array_push($plot_data,$subplot);
+        $farm_land_data = FarmLand::where('season_id',$request->season_id)->with('farmer_details:id,farmer_code,full_name,farmer_photo','farm_land_lat_lng')->get();
+        // foreach ($farm_land_data as $each_farm_land)
+        // {
+        //     $plot_data = [];
+        //     $data_farmer = FarmerDetails::select(['full_name','farmer_code','farmer_photo'])->find($each_farm_land->farmer_id);
+        //     $cultivation_data = $each_farm_land->cultivation()->first();
+        //     if(isset($cultivation_data))
+        //     {
+        //         $season_data = SeasonMaster::find($cultivation_data->season_id);
+        //         $crop_information = CropInformation::find($cultivation_data->crop_id);
+        //         $each_farm_land->crop_name = $crop_information->name;
+        //         $each_farm_land->season_period_from = $season_data->from_period;
+        //         $each_farm_land->season_period_to = $season_data->to_period;
+        //         $each_farm_land->est_yeild = $cultivation_data->est_yield;
+        //         $each_farm_land->harvest_date = $cultivation_data->expect_date;
+        //     }
+        //     else
+        //     {
+        //         $each_farm_land->crop_name = 'N/A';
+        //         $each_farm_land->season_period_from = 'N/A';
+        //         $each_farm_land->season_period_to = 'N/A';
+        //         $each_farm_land->est_yeild = 'N/A';
+        //         $each_farm_land->harvest_date ='N/A';
+        //     }
+        //     $each_farm_land->farmer_name = $data_farmer->full_name;
+        //     $each_farm_land->farmer_code = $data_farmer->farmer_code;
+        //     $each_farm_land->farmer_photo = uploaded_asset($data_farmer->farmer_photo);
+        //     $data_ploting = $each_farm_land->farm_land_lat_lng()->get();
+        //     foreach($data_ploting as $each_data_ploting)
+        //     {
+        //         if($each_data_ploting->order == 1)
+        //         {
+        //             $each_farm_land->lat = $each_data_ploting->lat;
+        //             $each_farm_land->lng = $each_data_ploting->lng;
+        //         }
+        //         $subplot = [
+        //             'lat'=>$each_data_ploting->lat,
+        //             'lng'=>$each_data_ploting->lng
+        //         ];
+        //         array_push($plot_data,$subplot);
                 
-            }
-            if(count($data_ploting)>0)
-            {
-                $subplot_final = [
-                    'lat'=>$data_ploting[0]->lat,
-                    'lng'=>$data_ploting[0]->lng
-                ];
-                array_push($plot_data,$subplot_final);
-            }
+        //     }
+        //     if(count($data_ploting)>0)
+        //     {
+        //         $subplot_final = [
+        //             'lat'=>$data_ploting[0]->lat,
+        //             'lng'=>$data_ploting[0]->lng
+        //         ];
+        //         array_push($plot_data,$subplot_final);
+        //     }
             
-            $each_farm_land->plot_data = $plot_data;
-        }
+        //     $each_farm_land->plot_data = $plot_data;
+        // }
         // dd(gettype($farm_land_data));
         return $farm_land_data;
     }

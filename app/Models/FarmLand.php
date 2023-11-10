@@ -10,6 +10,7 @@ class FarmLand extends Model
     use HasFactory;
 
     protected $table = 'farm_lands';
+    // protected $with = ['some_field_farmer_details'];
 
     protected $fillable = [
             'farmer_id',
@@ -32,6 +33,11 @@ class FarmLand extends Model
     public function farmer_details()
     {
         return $this->belongsTo(FarmerDetails::class,'farmer_id','id');
+    }
+
+    public function some_field_farmer_details()
+    {
+        return $this->belongsTo(FarmerDetails::class,'farmer_id','id')->select(['full_name', 'farmer_code','farmer_photo']);
     }
 
     public function farm_land_lat_lng()

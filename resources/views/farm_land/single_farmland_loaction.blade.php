@@ -3,7 +3,7 @@
 @section('content')
     <!-- Main content -->
     <div class="container">
-      <h2>Farm Land Location</h2>
+      <h2>Report Farm Land Location</h2>
       <div id="map" style="height: 500px;"></div>
     </div>
 @stop
