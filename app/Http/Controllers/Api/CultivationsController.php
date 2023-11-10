@@ -112,7 +112,7 @@ class CultivationsController extends Controller
                     'staff_id'=>$user->staff->id,
                     'farm_land_id'=>$request->farm_land_id,
                     'season_id'=>$request->season_id,
-                    'culitavtion_id'=>$final_crops->id,
+                    'cultivation_id'=>$final_crops->id,
                     'score'=>0,
                     'sowing_date'=>$request->sowing_date,
                 ];
