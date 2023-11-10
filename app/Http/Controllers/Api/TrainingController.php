@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\SRP;
-use App\Models\Training;
+use App\Models\SRPTraining;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,7 +36,7 @@ class TrainingController extends Controller
         $data_log_activities['lat'] = $request->staff_lat;
         $data_log_activities['lng'] = $request->staff_lng;
         $data_log_activities['request'] = $request->all();
-        $training_data = new Training();
+        $training_data = new SRPTraining();
         $staff = Auth::user()->staff;
         $total_score = 0;
         foreach($request->data_finance as $key => $value)
@@ -107,7 +107,7 @@ class TrainingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Training $training)
+    public function show(SRPTraining $training)
     {
         
     }
@@ -115,7 +115,7 @@ class TrainingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Training $training)
+    public function edit(SRPTraining $training)
     {
         //
     }
@@ -123,7 +123,7 @@ class TrainingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Training $training)
+    public function update(Request $request, SRPTraining $training)
     {
         //
     }
@@ -131,7 +131,7 @@ class TrainingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Training $training)
+    public function destroy(SRPTraining $training)
     {
         //
     }
