@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('srp_trainings', function (Blueprint $table) {
+        Schema::create('srp_integrated_pest_management', function (Blueprint $table) {
             $table->id();
             $table->integer('farmer_id');
             $table->integer('cultivation_id');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('srp_trainings');
+        Schema::dropIfExists('srp_integrated_pest_management');
     }
 };
