@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\FarmersController;
+use App\Http\Controllers\Api\SRPController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
             // SRP Transaction
             Route::post('farmer/srp_transaction_tranining',[App\Http\Controllers\Api\TrainingController::class, 'store'])->name('training.store');
+            Route::post('farmer/srp-pre-planting',[SRPController::class, 'storePrePlanting'])->name('pre_planting.store');
         });
 
         
