@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class SRPTraining extends Model
 {
-    protected $table = 'srp_trainings';
     use HasFactory;
+    protected $table = 'srp_trainings';
     protected $fillable = [
         'farmer_id',
         'cultivation_id',
