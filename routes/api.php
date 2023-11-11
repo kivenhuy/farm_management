@@ -72,6 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
             // SRP Transaction
+            Route::post('farmer/srp-upload-image',[SRPController::class, 'srpUploadImage'])->name('srp.upload_image');
             Route::post('farmer/srp_transaction_tranining',[App\Http\Controllers\Api\TrainingController::class, 'store'])->name('training.store');
             Route::post('farmer/srp-pre-planting',[SRPController::class, 'storePrePlanting'])->name('pre_planting.store');
         });
