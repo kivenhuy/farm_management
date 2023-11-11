@@ -12,15 +12,21 @@ class SeasonMasterController extends Controller
 {
     public function index(Request $request)
     {
-        $seasonCode = $request->input('season_code');
+        $seasonName = $request->input('season_name');
         $fromPefiod = $request->input('from_period');
         $toPefiod = $request->input('to_period');
         $status = $request->input('status');
 
         $seasonMasterQuery = SeasonMaster::with(['season'])->orderByDesc('id');
 
-        if ($seasonCode) {
-            $seasonMasterQuery->where('season_code', $seasonCode);
+        if ($seasonName) {
+            $words = $this->split_with_whitespace($seasonName);
+            
+            $seasonMasterQuery->where(function ($query) use ($words) {
+                foreach ($words as $word) {
+                    $query->where('season_name', 'like', '%' . $word . '%');
+                }
+            });
         }
 
         if ($fromPefiod) {  
@@ -36,7 +42,7 @@ class SeasonMasterController extends Controller
         }
 
         $seasonMasters = $seasonMasterQuery->paginate()->appends($request->except('page'));
-        return view('admin.season_master.index', compact('seasonMasters', 'seasonCode', 'fromPefiod', 'toPefiod', 'status'));
+        return view('admin.season_master.index', compact('seasonMasters', 'seasonName', 'fromPefiod', 'toPefiod', 'status'));
     }
 
     public function create()
@@ -92,4 +98,8 @@ class SeasonMasterController extends Controller
         return redirect()->route('season-masters.index')->with('success', 'The season master has been deleted!');
     }
 
+    public function split_with_whitespace($keyword)
+    {
+        return preg_split('/\s+/u', $keyword, -1, PREG_SPLIT_NO_EMPTY);
+    }
 }

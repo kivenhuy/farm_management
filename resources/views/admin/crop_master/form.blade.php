@@ -26,7 +26,7 @@
 
                     <div class="form-group row mb-3">
                         <div class="col-12 col-md-2">
-                            <label for="js-season-code">Name<span class="text-danger">*</span></label>
+                            <label for="js-name">Name<span class="text-danger">*</span></label>
                         </div>
                         <div class="col-12 col-md-3">
                             <input id="js-name" name="name" type="text" class="form-control" value="{{ $cropInformation->name }}" autocomplete="off" placeholder="Name"  data-parsley-required="true" data-parsley-trigger="change">
@@ -35,7 +35,7 @@
 
                     <div class="form-group row mb-3">
                         <div class="col-12 col-md-2">
-                            <label for="js-season-code">Crop Category<span class="text-danger">*</span></label>
+                            <label for="s-crop-category-code">Crop Category<span class="text-danger">*</span></label>
                         </div>
                         <div class="col-12 col-md-3">
                             <select name="crop_category_code" id="js-crop-category-code" class="form-control" required>
@@ -49,7 +49,7 @@
 
                     <div class="form-group row mb-3">
                         <div class="col-12 col-md-2">
-                            <label for="js-season-code">Photo</label>
+                            <label for="js-photo-input">Photo</label>
                         </div>
                         <div class="col-12 col-md-3">
                             <img class="mb-3 js-image-upload {{ $cropInformation->photo_url ? '' : 'd-none' }}" src="{{ $cropInformation->photo_url }}" width="200" alt="Author icon">
