@@ -15,6 +15,7 @@ class SRPPrePlanting extends Model
         'cultivation_id',
         'staff_id',
         'srps_id',
+        'collection_code',
         'question',
         'answer',
         'score',

@@ -17,8 +17,6 @@ return new class extends Migration
             $table->integer('cultivation_id');
             $table->integer('staff_id');
             $table->integer('srps_id');
-            $table->string('section')->nullable();
-            $table->string('position')->nullable();
             $table->unsignedInteger('collection_code')->nullable();
             $table->string('question');
             $table->string('answer');
