@@ -93,7 +93,6 @@ class FarmersController extends Controller
     {
         if($request->ajax())
         {
-            // dd($request->data);
             if($request->search == "")
             {
                 // $farmer = FarmerDetails::all(['id','farmer_code','full_name','phone_number','gender','staff_id'])->sortDesc();
