@@ -115,6 +115,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get("/commune", [App\Http\Controllers\Api\CommuneController::class, 'index'])->name('commune.index');
     Route::get("/commune_filter_by_district/{id}", [App\Http\Controllers\Api\CommuneController::class, 'filter_by_district'])->name('commune.filter_by_district');
 
+    // Carbon Emission
+    Route::post("/carbon_emission/create", [App\Http\Controllers\Api\CarbonEmissionController::class, 'store'])->name('carbon_emission.create');
+    Route::get("/carbon_emission/details/{id}", [App\Http\Controllers\Api\CarbonEmissionController::class, 'show'])->name('carbon_emission.show');
 
 });
 
