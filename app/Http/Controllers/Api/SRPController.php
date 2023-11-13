@@ -22,7 +22,7 @@ class SRPController extends Controller
         $validator = Validator::make($request->all(), [
             'farmer_id' => 'required|exists:farmer_details,id',
             'cultivation_id' => 'required|exists:cultivations,id',
-            'srps_id' => 'required|exists:srps,id',
+            'srp_id' => 'required|exists:srps,id',
             'data_question_answer_group' => 'required|array',
         ]);
 
@@ -45,7 +45,7 @@ class SRPController extends Controller
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
                     'staff_id'=> $staff->id,
-                    'srps_id' => $request->srps_id,
+                    'srp_id' => $request->srp_id,
                     'collection_code' => $latestCollectionCode,
                     'question'=> $key,
                     'answer'=> $answer,
@@ -56,7 +56,7 @@ class SRPController extends Controller
             }
         }
 
-        $srp = SRP::find($request->srps_id);
+        $srp = SRP::find($request->srp_id);
         $srp->score += $total_score;
         $srp->save();
 
@@ -73,7 +73,7 @@ class SRPController extends Controller
         $validator = Validator::make($request->all(), [
             'farmer_id' => 'required|exists:farmer_details,id',
             'cultivation_id' => 'required|exists:cultivations,id',
-            'srps_id' => 'required|exists:srps,id',
+            'srp_id' => 'required|exists:srps,id',
         ]);
 
         if ($validator->fails()) {
@@ -84,7 +84,7 @@ class SRPController extends Controller
 
         $landPreparations = SRPPrePlanting::where('farmer_id', $request->farmer_id)
             ->where('cultivation_id', $request->cultivation_id)
-            ->where('srps_id', $request->srps_id)
+            ->where('srp_id', $request->srp_id)
             ->where('staff_id', $staff->id)
             ->get()
             ->groupBy('collection_code');
