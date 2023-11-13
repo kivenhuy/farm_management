@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('farmer_id');
             $table->integer('cultivation_id');
             $table->integer('staff_id');
-            $table->integer('srp_id')->nullable();
+            $table->integer('srp_id');
             $table->string('question');
             $table->string('answer');
             $table->integer('score')->nullable();
