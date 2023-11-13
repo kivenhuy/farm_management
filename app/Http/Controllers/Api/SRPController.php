@@ -5,132 +5,142 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\SRP;
 use App\Models\SRPLandPreparation;
+use App\Models\SRPPrePlanting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
 class SRPController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function srpUploadImage(Request $request)
     {
-        //
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function storePrePlanting(Request $request)
     {
-        //
-    }
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srps_id' => 'required|exists:srps,id',
+            'data_question_answer_group' => 'required|array',
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
         
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(SRP $sRP)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(SRP $sRP)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, SRP $sRP)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(SRP $sRP)
-    {
-        //
-    }
-
-
-    public function store_land_preparation(Request $request)
-    {
-        $data_log_activities = [];
-        $data_log_activities['action'] = 'create';
-        $data_log_activities['lat'] = $request->staff_lat;
-        $data_log_activities['lng'] = $request->staff_lng;
-        $data_log_activities['request'] = $request->all();
-        $landpreparation = new SRPLandPreparation();
         $staff = Auth::user()->staff;
         $total_score = 0;
-        // foreach($request->data_srp as $key => $value)
-        // {
-        //     $data_training = [
-        //         'farmer_id'=>$request->farmer_id,
-        //         'cultivation_id'=>$request->cultivation_id,
-        //         'staff_id'=>$staff->id,
-        //         'srps_id'=>$request->srps_id,
-        //         'question'=>$key,
-        //         'answer'=>$value,
-        //         'score'=>$score,
-        //     ];
-        //     try {
-        //         $training_data->create($data_training);
-        //         $total_score += $score;
-        //     } 
-        //     catch (\Exception $e) {  
-        //         $data_log_activities['status_code'] = 400;
-        //         $data_log_activities['status_msg'] = $e->getMessage();
-        //         $this->create_log((object) $data_log_activities);
-        //         return response()->json([
-        //             'result' => true,
-        //             'message' => 'Training SRP Created Failed',
-        //         ]);
-        //     }
-        // }
-        // dd($total_score);
-        $srp_data = SRP::find($request->srps_id);
-        $srp_data->score = $total_score;
-        $srp_data->save();
-        $data_log_activities['status_code'] = 200;
-        $data_log_activities['status_msg'] = 'SRP Land Preparation Created Successfully';
-        $this->create_log((object) $data_log_activities);
+        foreach($request->data_question_answer_group as $key => $answerData) {
+            $answer = !empty($answerData['answer']) ? $answerData['answer'] : "";
+            $score = !empty($answerData['score']) ? $answerData['score'] : 0;
+            //dd($answerData);
+
+            SRPPrePlanting::create([
+                'farmer_id' => $request->farmer_id,
+                'cultivation_id' => $request->cultivation_id,
+                'staff_id'=> $staff->id,
+                'srps_id' => $request->srps_id,
+                'question' => $key,
+                'answer' => $answer,
+                'score' => $score,
+            ]);
+
+            $total_score += $score;
+        }
+
+        $srp = SRP::find($request->srps_id);
+        $srp->score += $total_score;
+        $srp->save();
+
         return response()->json([
             'result' => true,
-            'message' => 'SRP Land Preparation',
+            'message' => 'SRP Pre-planting Created Successfully',
         ]);
-       
     }
 
-    public function create_log($data)
+    public function storeLandPreparation(Request $request)
     {
-        // dd($data);
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srps_id' => 'required|exists:srps,id',
+            'data_question_answer_group' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+        
         $staff = Auth::user()->staff;
-        $log_actitvities = new LogActivitiesController();
-        $data_log_activities = [
-            'staff_id' => $staff->id,
-            'type' => 500,
-            'action'=>$data->action,
-            'request'=>$data->request,
-            'status_code'=>$data->status_code,
-            'status_msg'=>$data->status_msg,
-            'lat'=>$data->lat,
-            'lng'=>$data->lng
-        ];
-        $log_actitvities->store_log((object) $data_log_activities);
+        $total_score = 0;
+        
+        
+        foreach($request->data_question_answer_group as $groupData) {
+            $collectionCode = SRPLandPreparation::max('collection_code') ?? 0;
+            $latestCollectionCode = $collectionCode + 1;
+
+            foreach($groupData as $key => $data) {
+                $answer = !empty($data['answer']) ? $data['answer'] : "";
+                $score = !empty($data['score']) ? $data['score'] : 0;
+
+                SRPLandPreparation::create([
+                    'farmer_id' => $request->farmer_id,
+                    'cultivation_id' => $request->cultivation_id,
+                    'staff_id'=> $staff->id,
+                    'srps_id' => $request->srps_id,
+                    'collection_code' => $latestCollectionCode,
+                    'question'=> $key,
+                    'answer'=> $answer,
+                    'score' => $score
+                ]);
+
+                $total_score += $score;
+            }
+        }
+
+        $srp = SRP::find($request->srps_id);
+        $srp->score += $total_score;
+        $srp->save();
+
+        return response()->json([
+            'result' => true,
+            'message' => 'SRP Land Preparation Created Successfully',
+        ]);
     }
+
+
+
+    // ========== Get api ================
+
+    public function getLandPreparation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srps_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $landPreparations = SRPLandPreparation::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srps_id', $request->srps_id)
+            ->where('staff_id', $staff->id)
+            ->get()
+            ->groupBy('collection_code');
+
+        $dataGroup = [];
+        foreach($landPreparations as $landPreparation) {
+            $dataGroup[] = $landPreparation;
+        }
+
+        return response()->json(['data' => $dataGroup]);
+    }
+
 }

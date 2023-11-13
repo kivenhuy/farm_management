@@ -236,6 +236,9 @@ class FarmersController extends Controller
                     continue;
                 }
 
+                // temporary added staff
+                // $staff = Staff::find(35);
+
                 $staff = Staff::where('id', '!=', 1)->has('farmer_details','<', 200)->first();
                 if (empty($staff)) {
                     $staff = Staff::find(3);

@@ -18,7 +18,7 @@
                             <label for="js-season-name">Season Name</label>
                         </div>
                         <div class="col-12 col-md-3">
-                            <input id="js-season-name" name="season_name" type="text" placeholder="Season Name" class="form-control">
+                            <input id="js-season-name" name="season_name" type="text" placeholder="Season Name" class="form-control" value="{{ $seasonMaster->season_name }}" required>
                         </div>
                     </div>
 
@@ -27,7 +27,7 @@
                             <label for="js-season_code">Season Code</label>
                         </div>
                         <div class="col-12 col-md-3">
-                            <input id="js-season_code" name="season_code" type="text" placeholder="Season Code" class="form-control">
+                            <input id="js-season_code" name="season_code" type="text" placeholder="Season Code" class="form-control" value="{{ $seasonMaster->season_code }}" required>
                         </div>
                     </div>
 

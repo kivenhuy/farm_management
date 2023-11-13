@@ -11,13 +11,8 @@
             <div class="form-group row align-items-center">
                 <div class="col">
                     <div>
-                        <label for="js-season-code">Season</label>
-                        <select name="season_code" id="js-season-code" class="form-control">
-                            <option value="">Select Season</option>
-                            {{-- @foreach (\App\Models\Season::get()->pluck('name', 'code') as $code => $name)
-                                <option value="{{  $code }}" {{ $code == $seasonCode ? 'selected' : ''}}>{{ $name }}</option>
-                            @endforeach --}}
-                        </select>
+                        <label for="js-season-name">Season</label>
+                        <input type="text" name="season_name" id="js-season-name" class="form-control" value="{{ $seasonName }}">
                     </div>
                 </div>
                 <div class="col">
