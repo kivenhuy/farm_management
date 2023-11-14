@@ -69,12 +69,20 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     
     Route::group(['middleware' => 'staff'], function () {
-        // SRP Transaction
+        // SRP Uload image
         Route::post('srp/srp-upload-image',[SRPController::class, 'srpUploadImage'])->name('srp.upload_image');
-
+        
         // Pre Planting
         Route::post('srp/srp-pre-planting',[SRPController::class, 'storePrePlanting'])->name('pre_planting.store');
         Route::get('srp/srp-pre-planting',[SRPController::class, 'getPrePlanting'])->name('pre_planting.get');
+        
+        // Farm management
+        Route::post('srp/srp-farm-management',[SRPController::class, 'storeFarmManagement'])->name('farm_management.store');
+        Route::get('srp/srp-farm-management',[SRPController::class, 'getFarmManagement'])->name('farm_management.get');
+        
+        // Water management
+        Route::post('srp/srp-water-management',[SRPController::class, 'storeWaterManagement'])->name('water_management.store');
+        Route::get('srp/srp-water-management',[SRPController::class, 'getWaterManagement'])->name('water_management.get');
     
         // Nutrient Management
         Route::post('srp/srp-nutrient_management',[SRPController::class, 'storeNutrientManagement'])->name('srp-nutrient_management.store');
