@@ -65,7 +65,7 @@ class FarmersController extends Controller
         }
         else
         {
-            $data = $user_login->staff->farmer_details;
+            $data = $user_login->staff->farmer_details()->paginate(200);
         }
         
         
