@@ -14,6 +14,7 @@ class SRPWaterManagement extends Model
         'cultivation_id',
         'staff_id',
         'srp_id',
+        'collection_code',
         'question',
         'answer',
         'score',
