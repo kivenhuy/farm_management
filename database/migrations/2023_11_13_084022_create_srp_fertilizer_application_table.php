@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('srp_water_managements', function (Blueprint $table) {
+        Schema::create('srp_fertilizer_applications', function (Blueprint $table) {
             $table->id();
             $table->integer('farmer_id');
             $table->integer('cultivation_id');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('srp_water_managements');
+        Schema::dropIfExists('srp_fertilizer_applications');
     }
 };
