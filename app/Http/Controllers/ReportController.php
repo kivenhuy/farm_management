@@ -60,6 +60,7 @@ class ReportController extends Controller
             $staff = Staff::find($farmer_details->staff_id);
             $data->data[$i]->staff_name = $staff?->name;
             $data->data[$i]->farmer_details = $farmer_details;
+            $data->data[$i]->actual_area = round($data->data[$i]->actual_area/10000,2);
         }
         $out->setData($data);
         // dd($out);
@@ -140,7 +141,7 @@ class ReportController extends Controller
             $farmer_data = Cultivations::find($data->data[$i]->id)->farm_land->farmer_details;
             $farm_land = Cultivations::find($data->data[$i]->id)->farm_land;
             $staff = Staff::find($farmer_data->staff_id);
-            $season = SeasonMaster::find($data->data[$i]->season_id)->season->name;
+            $season = SeasonMaster::find($data->data[$i]->season_id)->season_name;
             $data->data[$i]->season = $season;
             $data->data[$i]->staff_name = $staff?->name;
             $data->data[$i]->farmer_data = $farmer_data;
