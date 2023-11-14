@@ -69,15 +69,29 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     
     Route::group(['middleware' => 'staff'], function () {
-        // SRP Transaction
+        // SRP Uload image
         Route::post('srp/srp-upload-image',[SRPController::class, 'srpUploadImage'])->name('srp.upload_image');
+        
+        // Pre Planting
         Route::post('srp/srp-pre-planting',[SRPController::class, 'storePrePlanting'])->name('pre_planting.store');
-        Route::post('srp/srp-farm-management',[SRPController::class, 'storeFarmManagement'])->name('farm_management.store');
-        Route::post('srp/srp-water-management',[SRPController::class, 'storeWaterManagement'])->name('water_management.store');
-
         Route::get('srp/srp-pre-planting',[SRPController::class, 'getPrePlanting'])->name('pre_planting.get');
+        
+        // Farm management
+        Route::post('srp/srp-farm-management',[SRPController::class, 'storeFarmManagement'])->name('farm_management.store');
         Route::get('srp/srp-farm-management',[SRPController::class, 'getFarmManagement'])->name('farm_management.get');
+        
+        // Water management
+        Route::post('srp/srp-water-management',[SRPController::class, 'storeWaterManagement'])->name('water_management.store');
         Route::get('srp/srp-water-management',[SRPController::class, 'getWaterManagement'])->name('water_management.get');
+    
+        // Nutrient Management
+        Route::post('srp/srp-nutrient_management',[SRPController::class, 'storeNutrientManagement'])->name('srp-nutrient_management.store');
+        Route::get('srp/srp-nutrient_management',[SRPController::class, 'getNutrientManagement'])->name('srp-nutrient_management.get');
+
+        // Fertilizer Application
+        Route::post('srp/srp-fetilizer_application',[SRPController::class, 'storeFertilizerApplication'])->name('srp-fetilizer_application.store');
+        Route::get('srp/srp-fetilizer_application',[SRPController::class, 'getFertilizerApplication'])->name('srp-fetilizer_application.get');
+        
     });
     
 
@@ -90,6 +104,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post("/farmland/update_farmland/{id}", [App\Http\Controllers\Api\FarmLandController::class, 'update'])->name('farmland.update');
     Route::get("/farmland/dropdown_value", [App\Http\Controllers\Api\FarmLandController::class, 'create'])->name('farmland.create');
     Route::post("/add_farmland", [App\Http\Controllers\Api\FarmLandController::class, 'store'])->name('commnue.add_farmland');
+    Route::get("/farmland/get_cultivation/{id}", [App\Http\Controllers\Api\FarmLandController::class, 'get_cultivation'])->name('farmland.get_cultivation');
+    
 
     //Crops Enrollments
     Route::get("/crops", [App\Http\Controllers\Api\CultivationsController::class, 'index'])->name('crops.index');
@@ -118,6 +134,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get("/commune", [App\Http\Controllers\Api\CommuneController::class, 'index'])->name('commune.index');
     Route::get("/commune_filter_by_district/{id}", [App\Http\Controllers\Api\CommuneController::class, 'filter_by_district'])->name('commune.filter_by_district');
 
+    // Carbon Emission
+    Route::post("/carbon_emission/create", [App\Http\Controllers\Api\CarbonEmissionController::class, 'store'])->name('carbon_emission.create');
+    Route::get("/carbon_emission/details/{id}", [App\Http\Controllers\Api\CarbonEmissionController::class, 'show'])->name('carbon_emission.show');
 
 });
 
