@@ -52,14 +52,22 @@ class FarmersController extends Controller
             ]);
         }
         $staff_data = $user_login->staff;
-        if($request->search == '' || $request->search == null )
+        if(isset($request->page))
         {
-            $data = $user_login->staff->farmer_details()->paginate();
+            if($request->search == '' || $request->search == null )
+            {
+                $data = $user_login->staff->farmer_details()->paginate();
+            }
+            else
+            {
+                $data = $user_login->staff->farmer_details()->where("full_name", 'like', '%'.$request->search.'%')->orWhere("phone_number",$request->search)->orWhere("farmer_code",$request->search)->paginate();
+            }
         }
         else
         {
-            $data = $user_login->staff->farmer_details()->where("full_name", 'like', '%'.$request->search.'%')->orWhere("phone_number",$request->search)->orWhere("farmer_code",$request->search)->paginate();
+            $data = $user_login->staff->farmer_details;
         }
+        
         
         // dd($data);
         $farmer_data = FarmerDetails::where('staff_id',$staff_data->id);
