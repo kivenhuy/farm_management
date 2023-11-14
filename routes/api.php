@@ -74,11 +74,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Pre Planting
         Route::post('srp/srp-pre-planting',[SRPController::class, 'storePrePlanting'])->name('pre_planting.store');
-        Route::get('srp/srp-pre-planting/{id}',[SRPController::class, 'getPrePlanting'])->name('pre_planting.get');
+        Route::get('srp/srp-pre-planting',[SRPController::class, 'getPrePlanting'])->name('pre_planting.get');
     
         // Nutrient Management
         Route::post('srp/srp-nutrient_management',[SRPController::class, 'storeNutrientManagement'])->name('srp-nutrient_management.store');
         Route::get('srp/srp-nutrient_management',[SRPController::class, 'getNutrientManagement'])->name('srp-nutrient_management.get');
+
+        // Fertilizer Application
+        Route::post('srp/srp-fetilizer_application',[SRPController::class, 'storeFertilizerApplication'])->name('srp-fetilizer_application.store');
+        Route::get('srp/srp-fetilizer_application',[SRPController::class, 'getFertilizerApplication'])->name('srp-fetilizer_application.get');
         
     });
     

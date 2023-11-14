@@ -151,8 +151,8 @@ class SRPController extends Controller
             ->where('cultivation_id', $request->cultivation_id)
             ->where('srp_id', $request->srp_id)
             ->where('staff_id', $staff->id)
-            ->get()
-            ->groupBy('collection_code');
+            ->get(['question','answer','score']);
+            // ->groupBy('collection_code');
 
         $dataGroup = [];
         foreach($landPreparations as $landPreparation) {
@@ -163,6 +163,8 @@ class SRPController extends Controller
     }
 
 
+
+    // Nutrient Managemet 
     public function storeNutrientManagement(Request $request)
     {
         // dd($request);
@@ -225,12 +227,90 @@ class SRPController extends Controller
 
         $staff = Auth::user()->staff;
 
-        $landPreparations = SRPPrePlanting::where('farmer_id', $request->farmer_id)
+        $landPreparations = NutrientManagement::where('farmer_id', $request->farmer_id)
             ->where('cultivation_id', $request->cultivation_id)
             ->where('srp_id', $request->srp_id)
             ->where('staff_id', $staff->id)
-            ->get()
-            ->groupBy('collection_code');
+            ->get(['question','answer','score']);
+            // ->groupBy('collection_code');
+
+        $dataGroup = [];
+        foreach($landPreparations as $landPreparation) {
+            $dataGroup[] = $landPreparation;
+        }
+
+        return response()->json(['data' => $dataGroup]);
+    }
+
+    // Fertilizer Application
+    public function storeFertilizerApplication(Request $request)
+    {
+        // dd($request);
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+            'data_question_answer_group' => 'required|array',
+        ]);
+
+        $id_water_management = 0;
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+        
+        $staff = Auth::user()->staff;
+        $total_score = 0;
+        foreach($request->data_question_answer_group as $key => $groupData) {
+            // dd($groupData);
+            // foreach($groupData as $key => $data) {
+                $answer = !empty($groupData['answer']) ? $groupData['answer'] : "";
+                $score = !empty($groupData['score']) ? $groupData['score'] : 0;
+
+                NutrientManagement::create([
+                    'farmer_id' => $request->farmer_id,
+                    'cultivation_id' => $request->cultivation_id,
+                    'staff_id'=> $staff->id,
+                    'srp_id' => $request->srp_id,
+                    'question'=> $key,
+                    'answer'=> $answer,
+                    'score' => $score
+                ]);
+               
+                $total_score += $score;
+            // }
+        }
+
+        $srp = SRP::find($request->srp_id);
+        $srp->score += $total_score;
+        $srp->save();
+
+        return response()->json([
+            'result' => true,
+            'message' => 'SRP Nutrient Management Created Successfully',
+        ]);
+    }
+
+
+    public function getFertilizerApplication(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $landPreparations = NutrientManagement::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get(['question','answer','score']);
+            // ->groupBy('collection_code');
 
         $dataGroup = [];
         foreach($landPreparations as $landPreparation) {
