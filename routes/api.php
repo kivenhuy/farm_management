@@ -72,6 +72,10 @@ Route::middleware('auth:sanctum')->group(function () {
         // SRP Uload image
         Route::post('srp/srp-upload-image',[SRPController::class, 'srpUploadImage'])->name('srp.upload_image');
         
+        // Land Preparation
+        Route::post('srp/srp-land-preparation',[SRPController::class, 'storeLandPreparation'])->name('land_preparation.store');
+        Route::get('srp/srp-land-preparation',[SRPController::class, 'getLandPreparation'])->name('land_preparation.get');
+
         // Pre Planting
         Route::post('srp/srp-pre-planting',[SRPController::class, 'storePrePlanting'])->name('pre_planting.store');
         Route::get('srp/srp-pre-planting',[SRPController::class, 'getPrePlanting'])->name('pre_planting.get');

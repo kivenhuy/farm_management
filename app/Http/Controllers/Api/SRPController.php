@@ -22,6 +22,86 @@ class SRPController extends Controller
 
     }
 
+    public function storeLandPreparation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+            'data_question_answer_group' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+        
+        $staff = Auth::user()->staff;
+        
+        foreach($request->data_question_answer_group as $groupData) {
+            $collectionCode = SRPLandPreparation::max('collection_code') ?? 0;
+            $latestCollectionCode = $collectionCode + 1;
+
+            foreach($groupData as $key => $data) {
+                $answer = !empty($data['answer']) ? $data['answer'] : "";
+                $score = !empty($data['score']) ? $data['score'] : 0;
+
+                SRPLandPreparation::create([
+                    'farmer_id' => $request->farmer_id,
+                    'cultivation_id' => $request->cultivation_id,
+                    'staff_id'=> $staff->id,
+                    'srp_id' => $request->srp_id,
+                    'section' => $data['section'],
+                    'collection_code' => $latestCollectionCode,
+                    'question'=> $key,
+                    'answer'=> $answer,
+                    'score' => $score
+                ]);
+
+            }
+        }
+
+        return response()->json([
+            'result' => true,
+            'message' => 'SRP Farm Management Created Successfully',
+        ]);
+    }
+
+    public function getLandPreparation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $landPreparationBySections = SRPLandPreparation::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get()
+            ->groupBy('section');
+
+        $resultLandPreparationData = [];
+        foreach ($landPreparationBySections as $section => $landPreparationBySection) {
+            $dataLandPreparation = [];
+            $landPreparationByCollectionCodes = $landPreparationBySection->groupBy('collection_code');
+            
+            foreach ($landPreparationByCollectionCodes as $landPreparation) {
+                array_push($dataLandPreparation, $landPreparation);
+            }
+
+            $resultLandPreparationData[$section] = $dataLandPreparation;
+        }
+
+        return response()->json(['data'=> $resultLandPreparationData]);
+    }
+
     public function storeFarmManagement(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -278,7 +358,7 @@ class SRPController extends Controller
         foreach ($waterIrrigations as $waterIrrigation) {
             $waterIrrigationData[] = $waterIrrigation;
         }
-        
+
         return response()->json(['data'=> $waterIrrigationData]);
     }
 
