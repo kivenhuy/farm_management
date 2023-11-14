@@ -71,11 +71,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::group(['middleware' => 'staff'], function () {
         // SRP Transaction
         Route::post('srp/srp-upload-image',[SRPController::class, 'srpUploadImage'])->name('srp.upload_image');
-        Route::post('srp/srp-pre-planting',[SRPController::class, 'storePrePlanting'])->name('pre_planting.store');
-        Route::post('srp/srp-farm-management',[SRPController::class, 'storeFarmManagement'])->name('pre_planting.store');
 
-        Route::get('srp/srp-pre-planting',[SRPController::class, 'getPrePlanting'])->name('pre_planting.get');
-        Route::get('srp/srp-farm-management',[SRPController::class, 'getFarmManagement'])->name('farm_management.get');
+        // Pre Planting
+        Route::post('srp/srp-pre-planting',[SRPController::class, 'storePrePlanting'])->name('pre_planting.store');
+        Route::get('srp/srp-pre-planting/{id}',[SRPController::class, 'getPrePlanting'])->name('pre_planting.get');
+    
+        // Nutrient Management
+        Route::post('srp/srp-nutrient_management',[SRPController::class, 'storeNutrientManagement'])->name('srp-nutrient_management.store');
+        Route::get('srp/srp-nutrient_management',[SRPController::class, 'getNutrientManagement'])->name('srp-nutrient_management.get');
+        
     });
     
 
@@ -88,6 +92,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post("/farmland/update_farmland/{id}", [App\Http\Controllers\Api\FarmLandController::class, 'update'])->name('farmland.update');
     Route::get("/farmland/dropdown_value", [App\Http\Controllers\Api\FarmLandController::class, 'create'])->name('farmland.create');
     Route::post("/add_farmland", [App\Http\Controllers\Api\FarmLandController::class, 'store'])->name('commnue.add_farmland');
+    Route::get("/farmland/get_cultivation/{id}", [App\Http\Controllers\Api\FarmLandController::class, 'get_cultivation'])->name('farmland.get_cultivation');
+    
 
     //Crops Enrollments
     Route::get("/crops", [App\Http\Controllers\Api\CultivationsController::class, 'index'])->name('crops.index');
