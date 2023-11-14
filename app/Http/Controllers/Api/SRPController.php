@@ -282,6 +282,7 @@ class SRPController extends Controller
         foreach ($waterIrrigations as $waterIrrigation) {
             $waterIrrigationData[] = $waterIrrigation;
         }
+        
         return response()->json(['data'=> $waterIrrigationData]);
     }
 
