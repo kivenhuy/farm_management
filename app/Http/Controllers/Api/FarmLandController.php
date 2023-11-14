@@ -358,7 +358,11 @@ class FarmLandController extends Controller
     }
 
     public function get_cultivation($id)  {
-        $farm_land = FarmLand::find($id);
+        $farm_land = FarmLand::with([
+            'cultivation',
+            'cultivation.season',
+            'cultivation.crops_master',
+            ])->find($id);
         return response()->json([
             'result' => true,
             'message' => 'Get Culitavtion Successfully',
