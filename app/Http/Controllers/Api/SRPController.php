@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\FertilizerApplication;
 use App\Models\NutrientManagement;
 use App\Models\SRP;
 use App\Models\SRPFarmManagement;
@@ -245,7 +246,7 @@ class SRPController extends Controller
     // Fertilizer Application
     public function storeFertilizerApplication(Request $request)
     {
-        // dd($request);
+        
         $validator = Validator::make($request->all(), [
             'farmer_id' => 'required|exists:farmer_details,id',
             'cultivation_id' => 'required|exists:cultivations,id',
@@ -260,23 +261,25 @@ class SRPController extends Controller
         
         $staff = Auth::user()->staff;
         $total_score = 0;
-        foreach($request->data_question_answer_group as $key => $groupData) {
+        
+        // dd($request->data_question_answer_group);
+        foreach($request->data_question_answer_group as $groupData) {
+            $collectionCode = FertilizerApplication::max('collection_code') ?? 0;
+            $latestCollectionCode = $collectionCode + 1;
+            foreach($groupData as $key => $data) {
             // dd($groupData);
             // foreach($groupData as $key => $data) {
-                $answer = !empty($groupData['answer']) ? $groupData['answer'] : "";
-                $score = !empty($groupData['score']) ? $groupData['score'] : 0;
+                $answer = !empty($data['answer']) ? $data['answer'] : "";
 
-                NutrientManagement::create([
+                FertilizerApplication::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
                     'staff_id'=> $staff->id,
                     'srp_id' => $request->srp_id,
                     'question'=> $key,
                     'answer'=> $answer,
-                    'score' => $score
+                    'collection_code' => $latestCollectionCode
                 ]);
-               
-                $total_score += $score;
             // }
         }
 
