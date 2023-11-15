@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\FertilizerApplication;
 use App\Models\NutrientManagement;
 use App\Models\SRP;
 use App\Models\SRPFarmManagement;
+use App\Models\SRPFertilizerApplication;
 use App\Models\SRPLandPreparation;
 use App\Models\SRPPrePlanting;
 use App\Models\SRPWaterIrrigation;
@@ -492,65 +492,69 @@ class SRPController extends Controller
         $staff = Auth::user()->staff;
         $total_score = 0;
         
-        // dd($request->data_question_answer_group);
         foreach($request->data_question_answer_group as $groupData) {
-            $collectionCode = FertilizerApplication::max('collection_code') ?? 0;
+            $collectionCode = SRPFertilizerApplication::max('collection_code') ?? 0;
             $latestCollectionCode = $collectionCode + 1;
-            foreach($groupData as $key => $data) {
-            // dd($groupData);
-            // foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
 
-                FertilizerApplication::create([
+            foreach($groupData as $key => $data) {
+                $answer = !empty($data['answer']) ? $data['answer'] : "";
+                $score = !empty($data['score']) ? $data['score'] : 0;
+
+                SRPFertilizerApplication::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
                     'staff_id'=> $staff->id,
                     'srp_id' => $request->srp_id,
+                    'section' => $data['section'],
+                    'collection_code' => $latestCollectionCode,
                     'question'=> $key,
                     'answer'=> $answer,
-                    'collection_code' => $latestCollectionCode
+                    'score' => $score
                 ]);
             }
         }
 
-        $srp = SRP::find($request->srp_id);
-        $srp->score += $total_score;
-        $srp->save();
-
         return response()->json([
             'result' => true,
-            'message' => 'SRP Nutrient Management Created Successfully',
+            'message' => 'SRP Fertilizer Application Created Successfully',
         ]);
     }
 
 
-    // public function getFertilizerApplication(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'farmer_id' => 'required|exists:farmer_details,id',
-    //         'cultivation_id' => 'required|exists:cultivations,id',
-    //         'srp_id' => 'required|exists:srps,id',
-    //     ]);
+    public function getFertilizerApplication(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
 
-    //     if ($validator->fails()) {
-    //         return $validator->messages();
-    //     }
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
 
-    //     $staff = Auth::user()->staff;
+        $staff = Auth::user()->staff;
 
-    //     $landPreparations = NutrientManagement::where('farmer_id', $request->farmer_id)
-    //         ->where('cultivation_id', $request->cultivation_id)
-    //         ->where('srp_id', $request->srp_id)
-    //         ->where('staff_id', $staff->id)
-    //         ->get(['question','answer','score']);
-    //         // ->groupBy('collection_code');
+        $fertilizerApplicationBySections = SRPFertilizerApplication::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get()
+            ->groupBy('section');
 
-    //     $dataGroup = [];
-    //     foreach($landPreparations as $landPreparation) {
-    //         $dataGroup[] = $landPreparation;
-    //     }
+        $resultData = [];
+        foreach ($fertilizerApplicationBySections as $section => $fertilizerApplicationBySection) {
+            $datafertilizerApplication = [];
+            $fertilizerApplicationByCollectionCodes = $fertilizerApplicationBySection->groupBy('collection_code');
+            
+            foreach ($fertilizerApplicationByCollectionCodes as $fertilizerApplication) {
+                array_push($datafertilizerApplication, $fertilizerApplication);
+            }
 
-    //     return response()->json(['data' => $dataGroup]);
-    // }
+            $resultData[$section] = $datafertilizerApplication;
+        }
+
+        return response()->json(['data'=> $resultData]);
+    }
 
 }
