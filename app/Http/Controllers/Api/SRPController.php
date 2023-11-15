@@ -10,6 +10,7 @@ use App\Models\SRPIntegratedPestManagement;
 use App\Models\SRPFertilizerApplication;
 use App\Models\SRPHarvest;
 use App\Models\SRPHealthAndSafety;
+use App\Models\SRPLabourRight;
 use App\Models\SRPLandPreparation;
 use App\Models\SRPPesticideApplication;
 use App\Models\SRPPrePlanting;
@@ -47,8 +48,8 @@ class SRPController extends Controller
             $latestCollectionCode = $collectionCode + 1;
 
             foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-                $score = !empty($data['score']) ? $data['score'] : 0;
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
 
                 SRPLandPreparation::create([
                     'farmer_id' => $request->farmer_id,
@@ -125,8 +126,8 @@ class SRPController extends Controller
         
         foreach($request->data_question_answer_group as $groupData) {
             foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-                $score = !empty($data['score']) ? $data['score'] : 0;
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
 
                 SRPFarmManagement::create([
                     'farmer_id' => $request->farmer_id,
@@ -171,8 +172,8 @@ class SRPController extends Controller
         
         foreach($request->data_question_answer_group as $groupData) {
             foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-                $score = !empty($data['score']) ? $data['score'] : 0;
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
                 $srpWaterManagement = SRPWaterManagement::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
@@ -217,8 +218,8 @@ class SRPController extends Controller
             $latestCollectionCode = $collectionCode + 1;
 
             foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-                $score = !empty($data['score']) ? $data['score'] : 0;
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
 
                 SRPWaterIrrigation::create([
                     'farmer_id' => $request->farmer_id,
@@ -260,8 +261,8 @@ class SRPController extends Controller
             $latestCollectionCode = $collectionCode + 1;
 
             foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-                $score = !empty($data['score']) ? $data['score'] : 0;
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
 
                 SRPPesticideApplication::create([
                     'farmer_id' => $request->farmer_id,
@@ -302,8 +303,8 @@ class SRPController extends Controller
             foreach($groupData as $key => $data) {
             // dd($groupData);
             // foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-                $score = !empty($data['score']) ? $data['score'] : 0;
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
 
                 SRPPrePlanting::create([
                     'farmer_id' => $request->farmer_id,
@@ -349,8 +350,8 @@ class SRPController extends Controller
         foreach($request->data_question_answer_group as $groupData) {
             // dd($groupData);
             foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-                $score = !empty($data['score']) ? $data['score'] : 0;
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
 
                 NutrientManagement::create([
                     'farmer_id' => $request->farmer_id,
@@ -397,8 +398,8 @@ class SRPController extends Controller
         foreach($request->data_question_answer_group as $groupData) {
             // dd($groupData);
             foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-                $score = !empty($data['score']) ? $data['score'] : 0;
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
 
                 SRPIntegratedPestManagement::create([
                     'farmer_id' => $request->farmer_id,
@@ -448,8 +449,8 @@ class SRPController extends Controller
             $latestCollectionCode = $collectionCode + 1;
 
             foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-                $score = !empty($data['score']) ? $data['score'] : 0;
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
 
                 SRPFertilizerApplication::create([
                     'farmer_id' => $request->farmer_id,
@@ -493,8 +494,8 @@ class SRPController extends Controller
             $latestCollectionCode = $collectionCode + 1;
 
             foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-                $score = !empty($data['score']) ? $data['score'] : 0;
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
 
                 SRPHarvest::create([
                     'farmer_id' => $request->farmer_id,
@@ -522,6 +523,56 @@ class SRPController extends Controller
         ]);
     }
 
+    public function storeLabourRight(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+            'data_question_answer_group' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+        
+        $staff = Auth::user()->staff;
+        $total_score = 0;
+
+        foreach($request->data_question_answer_group as $groupData) {
+            $collectionCode = SRPLabourRight::max('collection_code') ?? 0;
+            $latestCollectionCode = $collectionCode + 1;
+
+            foreach($groupData as $key => $data) {
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
+
+                SRPLabourRight::create([
+                    'farmer_id' => $request->farmer_id,
+                    'cultivation_id' => $request->cultivation_id,
+                    'staff_id'=> $staff->id,
+                    'srp_id' => $request->srp_id,
+                    'section' => $data['section'],
+                    'collection_code' => $latestCollectionCode,
+                    'question'=> $key,
+                    'answer'=> $answer,
+                    'score' => $score
+                ]);
+
+                $total_score += $score;
+            }
+        }
+
+        $srp = SRP::find($request->srp_id);
+        $srp->score += $total_score;
+        $srp->save();
+
+        return response()->json([
+            'result' => true,
+            'message' => 'SRP Labour Right Created Successfully',
+        ]);
+    }
+
     // Health And Safety
     public function storeHealthAndSafety(Request $request)
     {
@@ -543,8 +594,8 @@ class SRPController extends Controller
         foreach($request->data_question_answer_group as $groupData) {
             // dd($groupData);
             foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-                $score = !empty($data['score']) ? $data['score'] : 0;
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
 
                 SRPHealthAndSafety::create([
                     'farmer_id' => $request->farmer_id,
@@ -591,8 +642,8 @@ class SRPController extends Controller
         foreach($request->data_question_answer_group as $groupData) {
             // dd($groupData);
             foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-                $score = !empty($data['score']) ? $data['score'] : 0;
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
 
                 SRPWomenEmpowerment::create([
                     'farmer_id' => $request->farmer_id,
