@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class SRPHarvest extends Model
 {
     use HasFactory;
-    protected $table = 'srp_harvest';
+    protected $table = 'srp_harvests';
     protected $fillable = [
         'farmer_id',
         'cultivation_id',
         'staff_id',
         'srp_id',
+        'section',
+        'collection_code',
         'question',
         'answer',
         'score',
