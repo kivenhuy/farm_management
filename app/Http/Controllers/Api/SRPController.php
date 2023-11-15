@@ -10,6 +10,7 @@ use App\Models\SRPIntegratedPestManagement;
 use App\Models\SRPFertilizerApplication;
 use App\Models\SRPHealthAndSafety;
 use App\Models\SRPLandPreparation;
+use App\Models\SRPPesticideApplication;
 use App\Models\SRPPrePlanting;
 use App\Models\SRPWaterIrrigation;
 use App\Models\SRPWaterManagement;
@@ -235,6 +236,49 @@ class SRPController extends Controller
         return response()->json([
             'result' => true,
             'message' => 'SRP Water Irrigation Created Successfully',
+        ]);
+    }
+
+    public function storePesticideApplication(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+            'data_question_answer_group' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+        
+        $staff = Auth::user()->staff;
+        
+        foreach($request->data_question_answer_group as $groupData) {
+            $collectionCode = SRPPesticideApplication::max('collection_code') ?? 0;
+            $latestCollectionCode = $collectionCode + 1;
+
+            foreach($groupData as $key => $data) {
+                $answer = !empty($data['answer']) ? $data['answer'] : "";
+                $score = !empty($data['score']) ? $data['score'] : 0;
+
+                SRPPesticideApplication::create([
+                    'farmer_id' => $request->farmer_id,
+                    'cultivation_id' => $request->cultivation_id,
+                    'staff_id'=> $staff->id,
+                    'srp_id' => $request->srp_id,
+                    'section' => $data['section'],
+                    'collection_code' => $latestCollectionCode,
+                    'question'=> $key,
+                    'answer'=> $answer,
+                    'score' => $score
+                ]);
+            }
+        }
+
+        return response()->json([
+            'result' => true,
+            'message' => 'SRP Pesticide Application Created Successfully',
         ]);
     }
 
@@ -650,6 +694,42 @@ class SRPController extends Controller
             }
 
             $resultData[$section] = $dataWaterIrrigation;
+        }
+
+        return response()->json(['data'=> $resultData]);
+    }
+
+    public function getPesticideApplication(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $pesticideApplicationBySections = SRPPesticideApplication::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get()
+            ->groupBy('section');
+
+        $resultData = [];
+        foreach ($pesticideApplicationBySections as $section => $pesticideApplicationBySections) {
+            $dataPesticideApplication = [];
+            $pesticideApplicationByCollectionCodes = $pesticideApplicationBySections->groupBy('collection_code');
+            
+            foreach ($pesticideApplicationByCollectionCodes as $pesticideApplication) {
+                array_push($dataPesticideApplication, $pesticideApplication);
+            }
+
+            $resultData[$section] = $dataPesticideApplication;
         }
 
         return response()->json(['data'=> $resultData]);
