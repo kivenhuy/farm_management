@@ -95,6 +95,10 @@ Route::middleware('auth:sanctum')->group(function () {
         // Fertilizer Application
         Route::post('srp/srp-fetilizer_application',[SRPController::class, 'storeFertilizerApplication'])->name('srp-fetilizer_application.store');
         Route::get('srp/srp-fetilizer_application',[SRPController::class, 'getFertilizerApplication'])->name('srp-fetilizer_application.get');
+
+        //  Integrate Pest Management
+        Route::post('srp/srp-integrate_pest_management',[SRPController::class, 'storeIntegratedPestManagement'])->name('srp-integrate_pest_management.store');
+        Route::get('srp/srp-integrate_pest_management',[SRPController::class, 'getIntegratedPestManagement'])->name('srp-integrate_pest_management.get');
         
     });
     
