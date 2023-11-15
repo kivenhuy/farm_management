@@ -108,6 +108,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('srp/srp-harvest',[SRPController::class, 'storeHarvest'])->name('srp-havest.store');
         Route::get('srp/srp-harvest',[SRPController::class, 'getHarvest'])->name('srp-havest.get');
 
+        // Labour Right
+        Route::post('srp/srp-labour-right',[SRPController::class, 'storeLabourRight'])->name('srp-havest.store');
+        Route::get('srp/srp-labour-right',[SRPController::class, 'getLabourRight'])->name('srp-havest.get');
+
         //  Integrate Pest Management
         Route::post('srp/srp-integrate_pest_management',[SRPController::class, 'storeIntegratedPestManagement'])->name('srp-integrate_pest_management.store');
         Route::get('srp/srp-integrate_pest_management',[SRPController::class, 'getIntegratedPestManagement'])->name('srp-integrate_pest_management.get');
