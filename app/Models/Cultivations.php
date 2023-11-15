@@ -37,6 +37,11 @@ class Cultivations extends Model
         return $this->belongsTo(CropInformation::class,'crop_id','id');
     }
 
+    public function carbon_emission()
+    {
+        return $this->hasOne(CarbonEmission::class,'cultivation_id','id');
+    }
+
     public function getCropPhotoUrlAttribute()
     {
         $photoIds = explode(',', $this->photo);

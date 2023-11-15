@@ -165,7 +165,8 @@ class CultivationsController extends Controller
                 'cultivation_data' =>$crop_data,
                 'farm_land' =>$farm_land,
                 'season_master' =>$season_master,
-                'crop_master' =>$crop_master
+                'crop_master' =>$crop_master,
+                'carbon_emission'=>$crop_data->carbon_emission
             ]
            
         ]);
