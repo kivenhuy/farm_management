@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SRPWaterIrrigation extends Model
+class SRPFertilizerApplication extends Model
 {
     use HasFactory;
-    protected $table = 'srp_water_irrigations';
+    protected $table = 'srp_fertilizer_applications';
     protected $fillable = [
         'farmer_id',
         'cultivation_id',

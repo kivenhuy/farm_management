@@ -72,6 +72,10 @@ Route::middleware('auth:sanctum')->group(function () {
         // SRP Uload image
         Route::post('srp/srp-upload-image',[SRPController::class, 'srpUploadImage'])->name('srp.upload_image');
         
+        // Land Preparation
+        Route::post('srp/srp-land-preparation',[SRPController::class, 'storeLandPreparation'])->name('land_preparation.store');
+        Route::get('srp/srp-land-preparation',[SRPController::class, 'getLandPreparation'])->name('land_preparation.get');
+
         // Pre Planting
         Route::post('srp/srp-pre-planting',[SRPController::class, 'storePrePlanting'])->name('pre_planting.store');
         Route::get('srp/srp-pre-planting',[SRPController::class, 'getPrePlanting'])->name('pre_planting.get');
@@ -85,20 +89,21 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('srp/srp-water-management',[SRPController::class, 'getWaterManagement'])->name('water_management.get');
     
         // Water Irrigation
-        Route::post('srp/srp-water-irrigation',[SRPController::class, 'storeWaterIrrigation'])->name('farm_management.store');
-        Route::get('srp/srp-water-irrigation',[SRPController::class, 'getFarmIrrigation'])->name('farm_management.get');
+        Route::post('srp/srp-water-irrigation',[SRPController::class, 'storeWaterIrrigation'])->name('water_irrigation.store');
+        Route::get('srp/srp-water-irrigation',[SRPController::class, 'getWaterIrrigation'])->name('water_irrigation.get');
 
         // Nutrient Management
         Route::post('srp/srp-nutrient_management',[SRPController::class, 'storeNutrientManagement'])->name('srp-nutrient_management.store');
         Route::get('srp/srp-nutrient_management',[SRPController::class, 'getNutrientManagement'])->name('srp-nutrient_management.get');
 
         // Fertilizer Application
-        Route::post('srp/srp-fetilizer_application',[SRPController::class, 'storeFertilizerApplication'])->name('srp-fetilizer_application.store');
-        Route::get('srp/srp-fetilizer_application',[SRPController::class, 'getFertilizerApplication'])->name('srp-fetilizer_application.get');
+        Route::post('srp/srp-fetilizer-application',[SRPController::class, 'storeFertilizerApplication'])->name('srp-fetilizer_application.store');
+        Route::get('srp/srp-fetilizer-application',[SRPController::class, 'getFertilizerApplication'])->name('srp-fetilizer_application.get');
 
         //  Integrate Pest Management
         Route::post('srp/srp-integrate_pest_management',[SRPController::class, 'storeIntegratedPestManagement'])->name('srp-integrate_pest_management.store');
         Route::get('srp/srp-integrate_pest_management',[SRPController::class, 'getIntegratedPestManagement'])->name('srp-integrate_pest_management.get');
+       
         
     });
     

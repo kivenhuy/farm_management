@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\FertilizerApplication;
 use App\Models\NutrientManagement;
 use App\Models\SRP;
 use App\Models\SRPFarmManagement;
 use App\Models\SRPIntegratedPestManagement;
+use App\Models\SRPFertilizerApplication;
 use App\Models\SRPLandPreparation;
 use App\Models\SRPPrePlanting;
 use App\Models\SRPWaterIrrigation;
@@ -21,6 +21,86 @@ class SRPController extends Controller
     public function srpUploadImage(Request $request)
     {
 
+    }
+
+    public function storeLandPreparation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+            'data_question_answer_group' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+        
+        $staff = Auth::user()->staff;
+        
+        foreach($request->data_question_answer_group as $groupData) {
+            $collectionCode = SRPLandPreparation::max('collection_code') ?? 0;
+            $latestCollectionCode = $collectionCode + 1;
+
+            foreach($groupData as $key => $data) {
+                $answer = !empty($data['answer']) ? $data['answer'] : "";
+                $score = !empty($data['score']) ? $data['score'] : 0;
+
+                SRPLandPreparation::create([
+                    'farmer_id' => $request->farmer_id,
+                    'cultivation_id' => $request->cultivation_id,
+                    'staff_id'=> $staff->id,
+                    'srp_id' => $request->srp_id,
+                    'section' => $data['section'],
+                    'collection_code' => $latestCollectionCode,
+                    'question'=> $key,
+                    'answer'=> $answer,
+                    'score' => $score
+                ]);
+
+            }
+        }
+
+        return response()->json([
+            'result' => true,
+            'message' => 'SRP Farm Management Created Successfully',
+        ]);
+    }
+
+    public function getLandPreparation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $landPreparationBySections = SRPLandPreparation::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get()
+            ->groupBy('section');
+
+        $resultLandPreparationData = [];
+        foreach ($landPreparationBySections as $section => $landPreparationBySection) {
+            $dataLandPreparation = [];
+            $landPreparationByCollectionCodes = $landPreparationBySection->groupBy('collection_code');
+            
+            foreach ($landPreparationByCollectionCodes as $landPreparation) {
+                array_push($dataLandPreparation, $landPreparation);
+            }
+
+            $resultLandPreparationData[$section] = $dataLandPreparation;
+        }
+
+        return response()->json(['data'=> $resultLandPreparationData]);
     }
 
     public function storeFarmManagement(Request $request)
@@ -141,19 +221,14 @@ class SRPController extends Controller
                     'cultivation_id' => $request->cultivation_id,
                     'staff_id'=> $staff->id,
                     'srp_id' => $request->srp_id,
+                    'section' => $data['section'],
                     'collection_code' => $latestCollectionCode,
                     'question'=> $key,
                     'answer'=> $answer,
                     'score' => $score
                 ]);
-
-                $total_score += $score;
             }
         }
-
-        $srp = SRP::find($request->srp_id);
-        $srp->score += $total_score;
-        $srp->save();
 
         return response()->json([
             'result' => true,
@@ -206,114 +281,6 @@ class SRPController extends Controller
         ]);
     }
 
-    // ========== Get api ================
-
-    public function getFarmManagement(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
-            'srp_id' => 'required|exists:srps,id',
-        ]);
-
-        if ($validator->fails()) {
-            return $validator->messages();
-        }
-
-        $staff = Auth::user()->staff;
-
-        $landPreparations = SRPFarmManagement::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
-            ->get();
-
-        return response()->json(['data' => $landPreparations]);
-    }
-
-    public function getWaterManagement(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
-            'srp_id' => 'required|exists:srps,id',
-        ]);
-
-        if ($validator->fails()) {
-            return $validator->messages();
-        }
-
-        $staff = Auth::user()->staff;
-
-        $waterManagement = SRPWaterManagement::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
-            ->get();
-
-        return response()->json(['data'=> $waterManagement]);
-    }
-
-    public function getFarmIrrigation(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
-            'srp_id' => 'required|exists:srps,id',
-        ]);
-
-        if ($validator->fails()) {
-            return $validator->messages();
-        }
-
-        $staff = Auth::user()->staff;
-
-        $waterIrrigations = SRPWaterIrrigation::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
-            ->get()
-            ->groupBy('collection_code');
-
-        $waterIrrigationData = [];
-        foreach ($waterIrrigations as $waterIrrigation) {
-            $waterIrrigationData[] = $waterIrrigation;
-        }
-        
-        return response()->json(['data'=> $waterIrrigationData]);
-    }
-
-    public function getPrePlanting(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
-            'srp_id' => 'required|exists:srps,id',
-        ]);
-
-        if ($validator->fails()) {
-            return $validator->messages();
-        }
-
-        $staff = Auth::user()->staff;
-
-        $landPreparations = SRPPrePlanting::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
-            ->get(['question','answer','score']);
-            // ->groupBy('collection_code');
-
-        $dataGroup = [];
-        foreach($landPreparations as $landPreparation) {
-            $dataGroup[] = $landPreparation;
-        }
-
-        return response()->json(['data' => $dataGroup]);
-    }
-
-
-
     // Nutrient Managemet 
     public function storeNutrientManagement(Request $request)
     {
@@ -349,86 +316,6 @@ class SRPController extends Controller
                 ]);
                
                 $total_score += $score;
-            }
-        }
-
-        $srp = SRP::find($request->srp_id);
-        $srp->score += $total_score;
-        $srp->save();
-
-        return response()->json([
-            'result' => true,
-            'message' => 'SRP Nutrient Management Created Successfully',
-        ]);
-    }
-
-
-    public function getNutrientManagement(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
-            'srp_id' => 'required|exists:srps,id',
-        ]);
-
-        if ($validator->fails()) {
-            return $validator->messages();
-        }
-
-        $staff = Auth::user()->staff;
-
-        $landPreparations = NutrientManagement::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
-            ->get(['question','answer','score']);
-            // ->groupBy('collection_code');
-
-        $dataGroup = [];
-        foreach($landPreparations as $landPreparation) {
-            $dataGroup[] = $landPreparation;
-        }
-
-        return response()->json(['data' => $dataGroup]);
-    }
-
-    // Fertilizer Application
-    public function storeFertilizerApplication(Request $request)
-    {
-        
-        $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
-            'srp_id' => 'required|exists:srps,id',
-            'data_question_answer_group' => 'required|array',
-        ]);
-
-        $id_water_management = 0;
-        if ($validator->fails()) {
-            return $validator->messages();
-        }
-        
-        $staff = Auth::user()->staff;
-        $total_score = 0;
-        
-        // dd($request->data_question_answer_group);
-        foreach($request->data_question_answer_group as $groupData) {
-            $collectionCode = FertilizerApplication::max('collection_code') ?? 0;
-            $latestCollectionCode = $collectionCode + 1;
-            foreach($groupData as $key => $data) {
-            // dd($groupData);
-            // foreach($groupData as $key => $data) {
-                $answer = !empty($data['answer']) ? $data['answer'] : "";
-
-                FertilizerApplication::create([
-                    'farmer_id' => $request->farmer_id,
-                    'cultivation_id' => $request->cultivation_id,
-                    'staff_id'=> $staff->id,
-                    'srp_id' => $request->srp_id,
-                    'question'=> $key,
-                    'answer'=> $answer,
-                    'collection_code' => $latestCollectionCode
-                ]);
             }
         }
 
@@ -490,35 +377,52 @@ class SRPController extends Controller
         ]);
     }
 
-    public function getIntegratedPestManagement(Request $request)
+    // Fertilizer Application
+    public function storeFertilizerApplication(Request $request)
     {
+        
         $validator = Validator::make($request->all(), [
             'farmer_id' => 'required|exists:farmer_details,id',
             'cultivation_id' => 'required|exists:cultivations,id',
             'srp_id' => 'required|exists:srps,id',
+            'data_question_answer_group' => 'required|array',
         ]);
 
+        $id_water_management = 0;
         if ($validator->fails()) {
             return $validator->messages();
         }
-
+        
         $staff = Auth::user()->staff;
+        $total_score = 0;
+        
+        foreach($request->data_question_answer_group as $groupData) {
+            $collectionCode = SRPFertilizerApplication::max('collection_code') ?? 0;
+            $latestCollectionCode = $collectionCode + 1;
 
-        $landPreparations = NutrientManagement::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
-            ->get(['question','answer','score']);
-            // ->groupBy('collection_code');
+            foreach($groupData as $key => $data) {
+                $answer = !empty($data['answer']) ? $data['answer'] : "";
+                $score = !empty($data['score']) ? $data['score'] : 0;
 
-        $dataGroup = [];
-        foreach($landPreparations as $landPreparation) {
-            $dataGroup[] = $landPreparation;
+                SRPFertilizerApplication::create([
+                    'farmer_id' => $request->farmer_id,
+                    'cultivation_id' => $request->cultivation_id,
+                    'staff_id'=> $staff->id,
+                    'srp_id' => $request->srp_id,
+                    'section' => $data['section'],
+                    'collection_code' => $latestCollectionCode,
+                    'question'=> $key,
+                    'answer'=> $answer,
+                    'score' => $score
+                ]);
+            }
         }
 
-        return response()->json(['data' => $dataGroup]);
+        return response()->json([
+            'result' => true,
+            'message' => 'SRP Fertilizer Application Created Successfully',
+        ]);
     }
-
 
     // Harvest
     public function storeHarvest(Request $request)
@@ -568,6 +472,185 @@ class SRPController extends Controller
         ]);
     }
 
+
+    // ========== Get api ================
+
+    public function getFarmManagement(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $landPreparations = SRPFarmManagement::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get();
+
+        return response()->json(['data' => $landPreparations]);
+    }
+
+    public function getWaterManagement(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $waterManagement = SRPWaterManagement::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get();
+
+        return response()->json(['data'=> $waterManagement]);
+    }
+
+    public function getWaterIrrigation(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $waterIrrigationBySections = SRPWaterIrrigation::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get()
+            ->groupBy('section');
+
+        $resultData = [];
+        foreach ($waterIrrigationBySections as $section => $waterIrrigationBySection) {
+            $dataWaterIrrigation = [];
+            $waterIrrigationByCollectionCodes = $waterIrrigationBySection->groupBy('collection_code');
+            
+            foreach ($waterIrrigationByCollectionCodes as $waterIrrigation) {
+                array_push($dataWaterIrrigation, $waterIrrigation);
+            }
+
+            $resultData[$section] = $dataWaterIrrigation;
+        }
+
+        return response()->json(['data'=> $resultData]);
+    }
+
+    public function getPrePlanting(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $landPreparations = SRPPrePlanting::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get(['question','answer','score']);
+            // ->groupBy('collection_code');
+
+        $dataGroup = [];
+        foreach($landPreparations as $landPreparation) {
+            $dataGroup[] = $landPreparation;
+        }
+
+        return response()->json(['data' => $dataGroup]);
+    }
+
+    public function getNutrientManagement(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $landPreparations = NutrientManagement::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get(['question','answer','score']);
+            // ->groupBy('collection_code');
+
+        $dataGroup = [];
+        foreach($landPreparations as $landPreparation) {
+            $dataGroup[] = $landPreparation;
+        }
+
+        return response()->json(['data' => $dataGroup]);
+    }
+
+    
+
+    
+
+    public function getIntegratedPestManagement(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $landPreparations = NutrientManagement::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get(['question','answer','score']);
+            // ->groupBy('collection_code');
+
+        $dataGroup = [];
+        foreach($landPreparations as $landPreparation) {
+            $dataGroup[] = $landPreparation;
+        }
+
+        return response()->json(['data' => $dataGroup]);
+    }
+
+
+    
+
     public function getHarvest(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -595,6 +678,41 @@ class SRPController extends Controller
         }
 
         return response()->json(['data' => $dataGroup]);
+    }
+    public function getFertilizerApplication(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $fertilizerApplicationBySections = SRPFertilizerApplication::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get()
+            ->groupBy('section');
+
+        $resultData = [];
+        foreach ($fertilizerApplicationBySections as $section => $fertilizerApplicationBySection) {
+            $datafertilizerApplication = [];
+            $fertilizerApplicationByCollectionCodes = $fertilizerApplicationBySection->groupBy('collection_code');
+            
+            foreach ($fertilizerApplicationByCollectionCodes as $fertilizerApplication) {
+                array_push($datafertilizerApplication, $fertilizerApplication);
+            }
+
+            $resultData[$section] = $datafertilizerApplication;
+        }
+
+        return response()->json(['data'=> $resultData]);
     }
 
 }
