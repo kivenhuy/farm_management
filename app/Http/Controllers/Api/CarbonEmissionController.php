@@ -91,6 +91,7 @@ class CarbonEmissionController extends Controller
             'co2_emission'=>round($all_ghg_data->t_ghg_Co2,2),
             'ch4_emission'=>round($all_ghg_data->ghg_Ch4,2),
             'n20_emission'=>round($all_ghg_data->ghg_N2o,2),
+            'ghg_emission'=>round($all_ghg_data->ghg_Tot,2)
         ];
         $final_emission =  $emission->create($data_emission);
 
