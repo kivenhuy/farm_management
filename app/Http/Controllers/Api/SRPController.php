@@ -8,6 +8,7 @@ use App\Models\SRP;
 use App\Models\SRPFarmManagement;
 use App\Models\SRPIntegratedPestManagement;
 use App\Models\SRPFertilizerApplication;
+use App\Models\SRPHarvest;
 use App\Models\SRPHealthAndSafety;
 use App\Models\SRPLandPreparation;
 use App\Models\SRPPesticideApplication;
@@ -473,7 +474,6 @@ class SRPController extends Controller
     // Harvest
     public function storeHarvest(Request $request)
     {
-        // dd($request);
         $validator = Validator::make($request->all(), [
             'farmer_id' => 'required|exists:farmer_details,id',
             'cultivation_id' => 'required|exists:cultivations,id',
@@ -481,29 +481,33 @@ class SRPController extends Controller
             'data_question_answer_group' => 'required|array',
         ]);
 
-        $id_water_management = 0;
         if ($validator->fails()) {
             return $validator->messages();
         }
         
         $staff = Auth::user()->staff;
         $total_score = 0;
+
         foreach($request->data_question_answer_group as $groupData) {
-            // dd($groupData);
+            $collectionCode = SRPHarvest::max('collection_code') ?? 0;
+            $latestCollectionCode = $collectionCode + 1;
+
             foreach($groupData as $key => $data) {
                 $answer = !empty($data['answer']) ? $data['answer'] : "";
                 $score = !empty($data['score']) ? $data['score'] : 0;
 
-                SRPIntegratedPestManagement::create([
+                SRPHarvest::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
                     'staff_id'=> $staff->id,
                     'srp_id' => $request->srp_id,
+                    'section' => $data['section'],
+                    'collection_code' => $latestCollectionCode,
                     'question'=> $key,
                     'answer'=> $answer,
                     'score' => $score
                 ]);
-            
+
                 $total_score += $score;
             }
         }
@@ -514,7 +518,7 @@ class SRPController extends Controller
 
         return response()->json([
             'result' => true,
-            'message' => 'SRP Integrated Pest Management Created Successfully',
+            'message' => 'SRP Havest Created Successfully',
         ]);
     }
 
@@ -721,9 +725,9 @@ class SRPController extends Controller
             ->groupBy('section');
 
         $resultData = [];
-        foreach ($pesticideApplicationBySections as $section => $pesticideApplicationBySections) {
+        foreach ($pesticideApplicationBySections as $section => $pesticideApplicationBySection) {
             $dataPesticideApplication = [];
-            $pesticideApplicationByCollectionCodes = $pesticideApplicationBySections->groupBy('collection_code');
+            $pesticideApplicationByCollectionCodes = $pesticideApplicationBySection->groupBy('collection_code');
             
             foreach ($pesticideApplicationByCollectionCodes as $pesticideApplication) {
                 array_push($dataPesticideApplication, $pesticideApplication);
@@ -843,19 +847,26 @@ class SRPController extends Controller
 
         $staff = Auth::user()->staff;
 
-        $landPreparations = NutrientManagement::where('farmer_id', $request->farmer_id)
+        $harvestBySections = SRPHarvest::where('farmer_id', $request->farmer_id)
             ->where('cultivation_id', $request->cultivation_id)
             ->where('srp_id', $request->srp_id)
             ->where('staff_id', $staff->id)
-            ->get(['question','answer','score']);
-            // ->groupBy('collection_code');
+            ->get()
+            ->groupBy('section');
 
-        $dataGroup = [];
-        foreach($landPreparations as $landPreparation) {
-            $dataGroup[] = $landPreparation;
+        $resultData = [];
+        foreach ($harvestBySections as $section => $harvestBySection) {
+            $dataHarvest = [];
+            $harvestByCollectionCodes = $harvestBySection->groupBy('collection_code');
+            
+            foreach ($harvestByCollectionCodes as $harvest) {
+                array_push($dataHarvest, $harvest);
+            }
+
+            $resultData[$section] = $dataHarvest;
         }
 
-        return response()->json(['data' => $dataGroup]);
+        return response()->json(['data'=> $resultData]);
     }
     public function getFertilizerApplication(Request $request)
     {
