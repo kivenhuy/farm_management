@@ -220,19 +220,14 @@ class SRPController extends Controller
                     'cultivation_id' => $request->cultivation_id,
                     'staff_id'=> $staff->id,
                     'srp_id' => $request->srp_id,
+                    'section' => $data['section'],
                     'collection_code' => $latestCollectionCode,
                     'question'=> $key,
                     'answer'=> $answer,
                     'score' => $score
                 ]);
-
-                $total_score += $score;
             }
         }
-
-        $srp = SRP::find($request->srp_id);
-        $srp->score += $total_score;
-        $srp->save();
 
         return response()->json([
             'result' => true,
@@ -333,7 +328,7 @@ class SRPController extends Controller
         return response()->json(['data'=> $waterManagement]);
     }
 
-    public function getFarmIrrigation(Request $request)
+    public function getWaterIrrigation(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'farmer_id' => 'required|exists:farmer_details,id',
@@ -347,19 +342,26 @@ class SRPController extends Controller
 
         $staff = Auth::user()->staff;
 
-        $waterIrrigations = SRPWaterIrrigation::where('farmer_id', $request->farmer_id)
+        $waterIrrigationBySections = SRPWaterIrrigation::where('farmer_id', $request->farmer_id)
             ->where('cultivation_id', $request->cultivation_id)
             ->where('srp_id', $request->srp_id)
             ->where('staff_id', $staff->id)
             ->get()
-            ->groupBy('collection_code');
+            ->groupBy('section');
 
-        $waterIrrigationData = [];
-        foreach ($waterIrrigations as $waterIrrigation) {
-            $waterIrrigationData[] = $waterIrrigation;
+        $resultData = [];
+        foreach ($waterIrrigationBySections as $section => $waterIrrigationBySection) {
+            $dataWaterIrrigation = [];
+            $waterIrrigationByCollectionCodes = $waterIrrigationBySection->groupBy('collection_code');
+            
+            foreach ($waterIrrigationByCollectionCodes as $waterIrrigation) {
+                array_push($dataWaterIrrigation, $waterIrrigation);
+            }
+
+            $resultData[$section] = $dataWaterIrrigation;
         }
 
-        return response()->json(['data'=> $waterIrrigationData]);
+        return response()->json(['data'=> $resultData]);
     }
 
     public function getPrePlanting(Request $request)

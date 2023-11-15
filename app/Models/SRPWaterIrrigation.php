@@ -14,6 +14,7 @@ class SRPWaterIrrigation extends Model
         'cultivation_id',
         'staff_id',
         'srp_id',
+        'section',
         'collection_code',
         'question',
         'answer',
