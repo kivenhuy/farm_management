@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SRPWomenEmpowerment extends Model
 {
     use HasFactory;
-    protected $table = 'srp_women_empowerment';
+    protected $table = 'srp_women_empowerments';
     protected $fillable = [
         'farmer_id',
         'cultivation_id',
