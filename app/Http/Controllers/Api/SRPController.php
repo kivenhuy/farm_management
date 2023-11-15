@@ -790,6 +790,42 @@ class SRPController extends Controller
         return response()->json(['data'=> $resultData]);
     }
 
+    public function getLabourRight(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $labourRightBySections = SRPLabourRight::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get()
+            ->groupBy('section');
+
+        $resultData = [];
+        foreach ($labourRightBySections as $section => $labourRightBySection) {
+            $dataLabourRight = [];
+            $labourRightByCollectionCodes = $labourRightBySection->groupBy('collection_code');
+            
+            foreach ($labourRightByCollectionCodes as $labourRight) {
+                array_push($dataLabourRight, $labourRight);
+            }
+
+            $resultData[$section] = $dataLabourRight;
+        }
+
+        return response()->json(['data'=> $resultData]);
+    }
+
     public function getPrePlanting(Request $request)
     {
         $validator = Validator::make($request->all(), [
