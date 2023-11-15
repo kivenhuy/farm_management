@@ -8,10 +8,12 @@ use App\Models\SRP;
 use App\Models\SRPFarmManagement;
 use App\Models\SRPIntegratedPestManagement;
 use App\Models\SRPFertilizerApplication;
+use App\Models\SRPHealthAndSafety;
 use App\Models\SRPLandPreparation;
 use App\Models\SRPPrePlanting;
 use App\Models\SRPWaterIrrigation;
 use App\Models\SRPWaterManagement;
+use App\Models\SRPWomenEmpowerment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -469,6 +471,102 @@ class SRPController extends Controller
         return response()->json([
             'result' => true,
             'message' => 'SRP Integrated Pest Management Created Successfully',
+        ]);
+    }
+
+    // Health And Safety
+    public function storeHealthAndSafety(Request $request)
+    {
+        // dd($request);
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+            'data_question_answer_group' => 'required|array',
+        ]);
+
+        $id_water_management = 0;
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+        
+        $staff = Auth::user()->staff;
+        $total_score = 0;
+        foreach($request->data_question_answer_group as $groupData) {
+            // dd($groupData);
+            foreach($groupData as $key => $data) {
+                $answer = !empty($data['answer']) ? $data['answer'] : "";
+                $score = !empty($data['score']) ? $data['score'] : 0;
+
+                SRPHealthAndSafety::create([
+                    'farmer_id' => $request->farmer_id,
+                    'cultivation_id' => $request->cultivation_id,
+                    'staff_id'=> $staff->id,
+                    'srp_id' => $request->srp_id,
+                    'question'=> $key,
+                    'answer'=> $answer,
+                    'score' => $score
+                ]);
+            
+                $total_score += $score;
+            }
+        }
+
+        $srp = SRP::find($request->srp_id);
+        $srp->score += $total_score;
+        $srp->save();
+
+        return response()->json([
+            'result' => true,
+            'message' => 'SRP Health And Safety Created Successfully',
+        ]);
+    }
+
+    // Women Empowerment
+    public function storeWomenEmpowerment(Request $request)
+    {
+        // dd($request);
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+            'data_question_answer_group' => 'required|array',
+        ]);
+
+        $id_water_management = 0;
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+        
+        $staff = Auth::user()->staff;
+        $total_score = 0;
+        foreach($request->data_question_answer_group as $groupData) {
+            // dd($groupData);
+            foreach($groupData as $key => $data) {
+                $answer = !empty($data['answer']) ? $data['answer'] : "";
+                $score = !empty($data['score']) ? $data['score'] : 0;
+
+                SRPWomenEmpowerment::create([
+                    'farmer_id' => $request->farmer_id,
+                    'cultivation_id' => $request->cultivation_id,
+                    'staff_id'=> $staff->id,
+                    'srp_id' => $request->srp_id,
+                    'question'=> $key,
+                    'answer'=> $answer,
+                    'score' => $score
+                ]);
+            
+                $total_score += $score;
+            }
+        }
+
+        $srp = SRP::find($request->srp_id);
+        $srp->score += $total_score;
+        $srp->save();
+
+        return response()->json([
+            'result' => true,
+            'message' => 'SRP Women Empowerment Successfully',
         ]);
     }
 

@@ -103,7 +103,14 @@ Route::middleware('auth:sanctum')->group(function () {
         //  Integrate Pest Management
         Route::post('srp/srp-integrate_pest_management',[SRPController::class, 'storeIntegratedPestManagement'])->name('srp-integrate_pest_management.store');
         Route::get('srp/srp-integrate_pest_management',[SRPController::class, 'getIntegratedPestManagement'])->name('srp-integrate_pest_management.get');
+
+        //  Health And Safety
+        Route::post('srp/srp-health_and_safety',[SRPController::class, 'storeHealthAndSafety'])->name('srp-health_and_safety.store');
+        Route::get('srp/srp-health_and_safety',[SRPController::class, 'getHealthAndSafety'])->name('srp-health_and_safety.get');
        
+        //  Integrate Pest Management
+        Route::post('srp/srp-women_empowerment',[SRPController::class, 'storeWomenEmpowerment'])->name('srp-women_empowerment.store');
+        Route::get('srp/srp-women_empowerment',[SRPController::class, 'getWomenEmpowerment'])->name('srp-women_empowerment.get');
         
     });
     
