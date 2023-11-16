@@ -83,6 +83,10 @@ Route::middleware('auth:sanctum')->group(function () {
         // Farm management
         Route::post('srp/srp-farm-management',[SRPController::class, 'storeFarmManagement'])->name('farm_management.store');
         Route::get('srp/srp-farm-management',[SRPController::class, 'getFarmManagement'])->name('farm_management.get');
+
+        // Farm management
+        Route::post('srp/srp-training',[SRPController::class, 'storeTraining'])->name('training.store');
+        Route::get('srp/srp-training',[SRPController::class, 'getTraining'])->name('training.get');
         
         // Water management
         Route::post('srp/srp-water-management',[SRPController::class, 'storeWaterManagement'])->name('water_management.store');
