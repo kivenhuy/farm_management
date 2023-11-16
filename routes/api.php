@@ -80,9 +80,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('srp/srp-pre-planting',[SRPController::class, 'storePrePlanting'])->name('pre_planting.store');
         Route::get('srp/srp-pre-planting',[SRPController::class, 'getPrePlanting'])->name('pre_planting.get');
         
+        // // Farm management
+        // Route::post('srp/srp-farm-management',[SRPController::class, 'storeFarmManagement'])->name('farm_management.store');
+        // Route::get('srp/srp-farm-management',[SRPController::class, 'getFarmManagement'])->name('farm_management.get');
+
         // Farm management
-        Route::post('srp/srp-farm-management',[SRPController::class, 'storeFarmManagement'])->name('farm_management.store');
-        Route::get('srp/srp-farm-management',[SRPController::class, 'getFarmManagement'])->name('farm_management.get');
+        Route::post('srp/srp-training',[SRPController::class, 'storeTraining'])->name('training.store');
+        Route::get('srp/srp-training',[SRPController::class, 'getTraining'])->name('training.get');
         
         // Water management
         Route::post('srp/srp-water-management',[SRPController::class, 'storeWaterManagement'])->name('water_management.store');
@@ -107,6 +111,10 @@ Route::middleware('auth:sanctum')->group(function () {
         // Harvest
         Route::post('srp/srp-harvest',[SRPController::class, 'storeHarvest'])->name('srp-havest.store');
         Route::get('srp/srp-harvest',[SRPController::class, 'getHarvest'])->name('srp-havest.get');
+
+        // Labour Right
+        Route::post('srp/srp-labour-right',[SRPController::class, 'storeLabourRight'])->name('srp-havest.store');
+        Route::get('srp/srp-labour-right',[SRPController::class, 'getLabourRight'])->name('srp-havest.get');
 
         //  Integrate Pest Management
         Route::post('srp/srp-integrate_pest_management',[SRPController::class, 'storeIntegratedPestManagement'])->name('srp-integrate_pest_management.store');
