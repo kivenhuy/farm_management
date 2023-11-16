@@ -80,9 +80,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('srp/srp-pre-planting',[SRPController::class, 'storePrePlanting'])->name('pre_planting.store');
         Route::get('srp/srp-pre-planting',[SRPController::class, 'getPrePlanting'])->name('pre_planting.get');
         
-        // Farm management
-        Route::post('srp/srp-farm-management',[SRPController::class, 'storeFarmManagement'])->name('farm_management.store');
-        Route::get('srp/srp-farm-management',[SRPController::class, 'getFarmManagement'])->name('farm_management.get');
+        // // Farm management
+        // Route::post('srp/srp-farm-management',[SRPController::class, 'storeFarmManagement'])->name('farm_management.store');
+        // Route::get('srp/srp-farm-management',[SRPController::class, 'getFarmManagement'])->name('farm_management.get');
 
         // Farm management
         Route::post('srp/srp-training',[SRPController::class, 'storeTraining'])->name('training.store');
@@ -127,6 +127,10 @@ Route::middleware('auth:sanctum')->group(function () {
         //  Integrate Pest Management
         Route::post('srp/srp-women_empowerment',[SRPController::class, 'storeWomenEmpowerment'])->name('srp-women_empowerment.store');
         Route::get('srp/srp-women_empowerment',[SRPController::class, 'getWomenEmpowerment'])->name('srp-women_empowerment.get');
+
+         //  Integrate Pest Management
+         Route::post('srp/srp-field_visit',[SRPController::class, 'storeFieldVisit'])->name('srp-field_visit.store');
+         Route::get('srp/srp-field_visit',[SRPController::class, 'getFieldVisit'])->name('srp-field_visit.get');
         
     });
     
