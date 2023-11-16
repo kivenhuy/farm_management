@@ -14,6 +14,7 @@ use App\Models\SRPLabourRight;
 use App\Models\SRPLandPreparation;
 use App\Models\SRPPesticideApplication;
 use App\Models\SRPPrePlanting;
+use App\Models\SRPTraining;
 use App\Models\SRPWaterIrrigation;
 use App\Models\SRPWaterManagement;
 use App\Models\SRPWomenEmpowerment;
@@ -150,6 +151,51 @@ class SRPController extends Controller
         return response()->json([
             'result' => true,
             'message' => 'SRP Farm Management Created Successfully',
+        ]);
+    }
+
+    public function storeTraining(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+            'data_question_answer_group' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+        
+        $staff = Auth::user()->staff;
+        $total_score = 0;
+        
+        foreach($request->data_question_answer_group as $groupData) {
+            foreach($groupData as $key => $data) {
+                $answer = isset($data['answer']) ? $data['answer'] : "";
+                $score = isset($data['score']) ? $data['score'] : 0;
+
+                SRPTraining::create([
+                    'farmer_id' => $request->farmer_id,
+                    'cultivation_id' => $request->cultivation_id,
+                    'staff_id'=> $staff->id,
+                    'srp_id' => $request->srp_id,
+                    'question'=> $key,
+                    'answer'=> $answer,
+                    'score' => $score
+                ]);
+
+                $total_score += $score;
+            }
+        }
+
+        $srp = SRP::find($request->srp_id);
+        $srp->score += $total_score;
+        $srp->save();
+
+        return response()->json([
+            'result' => true,
+            'message' => 'SRP Training Created Successfully',
         ]);
     }
 
@@ -693,6 +739,29 @@ class SRPController extends Controller
             ->get();
 
         return response()->json(['data' => $landPreparations]);
+    }
+
+    public function getTraining(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'farmer_id' => 'required|exists:farmer_details,id',
+            'cultivation_id' => 'required|exists:cultivations,id',
+            'srp_id' => 'required|exists:srps,id',
+        ]);
+
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+
+        $training = SRPTraining::where('farmer_id', $request->farmer_id)
+            ->where('cultivation_id', $request->cultivation_id)
+            ->where('srp_id', $request->srp_id)
+            ->where('staff_id', $staff->id)
+            ->get();
+
+        return response()->json(['data' => $training]);
     }
 
     public function getWaterManagement(Request $request)
