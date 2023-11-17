@@ -805,6 +805,19 @@ class FarmersController extends Controller
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required|string|unique:users,phone_number',
             'full_name' => 'nullable|string',
+            'email' => 'nullable|email',
+            'enrollment_date' => 'required|string',
+            'enrollment_place' => 'required|string',
+            'country' => 'required|numeric',
+            'province'  => 'required|numeric',
+            'district' => 'required|numeric',
+            'commune' => 'required|numeric',
+            'village' => 'nullable|string',
+            'gender' => 'required|string',
+            'lat' => 'nullable|string',
+            'lng' => 'nullable|string',
+            'identity_proof' => 'nullable|string',
+
             // 'password' => 'required|string|min:5',
         ]);
         if ($validator->fails()) {
@@ -830,20 +843,37 @@ class FarmersController extends Controller
         $farmer_details = new FarmerDetails();
         $countable = FarmerCountable::find(1);
         $farmer_code = 'FA'.date('Y').date('m').date('d').$countable->count_number;
+        
         $email = "";
-        if($request->email != ""){
-            $email = $request->email;
-        } elseif (!empty($request->full_name)) {
-            $email = strtolower(str_replace(" ","_", $request->full_name)) . rand(10,90) . '@gmail.com';
-        } else {
-            $email = $request->phone_number . '@gmail.com';
+        if (!empty($request->email)) {
+            $heromarketUrl = env('HEROMARKET_URL');
+            $isExistEmailUrl = $heromarketUrl . '/api/v2/auth/is-email-exist';
+            try {
+                $response = Http::withOptions([
+                    'verify' => false,
+                ])->post($isExistEmailUrl, ['email' => $request->email]);
+
+                $response = json_decode($response->getBody(), true);
+                
+                if (!$response['email_exist']) {
+                    $email = $request->email;
+                }
+            } catch (\Exception $exception) {
+                $data_log_activities['status_code'] = 400;
+                $data_log_activities['status_msg'] = $exception->getMessage();
+                $this->create_log((object) $data_log_activities);
+            }
         }
 
-        $password = "";
-        if($request->password != "")
-        {
-            $password = Hash::make($request->password); 
+        
+        if (empty($email)) {
+            if (!empty($request->full_name)) {
+                $email = strtolower(str_replace(" ","_", $request->full_name)) . rand(100,900) . '@gmail.com';
+            } else {
+                $email = $request->phone_number . '_' . rand(100,900) . '@gmail.com';
+            }
         }
+
         // $user = new User(); 
         // $user->name = $request->full_name; 
         // $user->user_type = "farmer"; 
@@ -877,18 +907,14 @@ class FarmersController extends Controller
             'is_enterprise' => 0,
             'categories_id' => 1,
         ];
-        // dd($signupApiUrl);
        
-        // dd($response->status());
-        // dd(json_decode($response));
         try {
            
-             $response = Http::post($signupApiUrl, $data_regis_seller);
-            // dd(json_decode($response));
-
+             $response = Http::withOptions([
+                'verify' => false,
+            ])->post($signupApiUrl, $data_regis_seller);
         } 
         catch (\Exception $exception) {
-            
             \Log::error($exception->getMessage());
             $data_log_activities['status_code'] = 400;
             $data_log_activities['status_msg'] = $exception->getMessage();
