@@ -847,11 +847,11 @@ class FarmersController extends Controller
         $email = "";
         if (!empty($request->email)) {
             $heromarketUrl = env('HEROMARKET_URL');
-            $isExistEmail = $heromarketUrl . '/api/v2/auth/is-email-exist';
+            $isExistEmailUrl = $heromarketUrl . '/api/v2/auth/is-email-exist';
             try {
                 $response = Http::withOptions([
                     'verify' => false,
-                ])->post($isExistEmail, ['email' => $request->email]);
+                ])->post($isExistEmailUrl, ['email' => $request->email]);
 
                 $response = json_decode($response->getBody(), true);
                 
