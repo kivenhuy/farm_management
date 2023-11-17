@@ -868,33 +868,39 @@ class FarmersController extends Controller
         // $user->save();
 
         $heromarketUrl = env('HEROMARKET_URL');
+        $phone_number = (int) $request->phone_number;
+        $phone_number = '+84' . $phone_number;
         $signupApiUrl = $heromarketUrl . '/api/v2/auth/signup';
         $response = null;
-
+        $data_regis_seller = [
+            'create_seller_from_upstream' => 1,
+            'bussiness_name' => $request->full_name,
+            'email' => $email,
+            'password' => '123456789',   
+            'password_confirmation' => '123456789',   
+            'country_code' => '84',
+            'phone' => $phone_number,
+            'country' => 238,
+            'city' => 48358,
+            'state' => 4056,
+            'address' => 'Vietnam, Long An city, Long An',
+            'user_type' => 'seller',
+            'lat' => $request->lat,
+            'lng' => $request->lng,
+            'is_enterprise' => 0,
+            'categories_id' => 1,
+        ];
+        // dd($signupApiUrl);
+       
+        // dd($response->status());
+        // dd(json_decode($response));
         try {
-            $phone_number = (int) $request->phone_number;
-            $phone_number = '+84' . $phone_number;
+           
+             $response = Http::post($signupApiUrl, $data_regis_seller);
+            // dd(json_decode($response));
 
-            $response = Http::post($signupApiUrl, [
-                'create_seller_from_upstream' => 1,
-                'bussiness_name' => $request->full_name,
-                'email' => $email,
-                'password' => '123456789',   
-                'password_confirmation' => '123456789',   
-                'country_code' => '84',
-                'phone' => $phone_number,
-                'country' => 238,
-                'city' => 48358,
-                'state' => 4056,
-                'address' => 'Vietnam, Long An city, Long An',
-                'user_type' => 'seller',
-                'lat' => $request->lat,
-                'lng' => $request->lng,
-                'is_enterprise' => 0,
-                'categories_id' => 1,
-            ]);
-
-        } catch (\Exception $exception) {
+        } 
+        catch (\Exception $exception) {
             
             \Log::error($exception->getMessage());
             $data_log_activities['status_code'] = 400;

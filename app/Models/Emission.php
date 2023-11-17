@@ -26,5 +26,7 @@ class Emission extends Model
         'co2_emission',
         'ch4_emission',
         'n20_emission',
+        'ghg_emission',
+        'carbon_foot_print',
     ];
 }

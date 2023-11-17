@@ -20,6 +20,7 @@ class ProductLoss extends Model
         'bran',
         'rice_straw',
         'rice_husk',
-        'rice_bran'
+        'rice_bran',
+        'total_product_loss',
     ];
 }

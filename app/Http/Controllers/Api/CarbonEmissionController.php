@@ -91,6 +91,8 @@ class CarbonEmissionController extends Controller
             'co2_emission'=>round($all_ghg_data->t_ghg_Co2,2),
             'ch4_emission'=>round($all_ghg_data->ghg_Ch4,2),
             'n20_emission'=>round($all_ghg_data->ghg_N2o,2),
+            'ghg_emission'=>round($all_ghg_data->ghg_Tot,2),
+            'carbon_foot_print'=>round($all_ghg_data->cf_Prod,2)
         ];
         $final_emission =  $emission->create($data_emission);
 
@@ -107,7 +109,8 @@ class CarbonEmissionController extends Controller
             'bran'=>round($all_Q_data->Q_Bran,2),
             'rice_straw'=>round($all_Q_data->var_Straw,2),
             'rice_husk'=>round($all_Q_data->var_Husk,2),
-            'rice_bran'=>round($all_Q_data->var_Bran,2)
+            'rice_bran'=>round($all_Q_data->var_Bran,2),
+            'total_product_loss'=>round($all_Q_data->Q_Base,2) - (round($all_Q_data->Q_Husk,2) + round($all_Q_data->Q_Bran,2) + round($all_Q_data->Q_Loss,2) + round($all_Q_data->var_Husk,2) + round($all_Q_data->var_Bran,2))
         ];
         $final_data_product_loss =  $product_loss->create($data_product_loss);
 
