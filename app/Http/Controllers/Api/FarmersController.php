@@ -805,6 +805,19 @@ class FarmersController extends Controller
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required|string|unique:users,phone_number',
             'full_name' => 'nullable|string',
+            'email' => 'nullable|email',
+            'enrollment_date' => 'required|string',
+            'enrollment_place' => 'required|string',
+            'country' => 'required|numeric',
+            'province'  => 'required|numeric',
+            'district' => 'required|numeric',
+            'commune' => 'required|numeric',
+            'village' => 'nullable|string',
+            'gender' => 'required|string',
+            'lat' => 'nullable|string',
+            'lng' => 'nullable|string',
+            'identity_proof' => 'nullable|string',
+
             // 'password' => 'required|string|min:5',
         ]);
         if ($validator->fails()) {
