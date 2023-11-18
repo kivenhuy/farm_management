@@ -57,7 +57,24 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                {{-- <input type="text" name="variety" class="form-control" placeholder="Variety" value="{{ $cropStage->variety }}" /> --}}
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label for="js-start-date">Start Date</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" id="js-start-date" name="start_date" class="form-control datatimepicker-enable" placeholder="Start date" value="{{ $cropStage->start_date }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label for="js-end-date">End Date</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" id="js-end-date" name="end_date" class="form-control datatimepicker-enable" placeholder="End date" value="{{ $cropStage->end_date }}"/>
                             </div>
                         </div>
     
@@ -105,37 +122,13 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('custom/js/jquery.datetimepicker.full.min.js')}}"></script>
     <script>
         $(document).ready(function() {
-            let $body = $('body');
-
-            $body.removeClass('preload'); // To prevent CSS transition on page load
-
-            $body.on('change', 'select[data-fetch-child=true]', (e) => {
-                let $parentOption = $(e.currentTarget);
-                let targetSelector = $parentOption.attr('data-fetch-target');
-                let fetchUrl = $parentOption.attr('data-fetch-url');
-
-                let paramName = $parentOption.attr('data-fetch-param-name');
-
-                if (paramName === undefined) {
-                    paramName = $parentOption.attr('name');
-                }
-
-                let $targetElement = $(targetSelector);
-                let firstOptionHtml = $targetElement.find('option:first-child')[0].outerHTML;
-
-                let submitData = {};
-                submitData[paramName] = $parentOption.val();
-
-                $.get(fetchUrl, submitData)
-                    .done(function(data) {
-                        let htmlOptions = Object.keys(data).map(function(key) {
-                            return `<option value="${key}">${data[key]}</option>`
-                        });
-                        $targetElement.html(firstOptionHtml + htmlOptions);
-                        $targetElement.trigger('change');
-                    });
+            $('.datatimepicker-enable').datetimepicker({
+                format: 'Y-m-d',
+        		datepicker: true,
+                timepicker: false,
             });
         });
     </script>
