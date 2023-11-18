@@ -10,7 +10,7 @@
             <thead>
               <tr style="background-color: #666cff;">
                 <th scope="col" style="color:white;">Crop Stage</th>
-                <th scope="col" style="color:white;">Crop Stage</th>
+                <th scope="col" style="color:white;">Crop Information</th>
                 <th scope="col" style="color:white;">Crop Variety</th>
                 <th scope="col" style="color:white;">Start Date</th>
                 <th scope="col" style="color:white;">End Date</th>
