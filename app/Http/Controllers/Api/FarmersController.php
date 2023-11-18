@@ -844,7 +844,7 @@ class FarmersController extends Controller
         {
             $password = Hash::make($request->password); 
         }
-        // $user = new User(); 
+        // $user = new User();
         // $user->name = $request->full_name; 
         // $user->user_type = "farmer"; 
         // $user->username = $request->full_name; 
@@ -882,13 +882,12 @@ class FarmersController extends Controller
         // dd($response->status());
         // dd(json_decode($response));
         try {
-           
-             $response = Http::post($signupApiUrl, $data_regis_seller);
-            // dd(json_decode($response));
+            // dd($signupApiUrl);
+            $response = Http::post($signupApiUrl, $data_regis_seller);
+            dd($response->body());
 
         } 
         catch (\Exception $exception) {
-            
             \Log::error($exception->getMessage());
             $data_log_activities['status_code'] = 400;
             $data_log_activities['status_msg'] = $exception->getMessage();
@@ -923,6 +922,7 @@ class FarmersController extends Controller
             'farmer_code'=>$farmer_code,
             'dob'=>$request->dob,
             'is_online'=>$request->is_online,
+            'srp_ceritification'=>$request->srp_ceritification,
             // 'farmer_photo'=>implode(',', $farmer_photo),
             // 'id_proof_photo'=>implode(',', $id_proof_photo),
         ];
