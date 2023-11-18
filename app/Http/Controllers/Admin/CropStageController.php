@@ -54,8 +54,7 @@ class CropStageController extends Controller
         $cropStage->name = $cropStageRequest->name;
         $cropStage->crop_information_id = $cropStageRequest->crop_information_id;
         $cropStage->crop_variety_id = $cropStageRequest->crop_variety_id;
-        $cropStage->start_date = $cropStageRequest->start_date;
-        $cropStage->end_date = $cropStageRequest->end_date;
+        $cropStage->date = $cropStageRequest->date;
         $cropStage->status = $cropStageRequest->status;
         $cropStage->save();
 

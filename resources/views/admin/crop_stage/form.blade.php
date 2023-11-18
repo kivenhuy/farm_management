@@ -62,22 +62,13 @@
 
                         <div class="form-group row">
                             <div class="col-md-2">
-                                <label for="js-start-date">Start Date</label>
+                                <label for="js-date">Date</label>
                             </div>
                             <div class="col-md-3">
-                                <input type="text" id="js-start-date" name="start_date" class="form-control datatimepicker-enable" placeholder="Start date" value="{{ $cropStage->start_date }}"/>
+                                <input type="number" id="js-date" name="date" class="form-control" placeholder="Date" value="{{ $cropStage->date }}"/>
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <div class="col-md-2">
-                                <label for="js-end-date">End Date</label>
-                            </div>
-                            <div class="col-md-3">
-                                <input type="text" id="js-end-date" name="end_date" class="form-control datatimepicker-enable" placeholder="End date" value="{{ $cropStage->end_date }}"/>
-                            </div>
-                        </div>
-    
                         <div class="form-group row">
                             <div class="col-md-2">
                                 <label for="js-season-code">Status</label>
@@ -122,14 +113,9 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('custom/js/jquery.datetimepicker.full.min.js')}}"></script>
     <script>
         $(document).ready(function() {
-            $('.datatimepicker-enable').datetimepicker({
-                format: 'Y-m-d',
-        		datepicker: true,
-                timepicker: false,
-            });
+            
         });
     </script>
 @endpush
