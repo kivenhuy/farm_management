@@ -22,6 +22,44 @@
                                 <input type="text" name="name" class="form-control" placeholder="Name" value="{{ $cropStage->name }}" data-parsley-required="true"/>
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label for="js-season-code">Crop Information</label>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="crop_information_id" class="form-control" required
+                                    data-fetch-child="true"
+                                    data-fetch-target="#js-crop-variety"
+                                    data-fetch-url="{{ route('ajax_options.get-varieties') }}"
+                                    data-fetch-param-name="crop_information_id">
+
+                                    <option value="">Select Crop Information</option>
+                                    @foreach($cropInformations as $cropInformation)
+                                        <option value="{{ $cropInformation->id }}" {{ $cropInformation->id == $cropStage->crop_information_id ? 'selected' : ''}}>
+                                            {{$cropInformation->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label for="js-crop-variety">Variety</label>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="crop_variety_id" id="js-crop-variety" class="form-control">
+                                    <option value="">Select Crop Variety</option>
+                                    @foreach($cropVarieties as $cropVarietie)
+                                        <option value="{{ $cropVarietie->id }}" {{ $cropVarietie->id == $cropStage->crop_variety_id ? 'selected' : ''}}>
+                                            {{$cropVarietie->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                {{-- <input type="text" name="variety" class="form-control" placeholder="Variety" value="{{ $cropStage->variety }}" /> --}}
+                            </div>
+                        </div>
     
                         <div class="form-group row">
                             <div class="col-md-2">
@@ -69,7 +107,36 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            
+            let $body = $('body');
+
+            $body.removeClass('preload'); // To prevent CSS transition on page load
+
+            $body.on('change', 'select[data-fetch-child=true]', (e) => {
+                let $parentOption = $(e.currentTarget);
+                let targetSelector = $parentOption.attr('data-fetch-target');
+                let fetchUrl = $parentOption.attr('data-fetch-url');
+
+                let paramName = $parentOption.attr('data-fetch-param-name');
+
+                if (paramName === undefined) {
+                    paramName = $parentOption.attr('name');
+                }
+
+                let $targetElement = $(targetSelector);
+                let firstOptionHtml = $targetElement.find('option:first-child')[0].outerHTML;
+
+                let submitData = {};
+                submitData[paramName] = $parentOption.val();
+
+                $.get(fetchUrl, submitData)
+                    .done(function(data) {
+                        let htmlOptions = Object.keys(data).map(function(key) {
+                            return `<option value="${key}">${data[key]}</option>`
+                        });
+                        $targetElement.html(firstOptionHtml + htmlOptions);
+                        $targetElement.trigger('change');
+                    });
+            });
         });
     </script>
 @endpush

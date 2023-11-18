@@ -9,7 +9,7 @@
         <table class="table table-bordered w-50">
             <thead>
               <tr style="background-color: #666cff;">
-                <th scope="col" style="color:white;">Crop Stage</th>
+                <th scope="col" style="color:white;">Crop Activity</th>
                 <th scope="col" style="color:white;">Action</th>
               </tr>
             </thead>

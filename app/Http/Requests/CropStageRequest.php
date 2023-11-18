@@ -23,6 +23,8 @@ class CropStageRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
+            'crop_information_id' => 'required|exists:crop_informations,id',
+            'crop_variety_id' => 'nullable|numeric',
             'status' => 'nullable|in:active,inactive',
         ];
     }
