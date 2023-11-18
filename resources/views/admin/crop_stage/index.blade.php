@@ -6,10 +6,13 @@
             <a href="{{ route('crop-stages.create') }}" class="btn btn-info mb-4">Create Crop Stage</a>
         </div>
         
-        <table class="table table-bordered w-50">
+        <table class="table table-bordered w-75">
             <thead>
               <tr style="background-color: #666cff;">
                 <th scope="col" style="color:white;">Crop Stage</th>
+                <th scope="col" style="color:white;">Crop Information</th>
+                <th scope="col" style="color:white;">Crop Variety</th>
+                <th scope="col" style="color:white;">Date</th>
                 <th scope="col" style="color:white;">Action</th>
               </tr>
             </thead>
@@ -28,6 +31,15 @@
                                   </label>
 
                                 {{ $cropStage->name}}
+                            </td>
+                            <td>
+                                {{ $cropStage->crop_information?->name }}
+                            </td>
+                            <td>
+                                {{ $cropStage->crop_variety?->name }}
+                            </td>
+                            <td>
+                                {{ $cropStage->date }}
                             </td>
                             <td style="width: 200px;">
                                 <a class="rounded-circle btn-primary text-white p-2 avatar avatar-sm me-2" href="{{ route('crop-stages.edit', ['crop_stage' => $cropStage]) }}" title="Edit">

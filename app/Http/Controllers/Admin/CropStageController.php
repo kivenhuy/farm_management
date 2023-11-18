@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CropStageRequest;
+use App\Models\CropInformation;
 use App\Models\CropStage;
+use App\Models\Cultivations;
 use Illuminate\Http\Request;
 
 class CropStageController extends Controller
@@ -25,7 +27,10 @@ class CropStageController extends Controller
 
     public function edit(CropStage $cropStage)
     {
-        return view('admin.crop_stage.form', compact('cropStage'));
+        $cropInformations = CropInformation::get();
+        $cropVarieties = $cropStage?->crop_information?->crop_variety ?? [];
+
+        return view('admin.crop_stage.form', compact('cropStage', 'cropInformations', 'cropVarieties'));
     }
 
     public function show(CropStage $cropStage)
@@ -47,6 +52,9 @@ class CropStageController extends Controller
     {
         $isNewCropStage = empty($cropStage->id);
         $cropStage->name = $cropStageRequest->name;
+        $cropStage->crop_information_id = $cropStageRequest->crop_information_id;
+        $cropStage->crop_variety_id = $cropStageRequest->crop_variety_id;
+        $cropStage->date = $cropStageRequest->date;
         $cropStage->status = $cropStageRequest->status;
         $cropStage->save();
 

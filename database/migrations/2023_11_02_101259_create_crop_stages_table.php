@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('crop_stages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('crop_information_id')->nullable();
+            $table->integer('crop_variety_id')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->string('status')->default('active')->comment('active, inactive');
             $table->timestamps();
         });
