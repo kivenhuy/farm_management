@@ -16,4 +16,13 @@ class CropStage extends Model
         return $query->where('status', 'active');
     }
 
+    public function crop_information()
+    {
+        return $this->belongsTo(CropInformation::class);
+    }
+
+    public function crop_variety()
+    {
+        return $this->belongsTo(CropVariety::class);
+    }
 }

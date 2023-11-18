@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CropVariety;
 use App\Models\District;
 use App\Models\Province;
 use Illuminate\Http\Request;
@@ -33,5 +34,18 @@ class AjaxOptionsController extends Controller
         $provinces = District::where('province_id', $request->input('province_id'))->get();
 
         return response()->json($provinces->pluck('district_name', 'id')->toArray());
+    }
+
+    public function getVarieties(Request $request)
+    {
+        $validator = Validator::make($request->all(), ['crop_information_id' => 'required|numeric|exists:crop_informations,id']);
+
+        if ($validator->fails()) {
+            return response()->json([]);
+        }
+
+        $cropVarieties = CropVariety::where('crop_id', $request->input('crop_information_id'))->get();
+
+        return response()->json($cropVarieties->pluck('name', 'id')->toArray());
     }
 }

@@ -41,6 +41,7 @@ Route::group(["prefix"=> ""], function () {
 Route::group(['middleware' => ['auth']], function () {
     Route::get('ajax-option-get-provinces', [AjaxOptionsController::class,'getProvinces'])->name('ajax_options.get-provinces');
     Route::get('ajax-option-get-districts', [AjaxOptionsController::class,'getDistricts'])->name('ajax_options.get-districts');
+    Route::get('ajax-option-get-varieties', [AjaxOptionsController::class,'getVarieties'])->name('ajax_options.get-varieties');
 
     Route::get("/dashboard", [HomeController::class, 'dashboard'])->name('dashboard');
     Route::resource('season-masters', SeasonMasterController::class)->names('season-masters');

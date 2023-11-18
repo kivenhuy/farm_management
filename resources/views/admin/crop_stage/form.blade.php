@@ -22,6 +22,61 @@
                                 <input type="text" name="name" class="form-control" placeholder="Name" value="{{ $cropStage->name }}" data-parsley-required="true"/>
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label for="js-season-code">Crop Information</label>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="crop_information_id" class="form-control" required
+                                    data-fetch-child="true"
+                                    data-fetch-target="#js-crop-variety"
+                                    data-fetch-url="{{ route('ajax_options.get-varieties') }}"
+                                    data-fetch-param-name="crop_information_id">
+
+                                    <option value="">Select Crop Information</option>
+                                    @foreach($cropInformations as $cropInformation)
+                                        <option value="{{ $cropInformation->id }}" {{ $cropInformation->id == $cropStage->crop_information_id ? 'selected' : ''}}>
+                                            {{$cropInformation->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label for="js-crop-variety">Variety</label>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="crop_variety_id" id="js-crop-variety" class="form-control">
+                                    <option value="">Select Crop Variety</option>
+                                    @foreach($cropVarieties as $cropVarietie)
+                                        <option value="{{ $cropVarietie->id }}" {{ $cropVarietie->id == $cropStage->crop_variety_id ? 'selected' : ''}}>
+                                            {{$cropVarietie->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label for="js-start-date">Start Date</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" id="js-start-date" name="start_date" class="form-control datatimepicker-enable" placeholder="Start date" value="{{ $cropStage->start_date }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label for="js-end-date">End Date</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" id="js-end-date" name="end_date" class="form-control datatimepicker-enable" placeholder="End date" value="{{ $cropStage->end_date }}"/>
+                            </div>
+                        </div>
     
                         <div class="form-group row">
                             <div class="col-md-2">
@@ -67,9 +122,14 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('custom/js/jquery.datetimepicker.full.min.js')}}"></script>
     <script>
         $(document).ready(function() {
-            
+            $('.datatimepicker-enable').datetimepicker({
+                format: 'Y-m-d',
+        		datepicker: true,
+                timepicker: false,
+            });
         });
     </script>
 @endpush

@@ -34,8 +34,8 @@ class CropCalendarRequest extends FormRequest
             'calendar_detail.*.duration'=> 'nullable|numeric|gt:0',
             'calendar_detail.*.duration_uom'=> 'nullable|string',
             'calendar_detail.*.activity_description'=> 'nullable|string',
-            'calendar_detail.*.repetition'=> 'nullable|numeric|gt:0',
-            'calendar_detail.*.lead_time'=> 'nullable|numeric|gt:0',
+            'calendar_detail.*.repetition'=> 'nullable|numeric',
+            'calendar_detail.*.lead_time'=> 'nullable|numeric',
             'calendar_detail.*.is_base_on_sowing_date'=> 'nullable',
             'calendar_detail.*.status'=> 'nullable',
         ];
