@@ -12,8 +12,7 @@
                 <th scope="col" style="color:white;">Crop Stage</th>
                 <th scope="col" style="color:white;">Crop Information</th>
                 <th scope="col" style="color:white;">Crop Variety</th>
-                <th scope="col" style="color:white;">Start Date</th>
-                <th scope="col" style="color:white;">End Date</th>
+                <th scope="col" style="color:white;">Date</th>
                 <th scope="col" style="color:white;">Action</th>
               </tr>
             </thead>
@@ -40,10 +39,7 @@
                                 {{ $cropStage->crop_variety?->name }}
                             </td>
                             <td>
-                                {{ $cropStage->start_date }}
-                            </td>
-                            <td>
-                                {{ $cropStage->end_date }}
+                                {{ $cropStage->date }}
                             </td>
                             <td style="width: 200px;">
                                 <a class="rounded-circle btn-primary text-white p-2 avatar avatar-sm me-2" href="{{ route('crop-stages.edit', ['crop_stage' => $cropStage]) }}" title="Edit">
