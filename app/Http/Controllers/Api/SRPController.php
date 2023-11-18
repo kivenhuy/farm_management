@@ -19,6 +19,7 @@ use App\Models\SRPTraining;
 use App\Models\SRPWaterIrrigation;
 use App\Models\SRPWaterManagement;
 use App\Models\SRPWomenEmpowerment;
+use App\Models\Uploads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,23 @@ class SRPController extends Controller
 {
     public function srpUploadImage(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:10000',
+        ]);
 
+        if ($validator->fails()) {
+            return $validator->messages();
+        }
+
+        $staff = Auth::user()->staff;
+        $id = (new UploadsController)->upload_photo($request->photo, $staff->id);
+
+        $uploadFile = Uploads::find($id);
+        if ($uploadFile) {
+            return asset($uploadFile->file_name);
+        }
+
+        return '';
     }
 
     public function storeLandPreparation(Request $request)
