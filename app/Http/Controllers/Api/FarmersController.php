@@ -950,7 +950,7 @@ class FarmersController extends Controller
             'farmer_code'=>$farmer_code,
             'dob'=>$request->dob,
             'is_online'=>$request->is_online,
-            'srp_ceritification'=>$request->srp_ceritification,
+            'srp_certification'=>$request->srp_certification,
             // 'farmer_photo'=>implode(',', $farmer_photo),
             // 'id_proof_photo'=>implode(',', $id_proof_photo),
         ];
