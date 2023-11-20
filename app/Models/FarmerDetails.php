@@ -35,7 +35,7 @@ class FarmerDetails extends Model
         'farmer_photo',
         'id_proof_photo',
         'is_online',
-        'srp_ceritification',
+        'srp_certification',
     ];
 
     public function user()
