@@ -1197,6 +1197,7 @@ class SRPController extends Controller
                     $taskPending[]   = array_merge($task, ['total_pending' => $totalTaskPending]);
                 } else {
                     $totalTaskPending = $cultivation->crops_master->crop_stages->count();
+                    unset($cultivation['crops_master']);
                     $totalTaskCompleted = SRPFieldVisit::where('farmer_id', $farmer->id)
                         ->where('cultivation_id', $cultivation->id)
                         ->where('staff_id', $staff->id)
