@@ -33,58 +33,16 @@ class SaleIntentionController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        dd(uploaded_asset(106));
-        $farmer_photo = [];
-        $staff = Auth::user()->staff;
-        if (!empty($request->all()['photo'])) {
-            foreach ($request->all()['photo'] as $photo) {                        
-                $id = (new UploadsController)->upload_photo($photo,$staff->id);
-
-                if (!empty($id)) {
-                    array_push($farmer_photo, $id);
-                }
-            }    
-        }
-        $format = 'd/m/Y';
-        $heromarketUrl = env('HEROMARKET_URL');
-        $signupApiUrl = $heromarketUrl . '/api/v2/auction/product_store_seller';
-        $data_auction_products = [
-            'name'=>$request->variety,
-            'added_by'=>'seller',
-            'category_id'=>1,
-            'brand_id'=>0,
-            'barcode'=>"",
-            'starting_bid'=>$request->min_price,
-            'photo'=>$request->all()['photo'],
-            'description'=>"",
-            'video_provider'=>"",
-            'video_link'=>"",
-            'shipping_type'=>"",
-            'meta_title'=>"",
-            'meta_description'=>"",
-            'sku'=>"9081241",
-            'est_shipping_days'=>3,
-            'unit'=>'KG',
-            'auction_date_range'=>"upstream",
-            'date_for_harvest'=>Carbon::createFromFormat($format, $request->date_for_harvest)->timestamp,
-            'aviable_date'=>Carbon::createFromFormat($format, $request->aviable_date)->timestamp,
-       ];
-    //    dd($data_auction_products);
+    {  
        try {
-        // dd($signupApiUrl);
-            $response = Http::withToken('54|MRuVmHTkbtpSh6vW9ziiwTOtzHBCEIr90pt5xRds')->post($signupApiUrl, $data_auction_products);
-            if(json_decode($response)->data)
-            {
                 $sale_intention = new SaleIntention();
                 $data_sale = [
                     'farmer_id'=>$request->farmer_id,
                     'farm_land_id'=>$request->farmer_id,
-                    'crop_id'=>$request->crop_id,
+                    'cultivation_id'=>$request->cultivation_id,
                     'season_id'=>$request->season_id,
                     'variety'=>$request->variety,
                     'sowing_date'=>$request->sowing_date,
-                    'photo'=>implode(',', $farmer_photo),
                     'quantity'=>$request->quantity,
                     'min_price'=>$request->min_price,
                     'max_price'=>$request->max_price,
@@ -93,26 +51,30 @@ class SaleIntentionController extends Controller
                     'grade'=>$request->grade,
                     'age_of_crop'=>$request->age_of_crop,
                     'quality_check'=>$request->quality_check,
+                    'product_id'=>$request->product_id,
                 ];
-                $sale_intention->create($data_sale);
+                // return response()->json([
+                //     'result' => true,
+                //     'message' => 'Sale Intention has been inserted successfully',
+                //     'data'=>[
+                //         'sale_intention'=>$data_sale,
+                //     ]
+                // ]);
+                $final_data = $sale_intention->create($data_sale);
                 return response()->json([
                     'result' => true,
                     'message' => 'Sale Intention has been inserted successfully',
                     'data'=>[
-                        'sale_intention'=>$sale_intention,
+                        'sale_intention'=>$final_data,
                     ]
                 ]);
-            }
-
         } 
         catch (\Exception $exception) {
-            \Log::error($exception->getMessage());
-            $data_log_activities['status_code'] = 400;
-            $data_log_activities['status_msg'] = $exception->getMessage();
-            $this->create_log((object) $data_log_activities);
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage(),
+            ]);
         }
-       
-    //    dd($response);
     }
 
     /**

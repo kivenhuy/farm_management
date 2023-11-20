@@ -15,14 +15,13 @@ return new class extends Migration
             $table->id();
             $table->integer('farmer_id');
             $table->integer('farm_land_id');
-            $table->integer('crop_id');
+            $table->integer('cultivation_id');
             $table->integer('season_id');
             $table->string('variety');
             $table->string('sowing_date');
-            $table->string('photo');
-            $table->integer('quantity');
-            $table->double('min_price',20,2);
-            $table->double('max_price',20,2);
+            $table->string('product_id');
+            $table->double('min_price',8,2);
+            $table->double('max_price',8,2);
             $table->string('date_for_harvest');
             $table->string('aviable_date');
             $table->string('grade');
