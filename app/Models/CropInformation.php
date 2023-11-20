@@ -39,6 +39,11 @@ class CropInformation extends Model
         return $this->hasMany(CropVariety::class,'crop_id','id');
     }
 
+    public function crop_stages()
+    {
+        return $this->hasMany(CropStage::class, 'crop_information_id','id');
+    }
+
     public function getPhotoUrlAttribute()
     {
         if (!empty($this->thumbnail)) {

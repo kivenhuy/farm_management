@@ -132,6 +132,7 @@ Route::middleware('auth:sanctum')->group(function () {
          Route::post('srp/srp-field_visit',[SRPController::class, 'storeFieldVisit'])->name('srp-field_visit.store');
          Route::get('srp/srp-field_visit',[SRPController::class, 'getFieldVisit'])->name('srp-field_visit.get');
         
+         Route::get('srp/get-task-status',[SRPController::class, 'getTaskStatus'])->name('srp-task-status.get');
     });
     
 

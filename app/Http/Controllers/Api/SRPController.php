@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\FarmerDetails;
 use App\Models\NutrientManagement;
 use App\Models\SRP;
 use App\Models\SRPFarmManagement;
@@ -1171,8 +1172,125 @@ class SRPController extends Controller
         return response()->json(['data'=> $landPreparations]);
     }
 
-    
+    public function getTaskStatus(Request $request)
+    {
+        $staff = Auth::user()->staff;
 
+        $farmers = FarmerDetails::has('cultivation_crop')->where('staff_id', $staff->id)->get();
+        
+        $taskCompleted = [];
+        $taskPending = [];
+        foreach ($farmers as $farmer) {
+            $cultivations = $farmer->cultivation_crop;
+            foreach ($cultivations as $cultivation) {
+                unset($farmer['cultivation_crop']);
+                $isBaseOnSRP = $farmer->srp_certification;
+                $task = [];
+                $task['farmer'] = $farmer;
+                $task['cultivation'] = $cultivation;
+
+                if ($isBaseOnSRP) {
+                    $totalTaskCompleted = $this->getSRPTaskCount($farmer->id, $cultivation->id, $staff->id);
+                    $totalTaskPending = 14 - $totalTaskCompleted;
+
+                    $taskCompleted[] = array_merge($task, ['total_completed' => $totalTaskCompleted]);
+                    $taskPending[]   = array_merge($task, ['total_pending' => $totalTaskPending]);
+                } else {
+                    $totalTaskPending = $cultivation->crops_master->crop_stages->count();
+                    $totalTaskCompleted = SRPFieldVisit::where('farmer_id', $farmer->id)
+                        ->where('cultivation_id', $cultivation->id)
+                        ->where('staff_id', $staff->id)
+                        ->count();
+
+                    $taskCompleted[] = array_merge($task, ['total_completed' => $totalTaskCompleted]);
+                    $taskPending[]   = array_merge($task, ['total_pending' => $totalTaskPending]);
+                }
+            }
+        }
+
+        return response()->json(['task_completed'=> $taskCompleted, 'task_pending' => $taskPending]);
+    }
+
+    public function getSRPTaskCount($farmerId, $cultivationId, $staffId)
+    {
+        $countFertilizerApplication = SRPFertilizerApplication::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countFieldVisit = SRPFieldVisit::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countHavest = SRPHarvest::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countHealthAndSafety = SRPHealthAndSafety::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countIntergratedPestManagement = SRPIntegratedPestManagement::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countLabourRight = SRPLabourRight::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countLandPreparation = SRPLandPreparation::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countNutrientManagement = NutrientManagement::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countPesticideApplication = SRPPesticideApplication::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countPrePlanting = SRPPrePlanting::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countTraining = SRPTraining::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countWaterIrrigation = SRPWaterIrrigation::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countWaterManagement = SRPWaterManagement::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+        $countWomenEmpowerment = SRPWomenEmpowerment::where('farmer_id', $farmerId)
+            ->where('cultivation_id', $cultivationId)
+            ->where('staff_id', $staffId)
+            ->first() ? 1 : 0;
+
+
+        $totalCount = $countFertilizerApplication + $countFieldVisit + $countHavest + $countHealthAndSafety +
+            $countIntergratedPestManagement + $countLabourRight + $countLandPreparation + $countTraining + 
+            $countNutrientManagement + $countPesticideApplication + $countPrePlanting +
+            $countWaterIrrigation + $countWaterManagement + $countWomenEmpowerment;
+
+        return $totalCount;
+    }
     
 
     
