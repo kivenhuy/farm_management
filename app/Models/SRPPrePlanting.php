@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SRPPrePlanting extends Model
 {
     use HasFactory;
-    protected $table = 'srp_pre_plainings';
+    protected $table = 'srp_pre_plantings';
     protected $fillable = [
         'farmer_id',
         'cultivation_id',

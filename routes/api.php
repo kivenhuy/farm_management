@@ -138,6 +138,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('sale_intention/store',[SaleIntentionController::class, 'store'])->name('sale_intention.store');
 
         
+         Route::get('srp/get-task-status',[SRPController::class, 'getTaskStatus'])->name('srp-task-status.get');
     });
     
 
