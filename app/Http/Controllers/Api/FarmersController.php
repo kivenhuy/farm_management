@@ -254,7 +254,7 @@ class FarmersController extends Controller
                 }
             }    
         }
-        
+        dd();        
         $data_farmer_details =[
             'staff_id'=>$farmer_details->staff_id,
             'user_id'=>$farmer_details->user_id,
@@ -873,6 +873,7 @@ class FarmersController extends Controller
                 $email = $request->phone_number . '_' . rand(100,900) . '@gmail.com';
             }
         }
+        // $user = new User();
 
         // $user = new User(); 
         // $user->name = $request->full_name; 
@@ -949,6 +950,7 @@ class FarmersController extends Controller
             'farmer_code'=>$farmer_code,
             'dob'=>$request->dob,
             'is_online'=>$request->is_online,
+            'srp_ceritification'=>$request->srp_ceritification,
             // 'farmer_photo'=>implode(',', $farmer_photo),
             // 'id_proof_photo'=>implode(',', $id_proof_photo),
         ];

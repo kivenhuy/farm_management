@@ -3,7 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\FarmersController;
+use App\Http\Controllers\Api\SaleIntentionController;
 use App\Http\Controllers\Api\SRPController;
+use App\Models\SaleIntention;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,6 +133,10 @@ Route::middleware('auth:sanctum')->group(function () {
          //  Integrate Pest Management
          Route::post('srp/srp-field_visit',[SRPController::class, 'storeFieldVisit'])->name('srp-field_visit.store');
          Route::get('srp/srp-field_visit',[SRPController::class, 'getFieldVisit'])->name('srp-field_visit.get');
+
+        //  Sale Intention
+        Route::post('sale_intention/store',[SaleIntentionController::class, 'store'])->name('sale_intention.store');
+
         
          Route::get('srp/get-task-status',[SRPController::class, 'getTaskStatus'])->name('srp-task-status.get');
     });
