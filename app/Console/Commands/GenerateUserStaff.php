@@ -29,7 +29,7 @@ class GenerateUserStaff extends Command
     public function handle()
     {
         // already run in server
-        //return null;
+        return null;
 
         $firstNameArr = ['huy', 'khang', 'bao', 'phuc', 'anh', 'khoa', 'phat', 'dat', 'khoi', 'an', 'nam', 'quan', 'hoang', 'hieu', 'tri', 'tai'];
         $lastNameArr = ['nguyen', 'tran', 'phan', 'le', 'bui', 'dang', 'pham', 'hoang', 'huynh', 'truong', 'ngo'];
