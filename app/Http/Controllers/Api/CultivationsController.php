@@ -9,7 +9,9 @@ use App\Models\FarmLand;
 use App\Models\Season;
 use App\Models\SeasonMaster;
 use App\Models\SRP;
+use App\Models\SRPSchedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -101,6 +103,42 @@ class CultivationsController extends Controller
             'est_yield'=>$request->est_yield,
             'photo'=>implode(',', $crop_photo), 
         ];
+        $sowing_date = Carbon::createFromFormat('d/m/Y', $request->sowing_date);
+
+        $data_each_action_srp = [
+            "srp_training" => $sowing_date->addDay(-7)->toDateString('d/m/Y'),
+            "srp_pre_plainings" => $sowing_date->addDay(-3)->toDateString('d/m/Y'),
+            "srp_land_preparations" => $sowing_date->addDay(-10)->toDateString('d/m/Y'),
+            "srp_water_managements" => $sowing_date->addDay(0)->toDateString('d/m/Y'),
+            "srp_water_irrigations" => $sowing_date->addDay(-3)->toDateString('d/m/Y'),
+            "srp_water_irrigations_1" => $sowing_date->addDay(3)->toDateString('d/m/Y'),
+            "srp_water_irrigations_2" => $sowing_date->addDay(10)->toDateString('d/m/Y'),
+            "srp_water_irrigations_3" => $sowing_date->addDay(17)->toDateString('d/m/Y'),
+            "srp_water_irrigations_4" => $sowing_date->addDay(25)->toDateString('d/m/Y'),
+            "srp_water_irrigations_5" => $sowing_date->addDay(36)->toDateString('d/m/Y'),
+            "srp_water_irrigations_6" => $sowing_date->addDay(45)->toDateString('d/m/Y'),
+            "srp_water_irrigations_7" => $sowing_date->addDay(55)->toDateString('d/m/Y'),
+            "srp_water_irrigations_8" => $sowing_date->addDay(65)->toDateString('d/m/Y'),
+            "srp_water_irrigations_9" => $sowing_date->addDay(75)->toDateString('d/m/Y'),
+            "srp_nutrient_management" => $sowing_date->addDay(55)->toDateString('d/m/Y'),
+            "srp_fertilizer_applications_1" => $sowing_date->addDay(10)->toDateString('d/m/Y'),
+            "srp_fertilizer_applications_2" => $sowing_date->addDay(25)->toDateString('d/m/Y'),
+            "srp_fertilizer_applications_3" => $sowing_date->addDay(35)->toDateString('d/m/Y'),
+            "srp_fertilizer_applications_4" => $sowing_date->addDay(45)->toDateString('d/m/Y'),
+            "srp_integrated_pest_management" => $sowing_date->addDay(75)->toDateString('d/m/Y'),
+            "srp_pesticide_applications_1" => $sowing_date->addDay(7)->toDateString('d/m/Y'),
+            "srp_pesticide_applications_2" => $sowing_date->addDay(15)->toDateString('d/m/Y'),
+            "srp_pesticide_applications_3" => $sowing_date->addDay(26)->toDateString('d/m/Y'),
+            "srp_pesticide_applications_4" => $sowing_date->addDay(35)->toDateString('d/m/Y'),
+            "srp_pesticide_applications_5" => $sowing_date->addDay(45)->toDateString('d/m/Y'),
+            "srp_pesticide_applications_6" => $sowing_date->addDay(60)->toDateString('d/m/Y'),
+            "srp_pesticide_applications_7" => $sowing_date->addDay(75)->toDateString('d/m/Y'),
+            "srp_harvests_1" => $sowing_date->addDay(95)->toDateString('d/m/Y'),
+            "srp_harvests_2" => $sowing_date->addDay(100)->toDateString('d/m/Y'),
+            "srp_health_and_safetys" => $sowing_date->addDay(100)->toDateString('d/m/Y'),
+            "srp_labour_rights" => $sowing_date->addDay(100)->toDateString('d/m/Y'),
+            "srp_women_empowerments" => $sowing_date->addDay(100)->toDateString('d/m/Y'),
+        ];
         try 
         {
             $final_crops = $crops->create($data_crops);
@@ -118,6 +156,17 @@ class CultivationsController extends Controller
                 ];
                 
                 $final_srps = $srps->create($data_srps);
+                foreach($data_each_action_srp as $key =>$details)
+                {
+                    $srp_schedule = new SRPSchedule();
+                    $data_srp_schedule = 
+                    [
+                        'srp_id'=>$final_srps->id,
+                        'name_action'=>$key,
+                        'date_action'=>$details,
+                    ];
+                    $final_srp_schedule = $srp_schedule->create($data_srp_schedule);
+                }
                 $data_log_activities['status_code'] = 200;
                 $data_log_activities['status_msg'] = 'Crops Created Successfully';
                 $this->create_log((object) $data_log_activities);

@@ -224,19 +224,10 @@ class FarmersController extends Controller
         {
             $password = Hash::make($request->password); 
         }
-        $user_data = User::find($farmer_details->user_id);
-        $user_data->name = $request->full_name ?? $user_data->name;
-        $user_data->username = $request->full_name ?? $user_data->username; 
-        $user_data->email = $email; 
-        $user_data->password =  $password; 
-        $user_data->phone_number = $request->phone_number ?? $user_data->phone_number; 
-        $user_data->email_verified_at = ""; 
-        // dd($password);
-        $user_data->save();
         $farmer_photo = [];
         if (!empty($request->all()['farmer_photo'])) {
             foreach ($request->all()['farmer_photo'] as $photo) {                        
-                $id = (new UploadsController)->upload_photo($photo,$user_data->id);
+                $id = (new UploadsController)->upload_photo($photo,$request->farmer_id);
 
                 if (!empty($id)) {
                     array_push($farmer_photo, $id);
@@ -247,14 +238,13 @@ class FarmersController extends Controller
         if (!empty($request->all()['id_proof_photo'])) {
             
             foreach ($request->all()['id_proof_photo'] as $photo) {                        
-                $id = (new UploadsController)->upload_photo($photo,$user_data->id);
+                $id = (new UploadsController)->upload_photo($photo,$request->farmer_id);
 
                 if (!empty($id)) {
                     array_push($id_proof_photo, $id);
                 }
             }    
-        }
-        dd();        
+        }    
         $data_farmer_details =[
             'staff_id'=>$farmer_details->staff_id,
             'user_id'=>$farmer_details->user_id,

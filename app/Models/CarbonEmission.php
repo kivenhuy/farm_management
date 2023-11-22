@@ -11,6 +11,7 @@ class CarbonEmission extends Model
     protected $fillable = [
         'farmer_id',
         'farmland_id',
+        'season_id',
         'cultivation_id',
         'staff_id',
     ];

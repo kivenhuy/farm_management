@@ -69,6 +69,7 @@ class CarbonEmissionController extends Controller
             'farmer_id'=>$request->farmer_id,
             'farmland_id'=>$request->farmland_id,
             'cultivation_id'=>$request->cultivation_id,
+            'season_id'=>$request->season_id,
             'staff_id'=>Auth::user()->staff->id
         ];
         $final_carbon_emission =  $carbon_emission->create($data_carbon_emission);
