@@ -35,6 +35,18 @@ class Staff extends Model
         return $this->hasMany(FarmerDetails::class,'staff_id','id');
     }
 
+    public function srp_schedule()
+    {
+
+        return $this->hasManyThrough(
+            SRPSchedule::class, 
+            SRP::class,
+            'staff_id', // Foreign key on the environments table...
+            'srp_id', // Foreign key on the deployments table...
+            'id', // Local key on the projects table...
+            'id');
+    }
+
     public function getNameAttribute()
     {
         return $this->first_name .' '. $this->last_name;

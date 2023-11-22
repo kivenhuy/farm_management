@@ -1294,6 +1294,16 @@ class SRPController extends Controller
     }
     
 
+
+    public function getSRPSchedule()
+    {
+        $staff = Auth::user()->staff;
+        $cultivation_data = $staff->srp_schedule;
+        return response()->json(
+            ['data'=> $cultivation_data
+        ]);
+
+    }
     
 
 

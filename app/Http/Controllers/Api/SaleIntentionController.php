@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\LogActivitiesController;
+use App\Models\CarbonEmission;
+use App\Models\Cultivations;
 use Illuminate\Support\Facades\Http;
 use App\Models\SaleIntention;
 use App\Models\User;
@@ -38,7 +40,7 @@ class SaleIntentionController extends Controller
                 $sale_intention = new SaleIntention();
                 $data_sale = [
                     'farmer_id'=>$request->farmer_id,
-                    'farm_land_id'=>$request->farmer_id,
+                    'farm_land_id'=>$request->farm_land_id,
                     'cultivation_id'=>$request->cultivation_id,
                     'season_id'=>$request->season_id,
                     'variety'=>$request->variety,
@@ -80,9 +82,38 @@ class SaleIntentionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(SaleIntention $saleIntention)
+    public function show($id)
     {
-        //
+       $data_sale_intention = SaleIntention::where('product_id',$id)->first();
+       $data_carbon_emission = $data_sale_intention->cultivation->carbon_emission;
+       if(isset($data_carbon_emission))
+       {
+            $data_emission = $data_carbon_emission->emission;
+            $data_product_loss = $data_carbon_emission->product_loss;
+            $data_carbon_stage = $data_carbon_emission->carbon_stage;
+       }
+       else
+       {
+            $data_emission = (object)[];
+            $data_product_loss = (object)[];
+            $data_carbon_stage = (object)[];
+       }
+       return response()->json
+       ([
+        'result' => true,
+        'message' => 'Get data Successfully',
+        'data'=>
+            [
+                'data_sale_intention'=>$data_sale_intention,
+                'data_farmer'=>$data_sale_intention->farmer,
+                'data_farm_land'=>$data_sale_intention->farm_land,
+                'data_cultivation'=>$data_sale_intention->cultivation,
+                'data_season'=>$data_sale_intention->season,
+                'data_emission'=>$data_emission,
+                'data_product_loss'=>$data_product_loss,
+                'data_carbon_stage'=>$data_carbon_stage,
+            ]
+        ]);
     }
 
     /**

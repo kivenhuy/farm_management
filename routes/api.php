@@ -135,10 +135,13 @@ Route::middleware('auth:sanctum')->group(function () {
          Route::get('srp/srp-field_visit',[SRPController::class, 'getFieldVisit'])->name('srp-field_visit.get');
 
         //  Sale Intention
+        Route::get('sale_intention/details/{id}',[SaleIntentionController::class, 'show'])->name('sale_intention.show');
         Route::post('sale_intention/store',[SaleIntentionController::class, 'store'])->name('sale_intention.store');
 
         
          Route::get('srp/get-task-status',[SRPController::class, 'getTaskStatus'])->name('srp-task-status.get');
+         Route::get('srp/get-schedule',[SRPController::class, 'getSRPSchedule'])->name('srp.get-schedule');
+         
     });
     
 
