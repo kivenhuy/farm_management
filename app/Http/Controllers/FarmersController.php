@@ -7,8 +7,10 @@ use App\Models\Commune;
 use App\Models\Country;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\District;
+use App\Models\FamilyInfo;
 use App\Models\FarmerCountable;
 use App\Models\FarmerDetails;
+use App\Models\FarmLand;
 use App\Models\LogActivities;
 use Yajra\DataTables\DataTables;
 use App\Models\Province;
@@ -96,7 +98,7 @@ class FarmersController extends Controller
             if($request->search == "")
             {
                 // $farmer = FarmerDetails::all(['id','farmer_code','full_name','phone_number','gender','staff_id'])->sortDesc();
-                $farmer = FarmerDetails::query();
+                $farmer = FarmerDetails::query()->orderByDesc('id');
             }
             else
             {
@@ -239,10 +241,17 @@ class FarmersController extends Controller
                 // temporary added staff
                 // $staff = Staff::find(35);
 
-                $staff = Staff::where('id', '!=', 1)->has('farmer_details','<', 200)->first();
-                if (empty($staff)) {
-                    $staff = Staff::find(3);
+                if (isset($row[9]) && ($row[9] == 'Hau Tran' || $row[9] == '0394328444')) {
+                    $staff = Staff::where('phone_number', '0394328444')->first();
+                } else if (isset($row[9]) && ($row[9] == 'Ngoan Nguyen' || $row[9] == '09674959444')) {
+                    $staff = Staff::where('phone_number', '09674959444')->first();
+                } else {
+                    $staff = Staff::where('id', '>=', 35)->has('farmer_details', '<', 200)->first();
+                    if (empty($staff)) {
+                        $staff = Staff::find(3);
+                    }
                 }
+
 
                 $fullName = trim($row[0] . ' ' . $row[1]);
 
@@ -250,50 +259,184 @@ class FarmersController extends Controller
                 $phoneNumber = str_replace('nt', '', $phoneNumber);
                 $phoneNumber = preg_replace("/[^0-9]/", '', $phoneNumber);
 
-                // if(empty($phoneNumber)) {
-                //     $phoneNumber = str_replace('+', '0', fake()->unique()->e164PhoneNumber());
-                // }
-                
-                $province = Province::where('province_name', ucwords($row[4]))->first();
-                if (empty($province)) {
-                    $province = Province::where('province_name', 'like', '%'.ucwords($row[4]). '%')->first();
-                }
-
-                $dicstrict = District::where('district_name', ucwords($row[5]))->first();
-                if (empty($province)) {
-                    $dicstrict = District::where('district_name', 'like', '%'.$row[5]. '%')->first();
-                }
-
-                $commune = Commune::where('commune_name', ucwords($row[6]))->first();
-                if (empty($commune)) {
-                    $commune = Commune::where('commune_name', 'like', '%'. ucwords($row[6]) . '%')->first();
-                }
+                $province = Province::where('province_name', $this->formatString($row[4]))->first();
+                $dicstrict = District::where('district_name', $this->formatString($row[5]))->first();
+                $commune = Commune::where('commune_name', $this->formatString($row[6]))->first();
 
                 $village = $row[7];
+                $totalLandHolding = isset($row[8]) ? $row[8] : 0;
 
                 $countable = FarmerCountable::find(1);
-                $farmer_code = 'FA'.date('Y').date('m').date('d').$countable->count_number;
+                $farmer_code = 'FA' . date('Y') . date('m') . date('d') . $countable->count_number;
                 $countable->update(['count_number'=>$countable->count_number +=1]);
 
-                FarmerDetails::create([
+                $farmerDetail = FarmerDetails::create([
                     'user_id' => 3,
                     'staff_id' => $staff->id,
                     'full_name' => $fullName,
                     'phone_number' => $phoneNumber,
                     'country' => 1,
-                    'province' => $province->id ?? 0,
-                    'district' => $dicstrict->id ?? 0,
-                    'commune' => $commune->id ?? 0,
+                    'province' => $province?->id ?? 0,
+                    'district' => $dicstrict?->id ?? 0,
+                    'commune' => $commune?->id ?? 0,
                     'village' => $village,
                     // auto generate field
                     'enrollment_date' => now()->toDateString(),
                     'gender' => 'Male',
                     'farmer_code' => $farmer_code,
                 ]);
+
+                if (!empty($totalLandHolding)) {
+                    FarmLand::create([
+                        'farmer_id' => $farmerDetail->id,
+                        'farm_name' => 'plot1',
+                        'total_land_holding' => $totalLandHolding,
+                        'actual_area' => $totalLandHolding,
+                        'land_ownership' => 'Own'
+                    ]);
+                }
             }
+
             fclose($file);
         }
 
         return back()->with(['success' => 'Import farmer succesfully']);
+    }
+
+    public function importCSV_Farmer_Details(Request $request)
+    {
+        $filePath = $request->csvFile->path(); // csvFile is request name input
+        if ($file = fopen($filePath, "r")) {
+            while(($row = fgetcsv($file, 1000, ",")) !== FALSE) {     
+                if (ucwords($row[0]) == "Managed By") {
+                    continue;
+                }
+
+                $staff = Staff::where('id', '>=', 35)->has('farmer_details', '<', 200)->first();
+                if (empty($staff)) {
+                    $staff = Staff::find(3);
+                }
+
+                $staffName = trim($row[1]);
+                $farmerCode = trim($row[2]);
+                $farmerName = trim($row[3]);
+                $gender =  $row[4];
+                $age = $row[5];
+                $dob = null;
+
+                if ($age) {
+                    $dob = (date('Y') - $age) . '-01-01';
+                }
+
+                $phoneNumber = str_replace('o', '0', $row[6]);
+                $phoneNumber = str_replace('+84', '', $phoneNumber);
+                $phoneNumber = preg_replace("/[^0-9]/", '', $phoneNumber);
+
+                $parentName = $row[7];
+                $village = $row[8];
+                $communeName = $this->formatString($row[9]);
+                $location = $this->formatString($row[10]);
+                $enrollmentDate = $row[11];
+                $totalLandHolding = $row[12];
+
+                // processing
+                $locationInfo = explode(',', $location);
+                $dictrictName = trim($locationInfo[0]);
+                $provinceName = trim($locationInfo[1]);
+                $communeId = 0;
+
+                $province = Province::where('province_name', $provinceName)->first();
+                $district = District::where('district_name', $dictrictName)->first();
+                if ($district) {
+                    $commune = Commune::where('district_id', $district->id)
+                        ->where('commune_name', $communeName)
+                        ->first();
+
+                    $communeId = $commune?->id ?? 0;
+                }
+
+                $farmerDetail = FarmerDetails::create([
+                    'user_id' => 3,
+                    'staff_id' => $staff->id,
+                    'full_name' => $farmerName,
+                    'phone_number' => $phoneNumber,
+                    'country' => 1,
+                    'province' => $province->id ?? 0,
+                    'district' => $district->id ?? 0,
+                    'commune' => $communeId,
+                    'village' => $village,
+                    'enrollment_date' => $enrollmentDate,
+                    'gender' => $gender,
+                    'farmer_code' => $farmerCode,
+                    'dob' => $dob
+                ]);
+
+                $staff->first_name = $staffName;
+                $staff->save();
+
+                if (!empty($parentName)) {
+                    $farmilyInfos = new FamilyInfo();
+                    $farmilyInfos->farmer_id = $farmerDetail->id;
+                    $farmilyInfos->parent_name = $parentName;
+                    $farmilyInfos->save();
+                }
+
+                FarmLand::create([
+                    'farmer_id' => $farmerDetail->id,
+                    'farm_name' => 'plot1',
+                    'total_land_holding' => $totalLandHolding,
+                    'actual_area' => $totalLandHolding,
+                    'land_ownership' => 'Own'
+                ]);
+            }
+
+            fclose($file);
+        }
+
+        return back()->with(['success' => 'Import farmer succesfully']);
+    }
+
+    public function importCSV_Area_Audit(Request $request)
+    {
+        $filePath = $request->csvFile->path(); // csvFile is request name input
+        if ($file = fopen($filePath, "r")) {
+            while(($row = fgetcsv($file, 1000, ",")) !== FALSE) {     
+                if ($row[0] == "FarmerCode") {
+                    continue;
+                }
+
+                $staff = Staff::where('id', '>=', 35)->has('farmer_details', '<', 200)->first();
+                if (empty($staff)) {
+                    $staff = Staff::find(3);
+                }
+
+                $farmerCode = trim($row[0]);
+                $farmerName = trim($row[1]);
+                $plotOwner = trim($row[2]);
+                $plotName = trim($row[3]);
+                $coordinates = trim($row[4]);
+                $latitude = trim($row[5]);
+                $longtitude = trim($row[6]);
+                $isCropAudit = $row[7];
+                $actualArea = trim($row[8]);
+
+            }
+            fclose($file);
+        }
+
+        return back()->with(['success' => 'import area audit succesfully']);
+    }
+
+    public function formatString($str)
+    {
+        $str = ucwords(strtolower($str));
+        $str = str_replace('Province','', $str);
+        $str = str_replace('Thị Xã','', $str);
+        $str = str_replace('TX','', $str);
+        $str = str_replace('Xã ','', $str);
+        $str = str_replace('Tx','', $str);
+        $str = trim($str);
+        
+        return $str;
     }
 }
