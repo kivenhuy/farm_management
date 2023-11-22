@@ -139,7 +139,7 @@
             mapTypeId: 'satellite',
             });
 
-            var locations = {{ Js::from($farmLand) }};
+            var locations = {{ Js::from($farmLands) }};
   
             var infowindow = new google.maps.InfoWindow();
   
