@@ -42,10 +42,20 @@ class SRPController extends Controller
 
         $uploadFile = Uploads::find($id);
         if ($uploadFile) {
-            return asset($uploadFile->file_name);
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    'url' => asset($uploadFile->file_name),
+                ]
+            ]);
         }
 
-        return '';
+        return response()->json([
+            'message' => 'fail',
+            'data' => [
+                'url' => '',
+            ]
+        ]);
     }
 
     public function storeLandPreparation(Request $request)
