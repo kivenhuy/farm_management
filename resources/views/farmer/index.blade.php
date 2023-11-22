@@ -13,7 +13,7 @@
         <div class="card-body">
           @include('shared.form-alerts')
           <div class="row">
-            <div class="col-6">
+            {{-- <div class="col-6">
               <form method="post" action="{{ route('farmer-detail.import_csv') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group row">
@@ -30,7 +30,7 @@
                   </div>
                 </div>
             </form>
-            </div>
+            </div> --}}
 
             {{-- <div class="col-6">
               <form method="post" action="{{ route('area_audit.import_csv') }}" enctype="multipart/form-data">
