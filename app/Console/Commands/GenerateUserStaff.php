@@ -31,34 +31,36 @@ class GenerateUserStaff extends Command
         // already run in server
         return null;
 
-        $faker = \Faker\Factory::create();
-        $firstNameArr = ['huy', 'khang', 'bao', 'phuc', 'anh', 'khoa', 'phat', 'dat', 'khoi'];
-        $lastNameArr = ['nguyen', 'tran', 'phan', 'le', 'bui', 'dang'];
+        $firstNameArr = ['huy', 'khang', 'bao', 'phuc', 'anh', 'khoa', 'phat', 'dat', 'khoi', 'an', 'nam', 'quan', 'hoang', 'hieu', 'tri', 'tai'];
+        $lastNameArr = ['nguyen', 'tran', 'phan', 'le', 'bui', 'dang', 'pham', 'hoang', 'huynh', 'truong', 'ngo'];
         
-        for ($i=1; $i<=31; $i++) {
+        for ($i=1; $i<=20; $i++) {
             $firstNameKey = array_rand($firstNameArr);
-            $lastfirstNameKey = array_rand($lastNameArr);
+            $firstName = $firstNameArr[$firstNameKey ];
+
+            $lastNameKey = array_rand($lastNameArr);
+            $lastName = $lastNameArr[$lastNameKey ];
+            $rand = rand(10,99);
+            
             $phoneNumber = str_replace('+', '0', fake()->unique()->e164PhoneNumber());
 
             // Username
             $user = new User();
-            $user->name = $firstNameArr[$firstNameKey ] . ' ' . $lastNameArr[$lastfirstNameKey];
+            $user->name = $firstName . ' ' . $lastName;
             $user->user_type = 'staff';
-            $user->username = $firstNameArr[$firstNameKey ] . ' ' . $lastNameArr[$lastfirstNameKey] . rand(10,99);
-            $user->email = $firstNameArr[$firstNameKey ] . $lastNameArr[$lastfirstNameKey] . rand(10,99) . '@gmail.com';
+            $user->username = $firstName . $lastName . $rand;
+            $user->email = $firstName . $lastName . $rand . '@gmail.com';
             $user->password = Hash::make('12345678');
             $user->phone_number = $phoneNumber;
             $user->save();
 
             // Staff
-            $firstNameKey = array_rand($firstNameArr);
-            $lastfirstNameKey = array_rand($lastNameArr);
             $staff = new Staff();
             $staff->user_id = $user->id;
-            $staff->first_name = $firstNameArr[$firstNameKey ];
-            $staff->last_name = $lastNameArr[$lastfirstNameKey];
+            $staff->first_name = $firstName;
+            $staff->last_name = $lastName;
             $staff->gender = 'Male';
-            $staff->email = $firstNameArr[$firstNameKey ] . $lastNameArr[$lastfirstNameKey] . rand(10,99) . '@gmail.com';
+            $staff->email = $user->email;
             $staff->phone_number = $phoneNumber;
             $staff->status = 'active';
             $staff->save();
