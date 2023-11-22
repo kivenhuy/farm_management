@@ -32,12 +32,12 @@
             </form>
             </div> --}}
 
-            {{-- <div class="col-6">
-              <form method="post" action="{{ route('area_audit.import_csv') }}" enctype="multipart/form-data">
+            <div class="col-6">
+              <form method="post" action="{{ route('farmer.import_csv') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group row">
                   <div class="col-3 text-info fw-bold">
-                    Import Area Audit
+                    Import Farmer
                   </div>
                   <div class="col-9">
                     <input type="file" name="csvFile" class="form-control">
@@ -49,7 +49,7 @@
                   </div>
                 </div>
               </form>
-            </div> --}}
+            </div>
           </div>
           
         </div>
