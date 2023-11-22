@@ -42,6 +42,11 @@ class Cultivations extends Model
         return $this->hasOne(CarbonEmission::class,'cultivation_id','id')->where('season_id',$this->season_id);
     }
 
+    public function srp()
+    {
+        return $this->hasOne(SRP::class,'cultivation_id','id')->where('season_id',$this->season_id);
+    }
+
     public function getCropPhotoUrlAttribute()
     {
         $photoIds = explode(',', $this->photo);
