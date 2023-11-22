@@ -15,4 +15,9 @@ class SRPSchedule extends Model
         'name_action',
         'date_action',
     ];
+
+    public function srp()
+    {
+        return $this->belongsTo(SRP::class, 'srp_id', 'id');
+    }
 }
