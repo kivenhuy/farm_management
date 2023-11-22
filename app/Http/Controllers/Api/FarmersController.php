@@ -892,7 +892,7 @@ class FarmersController extends Controller
             'city' => 48358,
             'state' => 4056,
             'address' => 'Vietnam, Long An city, Long An',
-            'user_type' => 'seller',
+            'user_type' => 'farmer',
             'lat' => $request->lat,
             'lng' => $request->lng,
             'is_enterprise' => 0,

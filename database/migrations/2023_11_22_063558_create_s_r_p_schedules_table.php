@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('srp_id');
             $table->string('name_action');
-            $table->string('date_action');
+            $table->timestamps('date_action');
+            $table->integer('is_finished')->default(0);
             $table->timestamps();
         });
     }

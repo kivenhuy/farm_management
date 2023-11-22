@@ -16,14 +16,17 @@ use App\Models\SRPLabourRight;
 use App\Models\SRPLandPreparation;
 use App\Models\SRPPesticideApplication;
 use App\Models\SRPPrePlanting;
+use App\Models\SRPSchedule;
 use App\Models\SRPTraining;
 use App\Models\SRPWaterIrrigation;
 use App\Models\SRPWaterManagement;
 use App\Models\SRPWomenEmpowerment;
 use App\Models\Uploads;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SRPController extends Controller
 {
@@ -1295,16 +1298,66 @@ class SRPController extends Controller
     
 
 
-    public function getSRPSchedule()
+    public function getSRPSchedule(Request $request)
     {
-        $staff = Auth::user()->staff;
-        $cultivation_data = $staff->srp_schedule;
+        $status_response = [];
+        $arr_response = [];
+        $startDate = Carbon::createFromFormat('d/m/Y', $request->start_date);
+        $endDate = Carbon::createFromFormat('d/m/Y', $request->end_date);
+        $data = SRPSchedule::whereBetween('date_action', [$startDate,$endDate])->get();
+        
+        foreach($data as $sub_data)
+        {
+            if(array_key_exists($sub_data->date_action, $status_response))
+            {
+                if($sub_data->is_finished == 0)
+                {
+                    $status_response[$sub_data->date_action] = 0;
+                }
+                elseif($sub_data->is_finished == 1 && $status_response[$sub_data->date_action] == 1 )
+                {
+                    continue;
+                }
+                
+            }
+            else
+            {
+               
+                if($sub_data->is_finished == 0)
+                {
+                    
+                    $status_response[$sub_data->date_action] = 0;
+                }
+                elseif($sub_data->is_finished == 1)
+                {
+                    
+                    $status_response[$sub_data->date_action] = 1;
+                }
+            }
+        }
+        foreach($status_response as $key=> $sub_status_response)
+        {
+            $data = [
+                'date'=>$key,
+                'status'=>$sub_status_response,
+            ];
+            array_push($arr_response,$data);
+        }
         return response()->json(
-            ['data'=> $cultivation_data
+            ['data'=> $arr_response
         ]);
-
     }
     
+    public function getSRPSToday(Request $request)
+    {
+        $today = Carbon::createFromFormat('d/m/Y', $request->today);
+        $data = SRPSchedule::whereDate('date_action', '=',$today)->with('srp')->get();
+        return response()->json(
+            [
+                'data'=> $data
+            ]
+        );
+    }
 
 
     
