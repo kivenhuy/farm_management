@@ -19,5 +19,6 @@ class SRPLandPreparation extends Model
         'question',
         'answer',
         'score',
+        'created_at',
     ];
 }

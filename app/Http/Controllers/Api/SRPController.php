@@ -69,7 +69,7 @@ class SRPController extends Controller
             'srp_id' => 'required|exists:srps,id',
             'data_question_answer_group' => 'required|array',
         ]);
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         if ($validator->fails()) {
             return $validator->messages();
         }
@@ -93,11 +93,12 @@ class SRPController extends Controller
                     'collection_code' => $latestCollectionCode,
                     'question'=> $key,
                     'answer'=> $answer,
-                    'score' => $score
+                    'score' => $score,
+                    'created_at'=>$today,
                 ]);
 
             }
-        }$data_schedule_srp = SRPSchedule::where([['name_action','srp_land_preparations'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        }$data_schedule_srp = SRPSchedule::where([['name_action','srp_land_preparation'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
         if($data_schedule_srp)
         {
             try
@@ -172,7 +173,7 @@ class SRPController extends Controller
             'srp_id' => 'required|exists:srps,id',
             'data_question_answer_group' => 'required|array',
         ]);
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         
         if ($validator->fails()) {
             return $validator->messages();
@@ -194,7 +195,8 @@ class SRPController extends Controller
                     'srp_id' => $request->srp_id,
                     'question'=> $key,
                     'answer'=> $answer,
-                    'score' => $score
+                    'score' => $score,
+                    'created_at'=>$today,
                 ]);
 
                 $total_score += $score;
@@ -236,7 +238,7 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $staff = Auth::user()->staff;
         $total_score = 0;
         $idFirstOfWaterManagement = 0;
@@ -251,7 +253,8 @@ class SRPController extends Controller
                     'srp_id' => $request->srp_id,
                     'question'=> $key,
                     'answer'=> $answer,
-                    'score' => $score
+                    'score' => $score,
+                    'created_at'=>$today,
                 ]);
                 $total_score += $score;
             }
@@ -260,7 +263,7 @@ class SRPController extends Controller
         $srp = SRP::find($request->srp_id);
         $srp->score += $total_score;
         $srp->save();
-        $data_schedule_srp = SRPSchedule::where([['name_action','srp_water_managements'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        $data_schedule_srp = SRPSchedule::where([['name_action','srp_water_management'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
         if($data_schedule_srp)
         {
             try
@@ -291,7 +294,7 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         
         $staff = Auth::user()->staff;
         $total_score = 0;
@@ -313,11 +316,12 @@ class SRPController extends Controller
                     'collection_code' => $latestCollectionCode,
                     'question'=> $key,
                     'answer'=> $answer,
-                    'score' => $score
+                    'score' => $score,
+                    'created_at'=>$today,
                 ]);
             }
         }
-        $data_schedule_srp = SRPSchedule::where([['name_action', 'like', '%' .'srp_water_irrigations' . '%'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        $data_schedule_srp = SRPSchedule::where([['name_action', 'like', '%' .'srp_water_irrigation' . '%'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
         if($data_schedule_srp)
         {
             try
@@ -350,7 +354,7 @@ class SRPController extends Controller
         }
         
         $staff = Auth::user()->staff;
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         foreach($request->data_question_answer_group as $groupData) {
             $collectionCode = SRPPesticideApplication::max('collection_code') ?? 0;
             $latestCollectionCode = $collectionCode + 1;
@@ -368,11 +372,12 @@ class SRPController extends Controller
                     'collection_code' => $latestCollectionCode,
                     'question'=> $key,
                     'answer'=> $answer,
-                    'score' => $score
+                    'score' => $score,
+                    'created_at'=>$today,
                 ]);
             }
         }
-        $data_schedule_srp = SRPSchedule::where([['name_action', 'like', '%' .'srp_pesticide_applications' . '%'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        $data_schedule_srp = SRPSchedule::where([['name_action', 'like', '%' .'srp_pesticide_application' . '%'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
         if($data_schedule_srp)
         {
             try
@@ -403,7 +408,7 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $staff = Auth::user()->staff;
         $total_score = 0;
         foreach($request->data_question_answer_group as $groupData) {
@@ -420,7 +425,8 @@ class SRPController extends Controller
                     'srp_id' => $request->srp_id,
                     'question'=> $key,
                     'answer'=> $answer,
-                    'score' => $score
+                    'score' => $score,
+                    'created_at'=>$today,
                 ]);
                 $total_score += $score;
             }
@@ -429,7 +435,7 @@ class SRPController extends Controller
         $srp = SRP::find($request->srp_id);
         $srp->score += $total_score;
         $srp->save();
-        $data_schedule_srp = SRPSchedule::where([['name_action','srp_pre_plainings'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        $data_schedule_srp = SRPSchedule::where([['name_action','srp_pre_planting'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
         if($data_schedule_srp)
         {
             try
@@ -463,7 +469,7 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $staff = Auth::user()->staff;
         $total_score = 0;
         foreach($request->data_question_answer_group as $groupData) {
@@ -479,7 +485,8 @@ class SRPController extends Controller
                     'srp_id' => $request->srp_id,
                     'question'=> $key,
                     'answer'=> $answer,
-                    'score' => $score
+                    'score' => $score,
+                    'created_at'=>$today,
                 ]);
                
                 $total_score += $score;
@@ -524,7 +531,7 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $staff = Auth::user()->staff;
         $total_score = 0;
         foreach($request->data_question_answer_group as $groupData) {
@@ -540,7 +547,8 @@ class SRPController extends Controller
                     'srp_id' => $request->srp_id,
                     'question'=> $key,
                     'answer'=> $answer,
-                    'score' => $score
+                    'score' => $score,
+                    'created_at'=>$today,
                 ]);
             
                 $total_score += $score;
@@ -584,7 +592,7 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $staff = Auth::user()->staff;
         $total_score = 0;
         
@@ -605,11 +613,12 @@ class SRPController extends Controller
                     'collection_code' => $latestCollectionCode,
                     'question'=> $key,
                     'answer'=> $answer,
-                    'score' => $score
+                    'score' => $score,
+                    'created_at'=>$today,
                 ]);
             }
         }
-        $data_schedule_srp = SRPSchedule::where([['name_action', 'like', '%' .'srp_fertilizer_applications' . '%'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        $data_schedule_srp = SRPSchedule::where([['name_action', 'like', '%' .'srp_fertilizer_application' . '%'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
         if($data_schedule_srp)
         {
             try
@@ -889,7 +898,7 @@ class SRPController extends Controller
         }
 
         $staff = Auth::user()->staff;
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $landPreparations = SRPTraining::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
             ->get(['question','answer','score']);
@@ -909,7 +918,7 @@ class SRPController extends Controller
         }
 
         $staff = Auth::user()->staff;
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $landPreparations = SRPPrePlanting::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
             ->get(['question','answer','score']);
@@ -934,7 +943,7 @@ class SRPController extends Controller
 
         $staff = Auth::user()->staff;
 
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $landPreparationBySections = SRPLandPreparation::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
             ->get()
@@ -967,7 +976,7 @@ class SRPController extends Controller
 
         $staff = Auth::user()->staff;
 
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $waterManagement = SRPWaterManagement::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
             ->get(['question','answer','score']);
@@ -987,7 +996,7 @@ class SRPController extends Controller
 
         $staff = Auth::user()->staff;
 
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $waterIrrigationBySections = SRPWaterIrrigation::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
             ->get()
@@ -1021,7 +1030,7 @@ class SRPController extends Controller
 
         $staff = Auth::user()->staff;
 
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $landPreparations = NutrientManagement::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
             ->get(['question','answer','score']);
@@ -1041,7 +1050,7 @@ class SRPController extends Controller
         }
 
         $staff = Auth::user()->staff;
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $fertilizerApplicationBySections = SRPFertilizerApplication::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
             ->get()
@@ -1073,7 +1082,7 @@ class SRPController extends Controller
         }
 
         $staff = Auth::user()->staff;
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $landPreparations = NutrientManagement::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
             ->get(['question','answer','score']);
@@ -1098,7 +1107,7 @@ class SRPController extends Controller
         }
 
         $staff = Auth::user()->staff;
-        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $pesticideApplicationBySections = SRPPesticideApplication::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
             ->get()
