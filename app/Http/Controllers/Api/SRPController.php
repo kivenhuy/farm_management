@@ -69,7 +69,7 @@ class SRPController extends Controller
             'srp_id' => 'required|exists:srps,id',
             'data_question_answer_group' => 'required|array',
         ]);
-
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
         if ($validator->fails()) {
             return $validator->messages();
         }
@@ -97,6 +97,18 @@ class SRPController extends Controller
                 ]);
 
             }
+        }$data_schedule_srp = SRPSchedule::where([['name_action','srp_land_preparations'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        if($data_schedule_srp)
+        {
+            try
+            {
+                $data_schedule_srp->update(['is_finished'=>1]);
+            }
+            catch (\Exception $exception) 
+            {
+
+            }
+           
         }
 
         return response()->json([
@@ -160,7 +172,8 @@ class SRPController extends Controller
             'srp_id' => 'required|exists:srps,id',
             'data_question_answer_group' => 'required|array',
         ]);
-
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        
         if ($validator->fails()) {
             return $validator->messages();
         }
@@ -191,7 +204,7 @@ class SRPController extends Controller
         $srp = SRP::find($request->srp_id);
         $srp->score += $total_score;
         $srp->save();
-        $data_schedule_srp = SRPSchedule::where([['name_action','srp_training'],['srp_id',$request->srp_id]])->whereDate('date_action',Carbon::now())->first();
+        $data_schedule_srp = SRPSchedule::where([['name_action','srp_training'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
         if($data_schedule_srp)
         {
             try
@@ -212,6 +225,7 @@ class SRPController extends Controller
 
     public function storeWaterManagement(Request $request)
     {
+        
         $validator = Validator::make($request->all(), [
             'farmer_id' => 'required|exists:farmer_details,id',
             'cultivation_id' => 'required|exists:cultivations,id',
@@ -222,11 +236,10 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
-        
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
         $staff = Auth::user()->staff;
         $total_score = 0;
         $idFirstOfWaterManagement = 0;
-        
         foreach($request->data_question_answer_group as $groupData) {
             foreach($groupData as $key => $data) {
                 $answer = isset($data['answer']) ? $data['answer'] : "";
@@ -247,7 +260,19 @@ class SRPController extends Controller
         $srp = SRP::find($request->srp_id);
         $srp->score += $total_score;
         $srp->save();
+        $data_schedule_srp = SRPSchedule::where([['name_action','srp_water_managements'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        if($data_schedule_srp)
+        {
+            try
+            {
+                $data_schedule_srp->update(['is_finished'=>1]);
+            }
+            catch (\Exception $exception) 
+            {
 
+            }
+           
+        }
         return response()->json([
             'result' => true,
             'message' => 'SRP Water Management Created Successfully',
@@ -266,6 +291,7 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
         
         $staff = Auth::user()->staff;
         $total_score = 0;
@@ -291,7 +317,19 @@ class SRPController extends Controller
                 ]);
             }
         }
+        $data_schedule_srp = SRPSchedule::where([['name_action', 'like', '%' .'srp_water_irrigations' . '%'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        if($data_schedule_srp)
+        {
+            try
+            {
+                $data_schedule_srp->update(['is_finished'=>1]);
+            }
+            catch (\Exception $exception) 
+            {
 
+            }
+           
+        }
         return response()->json([
             'result' => true,
             'message' => 'SRP Water Irrigation Created Successfully',
@@ -312,7 +350,7 @@ class SRPController extends Controller
         }
         
         $staff = Auth::user()->staff;
-        
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
         foreach($request->data_question_answer_group as $groupData) {
             $collectionCode = SRPPesticideApplication::max('collection_code') ?? 0;
             $latestCollectionCode = $collectionCode + 1;
@@ -334,7 +372,19 @@ class SRPController extends Controller
                 ]);
             }
         }
+        $data_schedule_srp = SRPSchedule::where([['name_action', 'like', '%' .'srp_pesticide_applications' . '%'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        if($data_schedule_srp)
+        {
+            try
+            {
+                $data_schedule_srp->update(['is_finished'=>1]);
+            }
+            catch (\Exception $exception) 
+            {
 
+            }
+           
+        }
         return response()->json([
             'result' => true,
             'message' => 'SRP Pesticide Application Created Successfully',
@@ -353,7 +403,7 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
-        
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
         $staff = Auth::user()->staff;
         $total_score = 0;
         foreach($request->data_question_answer_group as $groupData) {
@@ -379,7 +429,7 @@ class SRPController extends Controller
         $srp = SRP::find($request->srp_id);
         $srp->score += $total_score;
         $srp->save();
-        $data_schedule_srp = SRPSchedule::where([['name_action','srp_pre_plainings'],['srp_id',$request->srp_id]])->whereDate('date_action',Carbon::now())->first();
+        $data_schedule_srp = SRPSchedule::where([['name_action','srp_pre_plainings'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
         if($data_schedule_srp)
         {
             try
@@ -413,7 +463,7 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
-        
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
         $staff = Auth::user()->staff;
         $total_score = 0;
         foreach($request->data_question_answer_group as $groupData) {
@@ -439,7 +489,19 @@ class SRPController extends Controller
         $srp = SRP::find($request->srp_id);
         $srp->score += $total_score;
         $srp->save();
+        $data_schedule_srp = SRPSchedule::where([['name_action','srp_nutrient_management'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        if($data_schedule_srp)
+        {
+            try
+            {
+                $data_schedule_srp->update(['is_finished'=>1]);
+            }
+            catch (\Exception $exception) 
+            {
 
+            }
+           
+        }
         return response()->json([
             'result' => true,
             'message' => 'SRP Nutrient Management Created Successfully',
@@ -449,6 +511,7 @@ class SRPController extends Controller
     // Integrated Pest Management 
     public function storeIntegratedPestManagement(Request $request)
     {
+        
         // dd($request);
         $validator = Validator::make($request->all(), [
             'farmer_id' => 'required|exists:farmer_details,id',
@@ -461,7 +524,7 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
-        
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
         $staff = Auth::user()->staff;
         $total_score = 0;
         foreach($request->data_question_answer_group as $groupData) {
@@ -487,7 +550,19 @@ class SRPController extends Controller
         $srp = SRP::find($request->srp_id);
         $srp->score += $total_score;
         $srp->save();
+        $data_schedule_srp = SRPSchedule::where([['name_action','srp_integrated_pest_management'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        if($data_schedule_srp)
+        {
+            try
+            {
+                $data_schedule_srp->update(['is_finished'=>1]);
+            }
+            catch (\Exception $exception) 
+            {
 
+            }
+           
+        }
         return response()->json([
             'result' => true,
             'message' => 'SRP Integrated Pest Management Created Successfully',
@@ -509,7 +584,7 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
-        
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
         $staff = Auth::user()->staff;
         $total_score = 0;
         
@@ -534,7 +609,19 @@ class SRPController extends Controller
                 ]);
             }
         }
+        $data_schedule_srp = SRPSchedule::where([['name_action', 'like', '%' .'srp_fertilizer_applications' . '%'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        if($data_schedule_srp)
+        {
+            try
+            {
+                $data_schedule_srp->update(['is_finished'=>1]);
+            }
+            catch (\Exception $exception) 
+            {
 
+            }
+           
+        }
         return response()->json([
             'result' => true,
             'message' => 'SRP Fertilizer Application Created Successfully',
@@ -791,11 +878,9 @@ class SRPController extends Controller
 
 
     // Get Training
-    public function getFarmManagement(Request $request)
+    public function getTraining(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
             'srp_id' => 'required|exists:srps,id',
         ]);
 
@@ -804,12 +889,10 @@ class SRPController extends Controller
         }
 
         $staff = Auth::user()->staff;
-
-        $landPreparations = SRPFarmManagement::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
-            ->get();
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $landPreparations = SRPTraining::where('srp_id', $request->srp_id)
+            ->whereDate('created_at', $today)
+            ->get(['question','answer','score']);
 
         return response()->json(['data' => $landPreparations]);
     }
@@ -818,8 +901,6 @@ class SRPController extends Controller
     public function getPrePlanting(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
             'srp_id' => 'required|exists:srps,id',
         ]);
 
@@ -828,14 +909,10 @@ class SRPController extends Controller
         }
 
         $staff = Auth::user()->staff;
-
-        $landPreparations = SRPPrePlanting::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $landPreparations = SRPPrePlanting::where('srp_id', $request->srp_id)
+            ->whereDate('created_at', $today)
             ->get(['question','answer','score']);
-            // ->groupBy('collection_code');
-
         $dataGroup = [];
         foreach($landPreparations as $landPreparation) {
             $dataGroup[] = $landPreparation;
@@ -848,8 +925,6 @@ class SRPController extends Controller
     public function getLandPreparation(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
             'srp_id' => 'required|exists:srps,id',
         ]);
 
@@ -859,10 +934,9 @@ class SRPController extends Controller
 
         $staff = Auth::user()->staff;
 
-        $landPreparationBySections = SRPLandPreparation::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $landPreparationBySections = SRPLandPreparation::where('srp_id', $request->srp_id)
+            ->whereDate('created_at', $today)
             ->get()
             ->groupBy('section');
 
@@ -884,8 +958,6 @@ class SRPController extends Controller
     public function getWaterManagement(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
             'srp_id' => 'required|exists:srps,id',
         ]);
 
@@ -895,11 +967,10 @@ class SRPController extends Controller
 
         $staff = Auth::user()->staff;
 
-        $waterManagement = SRPWaterManagement::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
-            ->get();
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $waterManagement = SRPWaterManagement::where('srp_id', $request->srp_id)
+            ->whereDate('created_at', $today)
+            ->get(['question','answer','score']);
 
         return response()->json(['data'=> $waterManagement]);
     }
@@ -907,8 +978,6 @@ class SRPController extends Controller
     public function getWaterIrrigation(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
             'srp_id' => 'required|exists:srps,id',
         ]);
 
@@ -918,10 +987,9 @@ class SRPController extends Controller
 
         $staff = Auth::user()->staff;
 
-        $waterIrrigationBySections = SRPWaterIrrigation::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $waterIrrigationBySections = SRPWaterIrrigation::where('srp_id', $request->srp_id)
+            ->whereDate('created_at', $today)
             ->get()
             ->groupBy('section');
 
@@ -944,8 +1012,6 @@ class SRPController extends Controller
     public function getNutrientManagement(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
             'srp_id' => 'required|exists:srps,id',
         ]);
 
@@ -955,10 +1021,9 @@ class SRPController extends Controller
 
         $staff = Auth::user()->staff;
 
-        $landPreparations = NutrientManagement::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $landPreparations = NutrientManagement::where('srp_id', $request->srp_id)
+            ->whereDate('created_at', $today)
             ->get(['question','answer','score']);
             // ->groupBy('collection_code');
 
@@ -968,8 +1033,6 @@ class SRPController extends Controller
     public function getFertilizerApplication(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
             'srp_id' => 'required|exists:srps,id',
         ]);
 
@@ -978,11 +1041,9 @@ class SRPController extends Controller
         }
 
         $staff = Auth::user()->staff;
-
-        $fertilizerApplicationBySections = SRPFertilizerApplication::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $fertilizerApplicationBySections = SRPFertilizerApplication::where('srp_id', $request->srp_id)
+            ->whereDate('created_at', $today)
             ->get()
             ->groupBy('section');
 
@@ -1004,8 +1065,6 @@ class SRPController extends Controller
     public function getIntegratedPestManagement(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
             'srp_id' => 'required|exists:srps,id',
         ]);
 
@@ -1014,11 +1073,9 @@ class SRPController extends Controller
         }
 
         $staff = Auth::user()->staff;
-
-        $landPreparations = NutrientManagement::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $landPreparations = NutrientManagement::where('srp_id', $request->srp_id)
+            ->whereDate('created_at', $today)
             ->get(['question','answer','score']);
             // ->groupBy('collection_code');
 
@@ -1033,8 +1090,6 @@ class SRPController extends Controller
     public function getPesticideApplication(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'farmer_id' => 'required|exists:farmer_details,id',
-            'cultivation_id' => 'required|exists:cultivations,id',
             'srp_id' => 'required|exists:srps,id',
         ]);
 
@@ -1043,11 +1098,9 @@ class SRPController extends Controller
         }
 
         $staff = Auth::user()->staff;
-
-        $pesticideApplicationBySections = SRPPesticideApplication::where('farmer_id', $request->farmer_id)
-            ->where('cultivation_id', $request->cultivation_id)
-            ->where('srp_id', $request->srp_id)
-            ->where('staff_id', $staff->id)
+        $today = Carbon::createFromFormat('d/m/Y', $request->current_date);
+        $pesticideApplicationBySections = SRPPesticideApplication::where('srp_id', $request->srp_id)
+            ->whereDate('created_at', $today)
             ->get()
             ->groupBy('section');
 
