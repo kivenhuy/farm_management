@@ -4,17 +4,17 @@
     <!-- Main content -->
     <div class="container-fluid">
 
-      {{-- <div class="card mb-3">
+      <div class="card mb-3">
         <div class="card-header row gutters-5">
           <div class="col">
-              <h5 class="mb-md-0 h6">Import Farmer Details</h5>
+              <h5 class="mb-md-0 h6">Import Farmland</h5>
           </div>
         </div>
         <div class="card-body">
           @include('shared.form-alerts')
           <div class="row">
             <div class="col-6">
-              <form method="post" action="{{ route('farmer.import_csv') }}" enctype="multipart/form-data">
+              <form method="post" action="{{ route('area_audit.import_csv') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group row">
                   <div class="col-3 text-info fw-bold">
@@ -34,7 +34,7 @@
           </div>
           
         </div>
-      </div> --}}
+      </div>
 
       <div class="row">
         <div class="col-12">
