@@ -15,6 +15,8 @@ class SRPHarvest extends Model
         'staff_id',
         'srp_id',
         'section',
+        'title',
+        'type',
         'collection_code',
         'question',
         'answer',

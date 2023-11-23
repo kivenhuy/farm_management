@@ -17,6 +17,8 @@ class SRPWaterIrrigation extends Model
         'section',
         'collection_code',
         'question',
+        'title',
+        'type',
         'answer',
         'score',
         'created_at',

@@ -14,6 +14,8 @@ class SRPFieldVisit extends Model
         'cultivation_id',
         'staff_id',
         'srp_id',
+        'title',
+        'type',
         'question',
         'answer',
         'score',

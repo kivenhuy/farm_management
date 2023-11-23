@@ -15,6 +15,8 @@ class SRPWomenEmpowerment extends Model
         'staff_id',
         'srp_id',
         'question',
+        'title',
+        'type',
         'answer',
         'score',
         'created_at',
