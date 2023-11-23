@@ -44,4 +44,9 @@ class SRP extends Model
         $cultivation_data = SeasonMaster::find($this->season_id)->season_name;
         return $cultivation_data;
     }
+
+    public function srp_schedule()
+    {
+        return $this->hasMany(SRPSchedule::class,'srp_id','id');
+    }
 }

@@ -14,6 +14,7 @@ class SRPSchedule extends Model
         'srp_id',
         'name_action',
         'date_action',
+        'is_finished',
     ];
 
     public function srp()

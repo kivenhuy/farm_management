@@ -168,6 +168,7 @@ class SRPController extends Controller
         $staff = Auth::user()->staff;
         $total_score = 0;
         
+       
         foreach($request->data_question_answer_group as $groupData) {
             foreach($groupData as $key => $data) {
                 $answer = isset($data['answer']) ? $data['answer'] : "";
@@ -190,7 +191,19 @@ class SRPController extends Controller
         $srp = SRP::find($request->srp_id);
         $srp->score += $total_score;
         $srp->save();
+        $data_schedule_srp = SRPSchedule::where([['name_action','srp_training'],['srp_id',$request->srp_id]])->whereDate('date_action',Carbon::now())->first();
+        if($data_schedule_srp)
+        {
+            try
+            {
+                $data_schedule_srp->update(['is_finished'=>1]);
+            }
+            catch (\Exception $exception) 
+            {
 
+            }
+           
+        }
         return response()->json([
             'result' => true,
             'message' => 'SRP Training Created Successfully',
@@ -366,7 +379,19 @@ class SRPController extends Controller
         $srp = SRP::find($request->srp_id);
         $srp->score += $total_score;
         $srp->save();
+        $data_schedule_srp = SRPSchedule::where([['name_action','srp_pre_plainings'],['srp_id',$request->srp_id]])->whereDate('date_action',Carbon::now())->first();
+        if($data_schedule_srp)
+        {
+            try
+            {
+                $data_schedule_srp->update(['is_finished'=>1]);
+            }
+            catch (\Exception $exception) 
+            {
 
+            }
+           
+        }
         return response()->json([
             'result' => true,
             'message' => 'SRP Pre-planting Created Successfully',
@@ -1365,6 +1390,17 @@ class SRPController extends Controller
         return response()->json(
             [
                 'data'=> $data
+            ]
+        );
+    }
+
+    public function getSRPSByFarmer(Request $request)
+    {
+        $data_schedule = SRP::where([['farmer_id',$request->farmer_id],['cultivation_id',$request->cultivation_id],['season_id',$request->season_id]])->first();
+        
+        return response()->json(
+            [
+                'data'=> $data_schedule->srp_schedule,
             ]
         );
     }

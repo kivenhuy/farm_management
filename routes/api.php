@@ -142,6 +142,7 @@ Route::middleware('auth:sanctum')->group(function () {
          Route::get('srp/get-task-status',[SRPController::class, 'getTaskStatus'])->name('srp-task-status.get');
          Route::get('srp/get-schedule',[SRPController::class, 'getSRPSchedule'])->name('srp.get-schedule');
          Route::get('srp/get-today',[SRPController::class, 'getSRPSToday'])->name('srp.get-today');
+         Route::get('srp/by-farmer',[SRPController::class, 'getSRPSByFarmer'])->name('srp.by-farmer');
          
     });
     
