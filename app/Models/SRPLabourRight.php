@@ -16,6 +16,8 @@ class SRPLabourRight extends Model
         'srp_id',
         'section',
         'collection_code',
+        'title',
+        'type',
         'question',
         'answer',
         'score',

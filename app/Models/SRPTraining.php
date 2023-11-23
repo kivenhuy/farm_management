@@ -17,6 +17,8 @@ class SRPTraining extends Model
         'title',
         'type',
         'question',
+        'title',
+        'type',
         'answer',
         'score',
         'created_at',

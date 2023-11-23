@@ -83,7 +83,8 @@ class SRPController extends Controller
             foreach($groupData as $key => $data) {
                 $answer = isset($data['answer']) ? $data['answer'] : "";
                 $score = isset($data['score']) ? $data['score'] : 0;
-
+                $type = isset($data['type']) ? $data['type'] : "";
+                $title = isset($data['title']) ? $data['title'] : "";
                 SRPLandPreparation::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
@@ -92,6 +93,8 @@ class SRPController extends Controller
                     'section' => $data['section'],
                     'collection_code' => $latestCollectionCode,
                     'question'=> $key,
+                    'title'=> $title,
+                    'type' => $type,
                     'answer'=> $answer,
                     'score' => $score,
                     'created_at'=>$today,
@@ -250,12 +253,16 @@ class SRPController extends Controller
             foreach($groupData as $key => $data) {
                 $answer = isset($data['answer']) ? $data['answer'] : "";
                 $score = isset($data['score']) ? $data['score'] : 0;
+                $type = isset($data['type']) ? $data['type'] : "";
+                $title = isset($data['title']) ? $data['title'] : "";
                 $srpWaterManagement = SRPWaterManagement::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
                     'staff_id'=> $staff->id,
                     'srp_id' => $request->srp_id,
                     'question'=> $key,
+                    'title'=> $title,
+                    'type' => $type,
                     'answer'=> $answer,
                     'score' => $score,
                     'created_at'=>$today,
@@ -310,7 +317,8 @@ class SRPController extends Controller
             foreach($groupData as $key => $data) {
                 $answer = isset($data['answer']) ? $data['answer'] : "";
                 $score = isset($data['score']) ? $data['score'] : 0;
-
+                $type = isset($data['type']) ? $data['type'] : "";
+                $title = isset($data['title']) ? $data['title'] : "";
                 SRPWaterIrrigation::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
@@ -319,6 +327,8 @@ class SRPController extends Controller
                     'section' => $data['section'],
                     'collection_code' => $latestCollectionCode,
                     'question'=> $key,
+                    'title'=> $title,
+                    'type' => $type,
                     'answer'=> $answer,
                     'score' => $score,
                     'created_at'=>$today,
@@ -366,7 +376,8 @@ class SRPController extends Controller
             foreach($groupData as $key => $data) {
                 $answer = isset($data['answer']) ? $data['answer'] : "";
                 $score = isset($data['score']) ? $data['score'] : 0;
-
+                $type = isset($data['type']) ? $data['type'] : "";
+                $title = isset($data['title']) ? $data['title'] : "";
                 SRPPesticideApplication::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
@@ -375,6 +386,8 @@ class SRPController extends Controller
                     'section' => $data['section'],
                     'collection_code' => $latestCollectionCode,
                     'question'=> $key,
+                    'title'=> $title,
+                    'type' => $type,
                     'answer'=> $answer,
                     'score' => $score,
                     'created_at'=>$today,
@@ -421,13 +434,16 @@ class SRPController extends Controller
             // foreach($groupData as $key => $data) {
                 $answer = isset($data['answer']) ? $data['answer'] : "";
                 $score = isset($data['score']) ? $data['score'] : 0;
-
+                $type = isset($data['type']) ? $data['type'] : "";
+                $title = isset($data['title']) ? $data['title'] : "";
                 SRPPrePlanting::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
                     'staff_id'=> $staff->id,
                     'srp_id' => $request->srp_id,
                     'question'=> $key,
+                    'title'=> $title,
+                    'type' => $type,
                     'answer'=> $answer,
                     'score' => $score,
                     'created_at'=>$today,
@@ -481,7 +497,8 @@ class SRPController extends Controller
             foreach($groupData as $key => $data) {
                 $answer = isset($data['answer']) ? $data['answer'] : "";
                 $score = isset($data['score']) ? $data['score'] : 0;
-
+                $type = isset($data['type']) ? $data['type'] : "";
+                $title = isset($data['title']) ? $data['title'] : "";
                 NutrientManagement::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
@@ -490,6 +507,8 @@ class SRPController extends Controller
                     'question'=> $key,
                     'answer'=> $answer,
                     'score' => $score,
+                    'title'=> $title,
+                    'type' => $type,
                     'created_at'=>$today,
                 ]);
                
@@ -543,7 +562,8 @@ class SRPController extends Controller
             foreach($groupData as $key => $data) {
                 $answer = isset($data['answer']) ? $data['answer'] : "";
                 $score = isset($data['score']) ? $data['score'] : 0;
-
+                $type = isset($data['type']) ? $data['type'] : "";
+                $title = isset($data['title']) ? $data['title'] : "";
                 SRPIntegratedPestManagement::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
@@ -551,6 +571,8 @@ class SRPController extends Controller
                     'srp_id' => $request->srp_id,
                     'question'=> $key,
                     'answer'=> $answer,
+                    'title'=> $title,
+                    'type' => $type,
                     'score' => $score,
                     'created_at'=>$today,
                 ]);
@@ -607,7 +629,8 @@ class SRPController extends Controller
             foreach($groupData as $key => $data) {
                 $answer = isset($data['answer']) ? $data['answer'] : "";
                 $score = isset($data['score']) ? $data['score'] : 0;
-
+                $type = isset($data['type']) ? $data['type'] : "";
+                $title = isset($data['title']) ? $data['title'] : "";
                 SRPFertilizerApplication::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
@@ -618,6 +641,8 @@ class SRPController extends Controller
                     'question'=> $key,
                     'answer'=> $answer,
                     'score' => $score,
+                    'title'=> $title,
+                    'type' => $type,
                     'created_at'=>$today,
                 ]);
             }
@@ -925,7 +950,7 @@ class SRPController extends Controller
         $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $landPreparations = SRPPrePlanting::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
-            ->get(['question','answer','score']);
+            ->get(['question','answer','score','title','type']);
         $dataGroup = [];
         foreach($landPreparations as $landPreparation) {
             $dataGroup[] = $landPreparation;
@@ -983,7 +1008,7 @@ class SRPController extends Controller
         $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $waterManagement = SRPWaterManagement::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
-            ->get(['question','answer','score']);
+            ->get(['question','answer','score','title','type']);
 
         return response()->json(['data'=> $waterManagement]);
     }
@@ -1037,7 +1062,7 @@ class SRPController extends Controller
         $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $landPreparations = NutrientManagement::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
-            ->get(['question','answer','score']);
+            ->get(['question','answer','score','title','type']);
             // ->groupBy('collection_code');
 
         return response()->json(['data'=> $landPreparations]);
@@ -1089,7 +1114,7 @@ class SRPController extends Controller
         $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $landPreparations = NutrientManagement::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
-            ->get(['question','answer','score']);
+            ->get(['question','answer','score','title','type']);
             // ->groupBy('collection_code');
 
         $dataGroup = [];
