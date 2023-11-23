@@ -187,6 +187,8 @@ class SRPController extends Controller
             foreach($groupData as $key => $data) {
                 $answer = isset($data['answer']) ? $data['answer'] : "";
                 $score = isset($data['score']) ? $data['score'] : 0;
+                $type = isset($data['type']) ? $data['type'] : "";
+                $title = isset($data['title']) ? $data['title'] : "";
 
                 SRPTraining::create([
                     'farmer_id' => $request->farmer_id,
@@ -194,6 +196,8 @@ class SRPController extends Controller
                     'staff_id'=> $staff->id,
                     'srp_id' => $request->srp_id,
                     'question'=> $key,
+                    'title'=> $title,
+                    'type' => $type,
                     'answer'=> $answer,
                     'score' => $score,
                     'created_at'=>$today,

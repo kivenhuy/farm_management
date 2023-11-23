@@ -94,9 +94,9 @@ class SaleIntentionController extends Controller
        }
        else
        {
-            $data_emission = (object)[];
-            $data_product_loss = (object)[];
-            $data_carbon_stage = (object)[];
+            $data_emission = null;
+            $data_product_loss = null;
+            $data_carbon_stage = null;
        }
        return response()->json
        ([
