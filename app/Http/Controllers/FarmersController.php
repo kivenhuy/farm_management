@@ -437,7 +437,7 @@ class FarmersController extends Controller
                             FarmLandLatLng::create([
                                 'farmer_id' => $farmerDetail->id,
                                 'farm_land_id' => $farmLand->id,
-                                'order' => $key,
+                                'order' => $key + 1,
                                 'lat' => $coordinateItem[0],
                                 'lng' => $coordinateItem[1],
                             ]);
