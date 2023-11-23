@@ -34,7 +34,7 @@ class SRP extends Model
     {
         $cultivation_data = Cultivations::find($this->cultivation_id);
         return $data= [
-            'crop_varierty'=>$cultivation_data->crop_variety,
+            'crop_variety'=>$cultivation_data->crop_variety,
             'sowing_date'=>$cultivation_data->sowing_date
         ];
     }
