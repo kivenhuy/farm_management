@@ -11,6 +11,7 @@ use App\Models\FamilyInfo;
 use App\Models\FarmerCountable;
 use App\Models\FarmerDetails;
 use App\Models\FarmLand;
+use App\Models\FarmLandLatLng;
 use App\Models\LogActivities;
 use Yajra\DataTables\DataTables;
 use App\Models\Province;
@@ -233,7 +234,7 @@ class FarmersController extends Controller
 
         $filePath = $request->csvFile->path(); // csvFile is request name input
         if ($file = fopen($filePath, "r")) {
-            while(($row = fgetcsv($file, 1000, ",")) !== FALSE) {     
+            while(($row = fgetcsv($file, null, ",")) !== FALSE) {     
                 if (ucwords($row[0]) == "First Name") {
                     continue;
                 }
@@ -307,7 +308,7 @@ class FarmersController extends Controller
     {
         $filePath = $request->csvFile->path(); // csvFile is request name input
         if ($file = fopen($filePath, "r")) {
-            while(($row = fgetcsv($file, 1000, ",")) !== FALSE) {     
+            while(($row = fgetcsv($file, null, ",")) !== FALSE) {     
                 if (ucwords($row[0]) == "Managed By") {
                     continue;
                 }
@@ -398,27 +399,51 @@ class FarmersController extends Controller
 
     public function importCSV_Area_Audit(Request $request)
     {
+        set_time_limit('3600');
         $filePath = $request->csvFile->path(); // csvFile is request name input
         if ($file = fopen($filePath, "r")) {
-            while(($row = fgetcsv($file, 1000, ",")) !== FALSE) {     
+            while(($row = fgetcsv($file, null, ",")) !== FALSE) {     
                 if ($row[0] == "FarmerCode") {
                     continue;
-                }
-
-                $staff = Staff::where('id', '>=', 35)->has('farmer_details', '<', 200)->first();
-                if (empty($staff)) {
-                    $staff = Staff::find(3);
                 }
 
                 $farmerCode = trim($row[0]);
                 $farmerName = trim($row[1]);
                 $plotOwner = trim($row[2]);
                 $plotName = trim($row[3]);
-                $coordinates = trim($row[4]);
-                $latitude = trim($row[5]);
-                $longtitude = trim($row[6]);
-                $isCropAudit = $row[7];
-                $actualArea = trim($row[8]);
+                $coordinates = $this->formatString($row[4]);
+                $latitude = $this->formatString($row[5]);
+                $longtitude = $this->formatString($row[6]);
+                $isCropAudit = trim($row[7]);
+                $totalLandHolding = trim($row[8]);
+
+                $farmerDetail = FarmerDetails::where('farmer_code', $farmerCode)->first();
+                
+                if ($farmerDetail && $totalLandHolding) {
+                    $farmLand = FarmLand::create([
+                        'farmer_id' => $farmerDetail->id,
+                        'farm_name' => $plotName,
+                        'total_land_holding' => $totalLandHolding,
+                        'actual_area' => $totalLandHolding,
+                        'land_ownership' => 'Own',
+                        'lat' =>  $latitude,
+                        'lng' =>  $longtitude,
+                    ]);
+
+                    $coordinateInfos = explode(',', $coordinates);
+                    foreach ($coordinateInfos as  $key => $coordinateInfo) {
+                        $coordinateItem = explode(' ', $coordinateInfo);
+                        if (isset($coordinateItem[0]) && isset($coordinateItem[1])) {
+                            FarmLandLatLng::create([
+                                'farmer_id' => $farmerDetail->id,
+                                'farm_land_id' => $farmLand->id,
+                                'order' => $key + 1,
+                                'lat' => $coordinateItem[0],
+                                'lng' => $coordinateItem[1],
+                            ]);
+                        }
+                    }
+                }
 
             }
             fclose($file);
@@ -435,6 +460,7 @@ class FarmersController extends Controller
         $str = str_replace('TX','', $str);
         $str = str_replace('Xã ','', $str);
         $str = str_replace('Tx','', $str);
+        $str = preg_replace('/NULL/i', '', $str);
         $str = trim($str);
         
         return $str;
