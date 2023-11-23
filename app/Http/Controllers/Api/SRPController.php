@@ -905,7 +905,7 @@ class SRPController extends Controller
         $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $landPreparations = SRPTraining::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
-            ->get(['question','answer','score']);
+            ->get(['question','answer','score','title','type']);
 
         return response()->json(['data' => $landPreparations]);
     }
