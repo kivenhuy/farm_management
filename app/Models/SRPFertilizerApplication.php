@@ -19,5 +19,6 @@ class SRPFertilizerApplication extends Model
         'question',
         'answer',
         'score',
+        'created_at',
     ];
 }

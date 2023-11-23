@@ -17,5 +17,6 @@ class SRPTraining extends Model
         'question',
         'answer',
         'score',
+        'created_at',
     ];
 }

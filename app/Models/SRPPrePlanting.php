@@ -17,5 +17,6 @@ class SRPPrePlanting extends Model
         'question',
         'answer',
         'score',
+        'created_at',
     ];
 }

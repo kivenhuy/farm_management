@@ -19,5 +19,6 @@ class SRPWaterIrrigation extends Model
         'question',
         'answer',
         'score',
+        'created_at',
     ];
 }

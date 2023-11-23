@@ -18,5 +18,6 @@ class SRPWaterManagement extends Model
         'question',
         'answer',
         'score',
+        'created_at',
     ];
 }

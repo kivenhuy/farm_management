@@ -17,5 +17,6 @@ class SRPHealthAndSafety extends Model
         'question',
         'answer',
         'score',
+        'created_at',
     ];
 }

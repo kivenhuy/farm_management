@@ -17,5 +17,6 @@ class NutrientManagement extends Model
         'question',
         'answer',
         'score',
+        'created_at',
     ];
 }
