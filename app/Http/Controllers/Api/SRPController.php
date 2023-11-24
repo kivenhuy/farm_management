@@ -75,7 +75,7 @@ class SRPController extends Controller
         }
         
         $staff = Auth::user()->staff;
-        
+        $total_cost = 0;
         foreach($request->data_question_answer_group as $groupData) {
             $collectionCode = SRPLandPreparation::max('collection_code') ?? 0;
             $latestCollectionCode = $collectionCode + 1;
@@ -85,6 +85,11 @@ class SRPController extends Controller
                 $score = isset($data['score']) ? $data['score'] : 0;
                 $type = isset($data['type']) ? $data['type'] : "";
                 $title = isset($data['title']) ? $data['title'] : "";
+
+                if(str_contains($key, 'total_cost'))
+                {
+                    $total_cost += (int)$answer;
+                }
                 SRPLandPreparation::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
@@ -101,7 +106,22 @@ class SRPController extends Controller
                 ]);
 
             }
-        }$data_schedule_srp = SRPSchedule::where([['name_action','srp_land_preparation'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
+        }
+        SRPLandPreparation::create([
+            'farmer_id' => $request->farmer_id,
+            'cultivation_id' => $request->cultivation_id,
+            'staff_id'=> $staff->id,
+            'srp_id' => $request->srp_id,
+            'section' => "",
+            'collection_code' =>0,
+            'question'=> "total_cost_of_day",
+            'title'=> "",
+            'type' => "",
+            'answer'=> $total_cost,
+            'score' => 0,
+            'created_at'=>$today,
+        ]);
+        $data_schedule_srp = SRPSchedule::where([['name_action','srp_land_preparation'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
         if($data_schedule_srp)
         {
             try
@@ -308,7 +328,7 @@ class SRPController extends Controller
         $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         
         $staff = Auth::user()->staff;
-        $total_score = 0;
+        $total_cost = 0;
         
         foreach($request->data_question_answer_group as $groupData) {
             $collectionCode = SRPWaterIrrigation::max('collection_code') ?? 0;
@@ -319,6 +339,10 @@ class SRPController extends Controller
                 $score = isset($data['score']) ? $data['score'] : 0;
                 $type = isset($data['type']) ? $data['type'] : "";
                 $title = isset($data['title']) ? $data['title'] : "";
+                if(str_contains($key, 'total_cost'))
+                {
+                    $total_cost += (int)$answer;
+                }
                 SRPWaterIrrigation::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
@@ -335,6 +359,20 @@ class SRPController extends Controller
                 ]);
             }
         }
+        SRPWaterIrrigation::create([
+            'farmer_id' => $request->farmer_id,
+            'cultivation_id' => $request->cultivation_id,
+            'staff_id'=> $staff->id,
+            'srp_id' => $request->srp_id,
+            'section' => "",
+            'collection_code' =>0,
+            'question'=> "total_cost_of_day",
+            'title'=> "",
+            'type' => "",
+            'answer'=> $total_cost,
+            'score' => 0,
+            'created_at'=>$today,
+        ]);
         $data_schedule_srp = SRPSchedule::where([['name_action', 'like', '%' .'srp_water_irrigation' . '%'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
         if($data_schedule_srp)
         {
@@ -366,7 +404,7 @@ class SRPController extends Controller
         if ($validator->fails()) {
             return $validator->messages();
         }
-        
+        $total_cost = 0;
         $staff = Auth::user()->staff;
         $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         foreach($request->data_question_answer_group as $groupData) {
@@ -378,6 +416,10 @@ class SRPController extends Controller
                 $score = isset($data['score']) ? $data['score'] : 0;
                 $type = isset($data['type']) ? $data['type'] : "";
                 $title = isset($data['title']) ? $data['title'] : "";
+                if(str_contains($key, 'total_cost'))
+                {
+                    $total_cost += (int)$answer;
+                }
                 SRPPesticideApplication::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
@@ -394,6 +436,20 @@ class SRPController extends Controller
                 ]);
             }
         }
+        SRPPesticideApplication::create([
+            'farmer_id' => $request->farmer_id,
+            'cultivation_id' => $request->cultivation_id,
+            'staff_id'=> $staff->id,
+            'srp_id' => $request->srp_id,
+            'section' => "",
+            'collection_code' =>0,
+            'question'=> "total_cost_of_day",
+            'title'=> "",
+            'type' => "",
+            'answer'=> $total_cost,
+            'score' => 0,
+            'created_at'=>$today,
+        ]);
         $data_schedule_srp = SRPSchedule::where([['name_action', 'like', '%' .'srp_pesticide_application' . '%'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
         if($data_schedule_srp)
         {
@@ -620,7 +676,7 @@ class SRPController extends Controller
         }
         $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $staff = Auth::user()->staff;
-        $total_score = 0;
+        $total_cost = 0;
         
         foreach($request->data_question_answer_group as $groupData) {
             $collectionCode = SRPFertilizerApplication::max('collection_code') ?? 0;
@@ -631,6 +687,11 @@ class SRPController extends Controller
                 $score = isset($data['score']) ? $data['score'] : 0;
                 $type = isset($data['type']) ? $data['type'] : "";
                 $title = isset($data['title']) ? $data['title'] : "";
+
+                if(str_contains($key, 'total_cost'))
+                {
+                    $total_cost += (int)$answer;
+                }
                 SRPFertilizerApplication::create([
                     'farmer_id' => $request->farmer_id,
                     'cultivation_id' => $request->cultivation_id,
@@ -647,6 +708,20 @@ class SRPController extends Controller
                 ]);
             }
         }
+        SRPFertilizerApplication::create([
+            'farmer_id' => $request->farmer_id,
+            'cultivation_id' => $request->cultivation_id,
+            'staff_id'=> $staff->id,
+            'srp_id' => $request->srp_id,
+            'section' => "",
+            'collection_code' =>0,
+            'question'=> "total_cost_of_day",
+            'title'=> "",
+            'type' => "",
+            'answer'=> $total_cost,
+            'score' => 0,
+            'created_at'=>$today,
+        ]);
         $data_schedule_srp = SRPSchedule::where([['name_action', 'like', '%' .'srp_fertilizer_application' . '%'],['srp_id',$request->srp_id]])->whereDate('date_action',$today)->first();
         if($data_schedule_srp)
         {
