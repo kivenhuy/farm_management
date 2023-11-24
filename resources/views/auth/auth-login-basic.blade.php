@@ -77,9 +77,8 @@ $customizerHidden = 'customizer-hide';
         <!-- Logo -->
         <div class="app-brand justify-content-center mt-5">
             <span class="app-brand-logo demo">
-              <img src="{{ asset('/images/farm-hero.png') }}" width="40px" class="me-2">
+              <img src="{{ asset('/images/farm-hero-larger.png') }}" width="100px" class="me-2">
             </span>
-            <span class="app-brand-text demo text-heading fw-bold">Farm Hero</span>
         </div>
         <!-- /Logo -->
 
@@ -105,7 +104,7 @@ $customizerHidden = 'customizer-hide';
               </div>
             </div>
             <div class="mb-3">
-              <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+              <button class="btn btn-primary d-grid w-100" type="submit" style="background-color:#2E7F25">Sign in</button>
             </div>
           </form>
         </div>
