@@ -123,7 +123,15 @@ class SaleIntentionController extends Controller
                 {
                     case(str_contains($sub_data_each_srp->name_action,'srp_land_preparation')):
                         $data_each_srp_land_prepare = SRPLandPreparation::where([['srp_id',$id_srp],['question', 'LIKE', "total_cost_of_day"]])->whereDate('created_at',$sub_data_each_srp->date_action)->first();
-                        $arr_date_and_cost_land_prepare[$sub_data_each_srp->date_action] = (int)$data_each_srp_land_prepare->answer;
+                        if($data_each_srp_land_prepare)
+                        {
+                            $arr_date_and_cost_land_prepare[$sub_data_each_srp->date_action] = (int)$data_each_srp_land_prepare->answer;
+                        }
+                        else
+                        {
+                            $arr_date_and_cost_land_prepare[$sub_data_each_srp->date_action] = 0;
+                        }
+                        
                         break;
                     case(str_contains($sub_data_each_srp->name_action,'srp_water_irrigation')):
                         $data_each_srp_land_prepare = SRPWaterIrrigation::where([['srp_id',$id_srp],['question', 'LIKE', "total_cost_of_day"]])->whereDate('created_at',$sub_data_each_srp->date_action)->first();
