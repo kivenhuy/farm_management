@@ -24,7 +24,8 @@
   <!-- $isFront is used to append the front layout styles only on the front layout otherwise the variable will be blank -->
   @include('layouts/sections/styles')
   <link rel="stylesheet" href="{{ asset(mix('css/app.css')) }}">
-  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
+  {{-- <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" /> --}}
+  <link rel="icon" type="image/x-icon" href="{{ asset('/images/farm-hero.png') }}" />
   <link rel="stylesheet" type="text/css" href="{{ asset('custom/css/aiz-core.css') }}" />
   <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -56,7 +57,7 @@
           @include('layouts/sections/menu/verticalMenu')
       
           <!-- Layout page -->
-          <div class="layout-page">
+          <div class="layout-page px-4">
       
             {{-- Below commented code read by artisan command while installing jetstream. !! Do not remove if you want to use jetstream. --}}
             {{-- <x-banner /> --}}
