@@ -8,6 +8,11 @@ use App\Models\CarbonEmission;
 use App\Models\Cultivations;
 use Illuminate\Support\Facades\Http;
 use App\Models\SaleIntention;
+use App\Models\SRPFertilizerApplication;
+use App\Models\SRPLandPreparation;
+use App\Models\SRPPesticideApplication;
+use App\Models\SRPSchedule;
+use App\Models\SRPWaterIrrigation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -98,6 +103,66 @@ class SaleIntentionController extends Controller
             $data_product_loss = null;
             $data_carbon_stage = null;
        }
+       $arr_date_and_cost_land_prepare = [];
+       $arr_date_and_cost_water_igiration = [];
+       $arr_date_and_cost_fertilize = [];
+       $arr_date_and_cost_pesticise = [];
+       if($data_sale_intention->farmer->srp_certification == 1)
+       {
+            $array_schedule = ['srp_water_irrigation','srp_fertilizer_application','srp_pesticide_application','srp_land_preparation'];
+            $id_srp = $data_sale_intention->cultivation->srp->id;
+            $data_srp_schedule = SRPSchedule::where('srp_id',$id_srp)->where(function($query) use($array_schedule){
+                foreach($array_schedule as $keyword) {
+                    $query->orWhere('name_action', 'LIKE', "%$keyword%");
+                }
+            })->get();
+          
+            foreach($data_srp_schedule as $sub_data_each_srp)
+            {
+                switch($sub_data_each_srp->name_action)
+                {
+                    case(str_contains($sub_data_each_srp->name_action,'srp_land_preparation')):
+                        $data_each_srp_land_prepare = SRPLandPreparation::where([['srp_id',$id_srp],['question', 'LIKE', "total_cost_of_day"]])->whereDate('created_at',$sub_data_each_srp->date_action)->first();
+                        $arr_date_and_cost_land_prepare[$sub_data_each_srp->date_action] = (int)$data_each_srp_land_prepare->answer;
+                        break;
+                    case(str_contains($sub_data_each_srp->name_action,'srp_water_irrigation')):
+                        $data_each_srp_land_prepare = SRPWaterIrrigation::where([['srp_id',$id_srp],['question', 'LIKE', "total_cost_of_day"]])->whereDate('created_at',$sub_data_each_srp->date_action)->first();
+                        if($data_each_srp_land_prepare)
+                        {
+                            $arr_date_and_cost_water_igiration[$sub_data_each_srp->date_action] = (int)$data_each_srp_land_prepare->answer;
+                        }
+                        else
+                        {
+                            $arr_date_and_cost_water_igiration[$sub_data_each_srp->date_action] = 0;
+                        }
+                        
+                        break;
+                    case(str_contains($sub_data_each_srp->name_action,'srp_fertilizer_application')):
+                        $data_each_srp_land_prepare = SRPFertilizerApplication::where([['srp_id',$id_srp],['question', 'LIKE', "total_cost_of_day"]])->whereDate('created_at',$sub_data_each_srp->date_action)->first();
+                        if($data_each_srp_land_prepare)
+                        {
+                            $arr_date_and_cost_fertilize[$sub_data_each_srp->date_action] = (int)$data_each_srp_land_prepare->answer;
+                        }
+                        else
+                        {
+                            $arr_date_and_cost_fertilize[$sub_data_each_srp->date_action] = 0;
+                        }
+                       
+                        break;
+                    case(str_contains($sub_data_each_srp->name_action,'srp_pesticide_application')):
+                        $data_each_srp_land_prepare = SRPPesticideApplication::where([['srp_id',$id_srp],['question', 'LIKE', "total_cost_of_day"]])->whereDate('created_at',$sub_data_each_srp->date_action)->first();
+                        if($data_each_srp_land_prepare)
+                        {
+                            $arr_date_and_cost_pesticise[$sub_data_each_srp->date_action] = (int)$data_each_srp_land_prepare->answer;
+                        }
+                        else
+                        {
+                            $arr_date_and_cost_pesticise[$sub_data_each_srp->date_action] = 0;
+                        }
+                        break;
+                }
+            }
+       }
        return response()->json
        ([
         'result' => true,
@@ -112,6 +177,10 @@ class SaleIntentionController extends Controller
                 'data_emission'=>$data_emission,
                 'data_product_loss'=>$data_product_loss,
                 'data_carbon_stage'=>$data_carbon_stage,
+                'arr_date_and_cost_land_prepare' =>$arr_date_and_cost_land_prepare,
+                'arr_date_and_cost_water_igiration' =>$arr_date_and_cost_water_igiration,
+                'arr_date_and_cost_fertilize' =>$arr_date_and_cost_fertilize,
+                'arr_date_and_cost_pesticise' =>$arr_date_and_cost_pesticise,
             ]
         ]);
     }
