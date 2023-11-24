@@ -8,8 +8,11 @@ $configData = Helper::appClasses();
   @if(!isset($navbarFull))
   <div class="app-brand demo">
     <a href="{{url('/')}}" class="app-brand-link">
-      <span class="app-brand-logo demo">@include('_partials.macros',["width"=>25,"withbg"=>'var(--bs-primary)'])</span>
-      <span class="app-brand-text demo menu-text fw-bold ms-2">Upstream</span>
+      <span class="app-brand-logo demo">
+        {{-- @include('_partials.macros',["width"=>25,"withbg"=>'var(--bs-primary)']) --}}
+        <img src="{{ asset('/images/farm-hero.png') }}" width="40px" class="me-2">
+      </span>
+      <span class="app-brand-text demo menu-text fw-bold ms-2">Farm Hero</span>
     </a>
 
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">

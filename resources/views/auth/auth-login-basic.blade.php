@@ -76,14 +76,13 @@ $customizerHidden = 'customizer-hide';
       <div class="card p-2">
         <!-- Logo -->
         <div class="app-brand justify-content-center mt-5">
-            <span class="app-brand-logo demo">@include('_partials.macros',["width"=>25,"withbg"=>'var(--bs-primary)'])</span>
-            <span class="app-brand-text demo text-heading fw-bold">Upstream</span>
+            <span class="app-brand-logo demo">
+              <img src="{{ asset('/images/farm-hero-larger.png') }}" width="100px" class="me-2">
+            </span>
         </div>
         <!-- /Logo -->
 
         <div class="card-body mt-2">
-          <h4 class="mb-2">Welcome to Upstream! 👋</h4>
-          <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
           @include('shared.form-alerts')
 
@@ -105,7 +104,7 @@ $customizerHidden = 'customizer-hide';
               </div>
             </div>
             <div class="mb-3">
-              <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+              <button class="btn text-white d-grid w-100" type="submit" style="background-color:#2E7F25">Sign in</button>
             </div>
           </form>
         </div>
@@ -115,4 +114,12 @@ $customizerHidden = 'customizer-hide';
     </div>
   </div>
 </div>
+
+<style>
+  .position-relative {
+    background-image: url('/images/login-background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+</style>
 @endsection
