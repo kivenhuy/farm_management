@@ -100,6 +100,7 @@ $open-customizer-primary-color: var(--bs-primary);
   // Customizer button
 
   .template-customizer-open-btn {
+    display: none !important;
     position: absolute;
     top: $open-btn-top;
 
