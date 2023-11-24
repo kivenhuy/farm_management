@@ -22,3 +22,7 @@
 .bg-menu-theme .menu-item.active > .menu-link:not(.menu-toggle) {
   background-color: #2E7F25;
 }
+
+.template-customizer-open-btn {
+  display: none !important;
+}
