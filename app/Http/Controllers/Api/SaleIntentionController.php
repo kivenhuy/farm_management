@@ -107,6 +107,11 @@ class SaleIntentionController extends Controller
        $arr_date_and_cost_water_igiration = [];
        $arr_date_and_cost_fertilize = [];
        $arr_date_and_cost_pesticise = [];
+
+        $total_cost_land_preaparation =0;
+        $total_cost_water_irrigration = 0;
+        $total_cost_fetilizer = 0;
+        $total_cost_srp_petisise = 0;
        if($data_sale_intention->farmer->srp_certification == 1)
        {
             $array_schedule = ['srp_water_irrigation','srp_fertilizer_application','srp_pesticide_application','srp_land_preparation'];
@@ -126,6 +131,7 @@ class SaleIntentionController extends Controller
                         if($data_each_srp_land_prepare)
                         {
                             $arr_date_and_cost_land_prepare[$sub_data_each_srp->date_action] = (int)$data_each_srp_land_prepare->answer;
+                            $total_cost_land_preaparation +=(int)$data_each_srp_land_prepare->answer;
                         }
                         else
                         {
@@ -138,6 +144,7 @@ class SaleIntentionController extends Controller
                         if($data_each_srp_land_prepare)
                         {
                             $arr_date_and_cost_water_igiration[$sub_data_each_srp->date_action] = (int)$data_each_srp_land_prepare->answer;
+                            $total_cost_water_irrigration +=(int)$data_each_srp_land_prepare->answer;
                         }
                         else
                         {
@@ -150,6 +157,7 @@ class SaleIntentionController extends Controller
                         if($data_each_srp_land_prepare)
                         {
                             $arr_date_and_cost_fertilize[$sub_data_each_srp->date_action] = (int)$data_each_srp_land_prepare->answer;
+                            $total_cost_fetilizer +=(int)$data_each_srp_land_prepare->answer;
                         }
                         else
                         {
@@ -162,6 +170,7 @@ class SaleIntentionController extends Controller
                         if($data_each_srp_land_prepare)
                         {
                             $arr_date_and_cost_pesticise[$sub_data_each_srp->date_action] = (int)$data_each_srp_land_prepare->answer;
+                            $total_cost_srp_petisise +=(int)$data_each_srp_land_prepare->answer;
                         }
                         else
                         {
@@ -189,6 +198,10 @@ class SaleIntentionController extends Controller
                 'arr_date_and_cost_water_igiration' =>$arr_date_and_cost_water_igiration,
                 'arr_date_and_cost_fertilize' =>$arr_date_and_cost_fertilize,
                 'arr_date_and_cost_pesticise' =>$arr_date_and_cost_pesticise,
+                'total_cost_land_preaparation' =>$total_cost_land_preaparation,
+                'total_cost_water_irrigration' =>$total_cost_water_irrigration,
+                'total_cost_fetilizer' =>$total_cost_fetilizer,
+                'total_cost_srp_petisise' =>$total_cost_srp_petisise,
             ]
         ]);
     }
