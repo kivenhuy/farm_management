@@ -26,3 +26,7 @@
 .template-customizer-open-btn {
   display: none !important;
 }
+
+.layout-navbar-fixed .layout-wrapper:not(.layout-without-menu) .layout-page {
+  padding-top: 20px !important;
+}
