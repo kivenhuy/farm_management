@@ -41,8 +41,8 @@ class HomeController extends Controller
         }
 
         // Farm area by commune chart
-        $communeCategory = Commune::whereHas('farmer_details')->pluck('commune_name')->toArray();
-        $communes = Commune::whereHas('farmer_details')->get();
+        $communeCategory = Commune::has('farmer_details')->pluck('commune_name')->toArray();
+        $communes = Commune::has('farmer_details')->get();
         $communeByFarmAreas = [];
         if ($communes->count()) {
             foreach ($communes as $commune) {
