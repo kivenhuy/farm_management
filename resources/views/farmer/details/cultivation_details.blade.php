@@ -1,6 +1,6 @@
 @php 
     $farmLandIds = $farmerDetail->farm_lands->pluck('id');
-    $cultivations = \App\Models\Cultivations::whereIn('farm_land_id', $farmLandIds)->get();
+    $cultivations = \App\Models\Cultivations::whereIn('farm_land_id', $farmLandIds)->get() ?? [];
 @endphp
 
 @if (!empty($cultivations))
@@ -20,9 +20,9 @@
             @foreach($cultivations as $crop)
                 <tr>
                     <td>{{ $crop->season_name }}</td>
-                    <td>{{ $crop->crops_master->name }}</td>
+                    <td>{{ $crop?->crops_master?->name }}</td>
                     <td>{{ $crop->crop_variety }}</td>
-                    <td>{{ number_format($crop->farm_land->total_land_holding, 2) . " Ha" }}</td>
+                    <td>{{ number_format($crop->farm_land?->total_land_holding, 2) . " Ha" }}</td>
                     <td>{{ $crop->sowing_date }}</td>
                     <td>{{ $crop->est_yield . " Kg"  }}</td>
                     <td>
@@ -46,17 +46,17 @@
                     <div class="form-group row border-bottom">
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Crop Category</label>
-                            <span class="col-md-6">{{ ucwords($crop?->crops_master->crop_category->name) }}</span>
+                            <span class="col-md-6">{{ ucwords($crop?->crops_master?->crop_category?->name) }}</span>
                         </div>
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Harvest Season</label>
-                            <span class="col-md-6">{{ $crop->season->season_name }}</span>
+                            <span class="col-md-6">{{ $crop->season?->season_name }}</span>
                         </div>
                     </div>
                     <div class="form-group row border-bottom">
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Cultivated Crop</label>
-                            <span class="col-md-6">{{ $crop->crops_master->name }}</span>
+                            <span class="col-md-6">{{ $crop?->crops_master?->name }}</span>
                         </div>
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Variety</label>
@@ -66,11 +66,11 @@
                     <div class="form-group row border-bottom">
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Cultivation Area HA</label>
-                            <span class="col-md-6">{{ number_format($crop->farm_land->total_land_holding, 2) . " Ha" }}</span>
+                            <span class="col-md-6">{{ number_format($crop->farm_land?->total_land_holding, 2) . " Ha" }}</span>
                         </div>
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Sowing Date</label>
-                            <span class="col-md-6">{{ $crop->sowing_date }}</span>
+                            <span class="col-md-6">{{ $crop?->sowing_date }}</span>
                         </div>
                     </div>    
                     <div class="form-group row border-bottom">

@@ -24,7 +24,7 @@ class SeasonMasterController extends Controller
             
             $seasonMasterQuery->where(function ($query) use ($words) {
                 foreach ($words as $word) {
-                    $query->where('season_name', 'like', '%' . $word . '%');
+                    $query->orWhere('season_name', 'like', '%' . $word . '%');
                 }
             });
         }
