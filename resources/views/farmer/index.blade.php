@@ -4,253 +4,91 @@
     <!-- Main content -->
     <div class="container-fluid">
 
-      {{-- <div class="card mb-3">
-        <div class="card-header row gutters-5">
-          <div class="col">
-              <h5 class="mb-md-0 h6">Import Farmland</h5>
-          </div>
-        </div>
-        <div class="card-body">
-          @include('shared.form-alerts')
-          <div class="row">
-            <div class="col-6">
-              <form method="post" action="{{ route('area_audit.import_csv') }}" enctype="multipart/form-data">
-                @csrf
-                <div class="form-group row">
-                  <div class="col-3 text-info fw-bold">
-                    Import Farmer
-                  </div>
-                  <div class="col-9">
-                    <input type="file" name="csvFile" class="form-control">
-                  </div>
+      <form action="{{ route('farmer.index')}}" class="mb-5">
+        {{-- @csrf --}}
+        <div class="form-group row align-items-center">
+            <div class="col">
+                <div>
+                    <label for="js-farmer-code">Farmer Code</label>
+                    <input type="text" name="farmer_code" id="js-farmer-code" class="form-control" value="{{ $farmerCode }}">
                 </div>
-                <div class="form-group row">
-                  <div class="col-3 offset-3">
-                    <button type="submit" class="btn btn-primary">Import</button>
-                  </div>
-                </div>
-              </form>
             </div>
-          </div>
-          
-        </div>
-      </div> --}}
-
-      <div class="row">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-body">
-              <div class="row" style="margin-bottom: 20px">
-                <div class="col-12">
-
-                  <div class="input-group input-group-md">
-                    <input type="text" class="form-control form-control-user @error('name') is-invalid @enderror" id="name" placeholder="Search Information Farmer" name="name" value="" style="">  
-                  </div>
-                </div>
-                {{-- <div class="col-6">
-
-                  <div class="input-group input-group-md">
-                    <input type="number" class="form-control form-control-user @error('phone') is-invalid @enderror" id="phone" placeholder="Phone" name="phone" value="" style="">  
-                  </div>
-                </div> --}}
-              </div>
-              <div class="row align-items-center d-flex">
-                <div class="container">
-                  <div class="col text-center">
-                      <button type="button" name="filter" id="filter" class="btn btn-info" style="width:20%">Search</button>
-                      <button type="button" name="reset" id="reset" class="btn btn-light" style="width:20%">Reset</button>
-                  </div>
-                  
-                </div>
-              </div>
+            <div class="col">
+                <label for="js-farmer-name">Farmer Name</label>
+                <input id="js-farmer-name" name="farmer_name" type="text" class="form-control" value="{{ $farmerName }}" autocomplete="off" placeholder="From Period">
             </div>
+            <div class="col">
+                <label for="js-start-date">Start Date</label>
+                <input id="js-start-date" name="start_date" type="text" class="form-control datatimepicker-enable" value="{{ $startDate }}" autocomplete="off" placeholder="Start Date">
+            </div>
+            <div class="col">
+              <label for="js-end-date">End Date</label>
+              <input id="js-end-date" name="end_date" type="text" class="form-control datatimepicker-enable" value="{{ $endDate }}" autocomplete="off" placeholder="End Date">
+          </div>
+          <div style="width: 260px;" class="mt-3">
+              <button type="submit" class="btn btn-primary" style="margin-right: 1rem;">Search</button>
+              <button type="button" class="btn btn-secondary js-reset">Reset</button>
           </div>
         </div>
-        <div class="col-12">
-          <div class="card">
-              <div class="card-header row gutters-5">
-                  <div class="col">
-                      <h5 class="mb-md-0 h6">All Farmer</h5>
-                  </div>
-                  {{-- <div class="col">
-                      <div class="mar-all mb-2" style=" text-align: end;">
-                          <a href="{{route('country.create')}}">
-                              <button type="submit" name="button" value="publish"
-                                  class="btn btn-primary">Create</button>
+    </form>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr style="background-color: #666cff;">
+          <th scope="col" style="color:white;">Farmer Code</th>
+          <th scope="col" style="color:white;">Farmer Name</th>
+          <th scope="col" style="color:white;">Phone Number</th>
+          <th scope="col" style="color:white;">Gender</th>
+          <th scope="col" style="color:white;">Enrollment Date</th>
+          <th scope="col" style="color:white;">Field Officer</th>
+          <th scope="col" style="color:white;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+          @if($farmerDetails->count())
+              @foreach ($farmerDetails as $farmerDetail)  
+                  <tr>
+                      <td>{{ $farmerDetail->farmer_code}}</td>
+                      <td>{{ $farmerDetail->full_name}}</td>
+                      <td>{{ $farmerDetail->phone_number}}</td>
+                      <td>{{ $farmerDetail->gender}}</td>
+                      <td>{{ $farmerDetail->enrollment_date}}</td>
+                      <td>{{ $farmerDetail->staff->name}}</td>
+                      <td style="width: 200px;">
+                          <a class="rounded-circle btn-primary text-white p-2 avatar avatar-sm me-2" href="{{ route('farmer.show', ['id' => $farmerDetail]) }}" title="Edit">
+                              <i class="fa fa-eye"></i>
                           </a>
-                      </div>
-                  </div> --}}
-              </div>
-            <div class="card-body">
-              <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                        <th>Farmer Code</th>
-                        <th>Farmer Name</th>
-                        <th>Phone Number</th>
-                        <th>Gender</th>
-                        <th>Field Officer</th>
-                        <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                      <tr>
-                      </tr>
-                  </tbody>
-              </table>
-            </div>
-            <!-- /.card-body -->
-          </div>
-          <!-- /.card -->
-        </div>
-          <!-- /.col -->
-      </div>
-        <!-- /.card -->
-    </div>
-      <!-- /.col -->
-    <!-- /.row -->
+                      </td>
+                  </tr>
+              @endforeach
+          @endif
+      </tbody>
+    </table>
+  
 
-        
-        <!-- /.row -->
-      </div>
-      <script>
-        @if(Session::has('success'))
-        toastr.options =
-        {
-          "closeButton" : true,
-          "progressBar" : true
-        }
-        toastr.success("{{ session('success') }}");
-        @endif
-        @if(Session::has('add'))
-        toastr.options =
-        {
-          "closeButton" : true,
-          "progressBar" : true
-        }
-        toastr.success("{{ session('add') }}");
-        @endif
-        @if(Session::has('delete'))
-        toastr.options =
-        {
-          "closeButton" : true,
-          "progressBar" : true
-        }
-            toastr.success("{{ session('delete') }}");
-        @endif
-      </script>
-        <style>
-            
-        </style>
-@stop
+  <div class="position-relative mt-5" style="min-height: 30px">
+      {{ $farmerDetails->links('shared.paginator') }}
+
+      <div style="position: absolute;right: 19px; top:0"><span class="font-weight-bold">{{ $farmerDetails->total() }}</span> results found</div>
+  </div>
+@endsection
+
 
 @push('scripts')
-<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}" ></script>
-<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}" ></script>
-<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}" ></script>
-<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}" ></script>
+    <script src="{{ asset('custom/js/jquery.datetimepicker.full.min.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.datatimepicker-enable').datetimepicker({
+                format: 'Y-m-d',
+        		    datepicker: true,
+                timepicker: false,
+            });
 
-<script type="text/javascript">
-$(document).ready(function()
-{
-    fill_datatable();
-
-    function fill_datatable(data = '')
-    {
-      console.log(data)
-    var rfq_table = $("#example1").DataTable
-    ({
-      
-      lengthChange: true,
-      responsive: true,
-      processing: true,
-      searching: false,
-      bSort:false,
-      serverSide: true,
-       ajax: {
-            url:"{{route('farmer.dtajax')}}",
-            pages: 20,
-            data:
-            {
-              search:data,
-            }
-          },
-      // error: function (xhr) {
-      //     if (xhr.status == 401) {
-      //     window.location.href = "{!! route('login') !!}";
-      //     }
-      // },
-      columns: [
-            {data: 'farmer_code', name: 'farmer_code',render: function (data) {
-              return (data=="")?"":data;
-            }},
-            {data: 'full_name', name: 'full_name', render: function(data){
-                return (data=="")?"":data;
-            }},
-            {data: 'phone_number', name: 'phone_number',render: function (data) {
-              return (data=="")?"":data;
-            }},
-            {data: 'gender', name: 'gender',render: function (data) {
-              return (data=="")?"":data;
-            }},
-            {data: 'staff_name', name: 'staff_name'},
-            {data: 'action', name: 'action'},
-        ],
-        drawCallback:function(setting){
-          
-          $('[data-toggle="tooltip"]').tooltip();
-          var abc = $(this).find('.dataTables_empty').length;
-          console.log("aaaaaa" + abc);
-          if ($(this).find('.dataTables_empty').length == 1) {
-                // $('th').hide();
-                // $('#example1_info').hide();
-                $('#example1_paginate').hide();
-          }
-        },
-        fnDrawCallback: function () {
-          var abc = $(this).find('.dataTables_empty').length;
-          console.log("aaaaaa" + abc);
-        }
-    });
-  }
-
-    $('#filter').click(function(){
-      var data = $('#name').val();
-      if( data == '')
-      {
-        toastr["error"]("Please input data to search!")
-        toastr.options = {
-          "closeButton": false,
-          "debug": true,
-          "newestOnTop": false,
-          "progressBar": false,
-          "positionClass": "toast-top-right",
-          "preventDuplicates": false,
-          "onclick": null,
-          "showDuration": "300",
-          "hideDuration": "1000",
-          "timeOut": "5000",
-          "extendedTimeOut": "1000",
-          "showEasing": "swing",
-          "hideEasing": "linear",
-          "showMethod": "fadeIn",
-          "hideMethod": "fadeOut"
-        }
-      }
-      else
-      {
-        $('#example1').DataTable().destroy();
-        fill_datatable(data);
-      }
-    });
-
-  $('#reset').click(function(){
-      var data = $('#name').val('');
-      $('#example1').DataTable().destroy();
-      fill_datatable(data);
-  });
-  });
-    
-</script>
+            $('.js-reset').click(function(){
+                $('input[type="text"]').val('');
+                $('select').val('');
+                document.querySelector('input[name="status"]:checked').checked = false;
+            });
+        });
+    </script>
 @endpush
