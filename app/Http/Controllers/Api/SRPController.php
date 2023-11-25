@@ -1050,22 +1050,21 @@ class SRPController extends Controller
         $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $landPreparationBySections = SRPLandPreparation::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
-            ->get()
-            ->groupBy('section');
+            ->get();
 
-        $resultLandPreparationData = [];
-        foreach ($landPreparationBySections as $section => $landPreparationBySection) {
-            $dataLandPreparation = [];
-            $landPreparationByCollectionCodes = $landPreparationBySection->groupBy('collection_code');
+        // $resultLandPreparationData = [];
+        // foreach ($landPreparationBySections as $section => $landPreparationBySection) {
+        //     $dataLandPreparation = [];
+        //     $landPreparationByCollectionCodes = $landPreparationBySection->groupBy('collection_code');
             
-            foreach ($landPreparationByCollectionCodes as $landPreparation) {
-                array_push($dataLandPreparation, $landPreparation);
-            }
+        //     foreach ($landPreparationByCollectionCodes as $landPreparation) {
+        //         array_push($dataLandPreparation, $landPreparation);
+        //     }
 
-            $resultLandPreparationData[$section] = $dataLandPreparation;
-        }
+        //     $resultLandPreparationData[$section] = $dataLandPreparation;
+        // }
 
-        return response()->json(['data'=> $resultLandPreparationData]);
+        return response()->json(['data'=> $landPreparationBySections]);
     }
 
     public function getWaterManagement(Request $request)
@@ -1103,22 +1102,21 @@ class SRPController extends Controller
         $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $waterIrrigationBySections = SRPWaterIrrigation::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
-            ->get()
-            ->groupBy('section');
+            ->get();
 
-        $resultData = [];
-        foreach ($waterIrrigationBySections as $section => $waterIrrigationBySection) {
-            $dataWaterIrrigation = [];
-            $waterIrrigationByCollectionCodes = $waterIrrigationBySection->groupBy('collection_code');
+        // $resultData = [];
+        // foreach ($waterIrrigationBySections as $section => $waterIrrigationBySection) {
+        //     $dataWaterIrrigation = [];
+        //     $waterIrrigationByCollectionCodes = $waterIrrigationBySection->groupBy('collection_code');
             
-            foreach ($waterIrrigationByCollectionCodes as $waterIrrigation) {
-                array_push($dataWaterIrrigation, $waterIrrigation);
-            }
+        //     foreach ($waterIrrigationByCollectionCodes as $waterIrrigation) {
+        //         array_push($dataWaterIrrigation, $waterIrrigation);
+        //     }
 
-            $resultData[$section] = $dataWaterIrrigation;
-        }
+        //     $resultData[$section] = $dataWaterIrrigation;
+        // }
 
-        return response()->json(['data'=> $resultData]);
+        return response()->json(['data'=> $waterIrrigationBySections]);
     }
 
     // Get Nutrient Management
@@ -1157,22 +1155,21 @@ class SRPController extends Controller
         $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $fertilizerApplicationBySections = SRPFertilizerApplication::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
-            ->get()
-            ->groupBy('section');
+            ->get();
 
-        $resultData = [];
-        foreach ($fertilizerApplicationBySections as $section => $fertilizerApplicationBySection) {
-            $datafertilizerApplication = [];
-            $fertilizerApplicationByCollectionCodes = $fertilizerApplicationBySection->groupBy('collection_code');
+        // $resultData = [];
+        // foreach ($fertilizerApplicationBySections as $section => $fertilizerApplicationBySection) {
+        //     $datafertilizerApplication = [];
+        //     $fertilizerApplicationByCollectionCodes = $fertilizerApplicationBySection->groupBy('collection_code');
             
-            foreach ($fertilizerApplicationByCollectionCodes as $fertilizerApplication) {
-                array_push($datafertilizerApplication, $fertilizerApplication);
-            }
+        //     foreach ($fertilizerApplicationByCollectionCodes as $fertilizerApplication) {
+        //         array_push($datafertilizerApplication, $fertilizerApplication);
+        //     }
 
-            $resultData[$section] = $datafertilizerApplication;
-        }
+        //     $resultData[$section] = $datafertilizerApplication;
+        // }
 
-        return response()->json(['data'=> $resultData]);
+        return response()->json(['data'=> $fertilizerApplicationBySections]);
     }
 
     public function getIntegratedPestManagement(Request $request)
@@ -1214,22 +1211,21 @@ class SRPController extends Controller
         $today = Carbon::createFromFormat('d/m/Y', $request->date_action);
         $pesticideApplicationBySections = SRPPesticideApplication::where('srp_id', $request->srp_id)
             ->whereDate('created_at', $today)
-            ->get()
-            ->groupBy('section');
+            ->get();
 
-        $resultData = [];
-        foreach ($pesticideApplicationBySections as $section => $pesticideApplicationBySection) {
-            $dataPesticideApplication = [];
-            $pesticideApplicationByCollectionCodes = $pesticideApplicationBySection->groupBy('collection_code');
+        // $resultData = [];
+        // foreach ($pesticideApplicationBySections as $section => $pesticideApplicationBySection) {
+        //     $dataPesticideApplication = [];
+        //     $pesticideApplicationByCollectionCodes = $pesticideApplicationBySection->groupBy('collection_code');
             
-            foreach ($pesticideApplicationByCollectionCodes as $pesticideApplication) {
-                array_push($dataPesticideApplication, $pesticideApplication);
-            }
+        //     foreach ($pesticideApplicationByCollectionCodes as $pesticideApplication) {
+        //         array_push($dataPesticideApplication, $pesticideApplication);
+        //     }
 
-            $resultData[$section] = $dataPesticideApplication;
-        }
+        //     $resultData[$section] = $dataPesticideApplication;
+        // }
 
-        return response()->json(['data'=> $resultData]);
+        return response()->json(['data'=> $pesticideApplicationBySections]);
     }
 
     public function getHarvest(Request $request)
