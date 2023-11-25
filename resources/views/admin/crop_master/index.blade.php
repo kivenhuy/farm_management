@@ -13,7 +13,7 @@
         
         <table class="table table-bordered">
             <thead>
-              <tr style="background-color: #666cff;">
+              <tr style="background-color: #2E7F25;">
                 <th scope="col" style="color:white;">Name</th>
                 <th scope="col" style="color:white;">Category</th>
                 <th scope="col" style="color:white;">Duration</th>

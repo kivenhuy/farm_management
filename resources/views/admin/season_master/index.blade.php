@@ -45,7 +45,7 @@
 
         <table class="table table-bordered">
             <thead>
-              <tr style="background-color: #666cff;">
+              <tr style="background-color: #2E7F25;">
                 <th scope="col" style="color:white;">Season</th>
                 <th scope="col" style="color:white;">From period</th>
                 <th scope="col" style="color:white;">To period</th>
