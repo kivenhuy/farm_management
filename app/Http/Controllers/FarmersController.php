@@ -36,25 +36,18 @@ class FarmersController extends Controller
 
     public function index(Request $request)
     {
-        $farmerCode = $request->input('farmer_code');
-        $farmerName = $request->input('farmer_name');
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+        $farmerCode = $request->input('farmer_code');
+        $farmerName = $request->input('farmer_name');
+        $phoneNumber = $request->input('phone_number');
+        $provinceId = $request->input('province_id');
+        $staffId = $request->input('staff_id');
 
-        $farmerDetailQuery = FarmerDetails::orderByDesc('created_at');
-        if (!empty($farmerCode)) {
-            $farmerDetailQuery->where('farmer_code', $farmerCode);
-        }
+        $farmerDetailQuery = FarmerDetails::orderByDesc('created_at')
+            ->withCount(['farm_lands'])
+            ->withSum('farm_lands as sum_total_land_holding', 'total_land_holding');
 
-        if (!empty($farmerName)) {
-            $farmerDetailQuery->Where('full_name', 'like', '%' . $farmerName . '%');
-        }
-
-        // if (empty($startDate) && empty($endDate)) {
-        //     $lastDate = now()->subDays(30)->toDateString();
-        //     $farmerDetailQuery->where('enrollment_date', '>=', $lastDate);
-        // } 
-        
         if (!empty($startDate)) {
             $farmerDetailQuery->where('enrollment_date', '>=', $startDate);
         }
@@ -63,9 +56,29 @@ class FarmersController extends Controller
             $farmerDetailQuery->where('enrollment_date', '<=', $endDate);
         }
 
+        if (!empty($farmerCode)) {
+            $farmerDetailQuery->where('farmer_code', $farmerCode);
+        }
+
+        if (!empty($farmerName)) {
+            $farmerDetailQuery->Where('full_name', 'like', '%' . $farmerName . '%');
+        }
+
+        if (!empty($phoneNumber)) {
+            $farmerDetailQuery->where('phone_number', $phoneNumber);
+        }
+
+        if (!empty($provinceId)) {
+            $farmerDetailQuery->where('province', $provinceId);
+        }
+
+        if (!empty($staffId)) {
+            $farmerDetailQuery->where('staff_id', $staffId);
+        }
+
         $farmerDetails = $farmerDetailQuery->paginate()->appends($request->except('page'));
 
-        return view('farmer.index', compact('farmerCode', 'farmerName', 'startDate', 'endDate', 'farmerDetails'));
+        return view('farmer.index', compact('farmerDetails', 'farmerCode', 'farmerName', 'startDate', 'endDate',  'phoneNumber', 'provinceId', 'staffId'));
     }
 
     public function split_with_whitespace($keyword)
