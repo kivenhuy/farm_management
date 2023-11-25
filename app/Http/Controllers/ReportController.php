@@ -14,10 +14,100 @@ use Yajra\DataTables\DataTables;
 class ReportController extends Controller
 {
     // Farmer Report Page
-    public function farmer_report()  
+    public function farmer_report(Request $request)  
     {
-        return view('report.farmer_report');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $farmerCode = $request->input('farmer_code');
+        $farmerName = $request->input('farmer_name');
+        $phoneNumber = $request->input('phone_number');
+        $provinceId = $request->input('province_id');
+        $staffId = $request->input('staff_id');
+        $exportExcel = $request->input('export_excel');
+
+        $farmerDetailQuery = FarmerDetails::orderByDesc('created_at')
+            ->withCount(['farm_lands'])
+            ->withSum('farm_lands as sum_total_land_holding', 'total_land_holding');
+
+        if (!empty($startDate)) {
+            $farmerDetailQuery->where('enrollment_date', '>=', $startDate);
+        }
+
+        if (!empty($endDate)) {
+            $farmerDetailQuery->where('enrollment_date', '<=', $endDate);
+        }
+
+        if (!empty($farmerCode)) {
+            $farmerDetailQuery->where('farmer_code', $farmerCode);
+        }
+
+        if (!empty($farmerName)) {
+            $farmerDetailQuery->Where('full_name', 'like', '%' . $farmerName . '%');
+        }
+
+        if (!empty($phoneNumber)) {
+            $farmerDetailQuery->where('phone_number', $phoneNumber);
+        }
+
+        if (!empty($provinceId)) {
+            $farmerDetailQuery->where('province', $provinceId);
+        }
+
+        if (!empty($staffId)) {
+            $farmerDetailQuery->where('staff_id', $staffId);
+        }
+
+        if($exportExcel) {
+            $farmerDetails = $farmerDetailQuery->get();
+            
+            return response()->streamDownload(function () use ($farmerDetails) {
+                $this->exportFarmer($farmerDetails);
+            }, 'Farmer.csv');
+        }
+
+        $farmerDetails = $farmerDetailQuery->paginate()->appends($request->except('page'));
+
+        return view('report.farmer_report_index', compact('farmerDetails', 'farmerCode', 'farmerName', 'startDate', 'endDate',  'phoneNumber', 'provinceId', 'staffId'));
     }
+
+    private function exportFarmer($farmerDetails)
+    {      
+        $file = fopen('php://output', 'w');
+        fputs($file, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF))); // Fix for Excel
+
+        fputcsv($file, [
+            'Enrollment Date',
+            'Farmer Code',
+            'Farmer Name',
+            'Phone Number',
+            'Field Officer',
+            'Gender',
+            'Province',
+            'District',
+            'Commune',
+            'Total No of Plots',
+            'Total land holding(HA)',
+            'Status',
+        ]);
+
+        foreach ($farmerDetails as $farmerDetail) {
+            fputcsv($file, [
+                $farmerDetail->enrollment_date,
+                $farmerDetail->farmer_code,
+                $farmerDetail->full_name,
+                $farmerDetail->phone_number,
+                $farmerDetail->staff->name,
+                $farmerDetail->gender,
+                $farmerDetail->provinceRelation?->province_name,
+                $farmerDetail->districtRelation?->district_name,
+                $farmerDetail->communeRelation?->commune_name,
+                $farmerDetail->sum_total_land_holding,
+                ucwords($farmerDetail->status)
+            ]);
+        }
+
+        fclose($file);
+    } 
 
     public function farmer_report_ajax(Request $request)
     {
