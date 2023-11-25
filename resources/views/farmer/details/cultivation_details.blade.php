@@ -1,6 +1,6 @@
 @php 
     $farmLandIds = $farmerDetail->farm_lands->pluck('id');
-    $cultivations = \App\Models\Cultivations::whereIn('farm_land_id', $farmLandIds)->get();
+    $cultivations = \App\Models\Cultivations::whereIn('farm_land_id', $farmLandIds)->get() ?? [];
 @endphp
 
 @if (!empty($cultivations))
@@ -20,7 +20,7 @@
             @foreach($cultivations as $crop)
                 <tr>
                     <td>{{ $crop->season_name }}</td>
-                    <td>{{ $crop->crops_master->name }}</td>
+                    <td>{{ $crop?->crops_master?->name }}</td>
                     <td>{{ $crop->crop_variety }}</td>
                     <td>{{ number_format($crop->farm_land->total_land_holding, 2) . " Ha" }}</td>
                     <td>{{ $crop->sowing_date }}</td>

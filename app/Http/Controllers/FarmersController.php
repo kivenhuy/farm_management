@@ -34,19 +34,43 @@ class FarmersController extends Controller
 
 
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('farmer.index');
-        // $farmer_data = FarmerDetails::all();
-        // foreach ($farmer_data as $details_farmer_data)
-        // {
-        //     $details_farmer_data->farmer_photo = uploaded_asset($details_farmer_data->farmer_photo);
-        //     $details_farmer_data->country= Country::find($details_farmer_data->country)->country_name;
-        //     $details_farmer_data->province= Province::find($details_farmer_data->province)->province_name;
-        //     $details_farmer_data->district= District::find($details_farmer_data->district)->district_name;
-        //     $details_farmer_data->commune= Commune::find($details_farmer_data->commune)->commune_name;
-        // }
+        $farmerCode = $request->input('farmer_code');
+        $farmerName = $request->input('farmer_name');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $farmerDetailQuery = FarmerDetails::orderByDesc('created_at');
+        if (!empty($farmerCode)) {
+            $farmerDetailQuery->where('farmer_code', $farmerCode);
+        }
+
+        if (!empty($farmerName)) {
+            $farmerDetailQuery->Where('full_name', 'like', '%' . $farmerName . '%');
+        }
+
+        // if (empty($startDate) && empty($endDate)) {
+        //     $lastDate = now()->subDays(30)->toDateString();
+        //     $farmerDetailQuery->where('enrollment_date', '>=', $lastDate);
+        // } 
         
+        if (!empty($startDate)) {
+            $farmerDetailQuery->where('enrollment_date', '>=', $startDate);
+        }
+
+        if (!empty($endDate)) {
+            $farmerDetailQuery->where('enrollment_date', '<=', $endDate);
+        }
+
+        $farmerDetails = $farmerDetailQuery->paginate()->appends($request->except('page'));
+
+        return view('farmer.index', compact('farmerCode', 'farmerName', 'startDate', 'endDate', 'farmerDetails'));
+    }
+
+    public function split_with_whitespace($keyword)
+    {
+        return preg_split('/\s+/u', $keyword, -1, PREG_SPLIT_NO_EMPTY);
     }
 
     /**
@@ -63,6 +87,9 @@ class FarmersController extends Controller
     public function show(string $id)
     {
         $farmerDetail = FarmerDetails::find($id);
+        if (empty($farmerDetail)) {
+            return redirect()->route('farmer.index');
+        }
         $url_farmer_details = env('UPSTREAM_URL').'farmer/'.$id;
         $qrcode = QrCode::size(200)->generate($url_farmer_details);
         return view('farmer.show',['farmerDetail'=> $farmerDetail,'qrcode'=>$qrcode]);

@@ -42,6 +42,12 @@ class FarmerDetails extends Model
     {
     	return $this->belongsTo(User::class);
     }
+
+    public function staff()
+    {
+        return $this->belongsTo(Staff::class);
+    }
+    
     public function farm_lands()
     {
         return $this->hasMany(FarmLand::class, 'farmer_id', 'id');
