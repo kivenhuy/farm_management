@@ -56,7 +56,7 @@
                     <div class="form-group row border-bottom">
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Cultivated Crop</label>
-                            <span class="col-md-6">{{ $crop->crops_master?->name }}</span>
+                            <span class="col-md-6">{{ $crop?->crops_master?->name }}</span>
                         </div>
                         <div class="col-md-6 d-flex align-items-center">
                             <label class="col-md-6 col-form-label fw-medium text-heading" for="">Variety</label>
