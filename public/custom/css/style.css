@@ -10,13 +10,13 @@
 
 .card-header-status {
   cursor: pointer;
-  background-color: #25bcf1 !important;
+  background-color: #2E7F25 !important;
   color: white;
 }
 
 .card-header-status.collapsed {
   background-color: white !important;
-  color: #25bcf1;
+  color: #2E7F25;
 }
 
 .bg-menu-theme .menu-item.active > .menu-link:not(.menu-toggle) {
