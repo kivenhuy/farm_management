@@ -131,9 +131,84 @@ class ReportController extends Controller
     }
 
 
-    public function farmland_report()
+    public function farmland_report(Request $request)
     {
-        return view('report.farmland_report');
+        $farmerCode = $request->input('farmer_code');
+        $farmerName = $request->input('farmer_name');
+        $phoneNumber = $request->input('phone_number');
+        $staffId = $request->input('staff_id');
+        $exportExcel = $request->input('export_excel');
+
+        $farmLandQuery = FarmLand::select('farm_lands.*')->orderByDesc('created_at');
+
+        $needJoinOption = false;
+        if (!empty($farmerCode) || !empty($farmerName) || !empty($phoneNumber) || !empty($staffId)) {
+            $needJoinOption = true;
+        }
+
+        if ($needJoinOption) {
+            $farmLandQuery->leftJoin('farmer_details', 'farmer_details.id', '=', 'farm_lands.farmer_id');
+        }
+
+        if (!empty($farmerCode)) {
+            $farmLandQuery->where('farmer_details.farmer_code', $farmerCode);
+        }
+
+        if (!empty($farmerName)) {
+            $farmLandQuery->Where('farmer_details.full_name', 'like', '%' . $farmerName . '%');
+        }
+
+        if (!empty($phoneNumber)) {
+            $farmLandQuery->where('farmer_details.phone_number', $phoneNumber);
+        }
+
+        if (!empty($staffId)) {
+            $farmLandQuery->where('farmer_details.staff_id', $staffId);
+        }
+
+        if($exportExcel) {
+            $farmLands = $farmLandQuery->get();
+            
+            return response()->streamDownload(function () use ($farmLands) {
+                $this->exportFarmLand($farmLands);
+            }, 'FarmLand.csv');
+        }
+
+        $farmLands = $farmLandQuery->paginate(10)->appends($request->except('page'));
+
+        return view('report.farmland_report_index', compact('farmLands', 'farmerCode','farmerName','phoneNumber', 'staffId'));
+    }
+
+    private function exportFarmLand($farmLands)
+    {
+        $file = fopen('php://output', 'w');
+        fputs($file, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF))); // Fix for Excel
+
+        fputcsv($file, [
+            'Farmland Name',
+            'Farmer Code',
+            'Farmer Name',
+            'Farmer Phone Number',
+            'Field Officer',
+            'Land Ownership',
+            'Total land holding(HA)',
+            'Actual Area(HA)',
+        ]);
+
+        foreach ($farmLands as $farmLand) {
+            fputcsv($file, [
+                $farmLand->farm_name,
+                $farmLand->farmer_details->farmer_code,
+                $farmLand->farmer_details->full_name,
+                $farmLand->farmer_details->phone_number,
+                $farmLand->farmer_details->staff->name,
+                $farmLand->land_ownership,
+                $farmLand->total_land_holding,
+                $farmLand->actual_area,
+            ]);
+        }
+
+        fclose($file);
     }
 
     public function farmland_report_ajax(Request $request)
