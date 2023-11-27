@@ -76,7 +76,7 @@ class FarmersController extends Controller
             $farmerDetailQuery->where('staff_id', $staffId);
         }
 
-        $farmerDetails = $farmerDetailQuery->paginate()->appends($request->except('page'));
+        $farmerDetails = $farmerDetailQuery->paginate(10)->appends($request->except('page'));
 
         return view('farmer.index', compact('farmerDetails', 'farmerCode', 'farmerName', 'startDate', 'endDate',  'phoneNumber', 'provinceId', 'staffId'));
     }

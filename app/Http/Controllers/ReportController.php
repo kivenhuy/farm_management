@@ -65,7 +65,7 @@ class ReportController extends Controller
             }, 'Farmer.csv');
         }
 
-        $farmerDetails = $farmerDetailQuery->paginate()->appends($request->except('page'));
+        $farmerDetails = $farmerDetailQuery->paginate(10)->appends($request->except('page'));
 
         return view('report.farmer_report_index', compact('farmerDetails', 'farmerCode', 'farmerName', 'startDate', 'endDate',  'phoneNumber', 'provinceId', 'staffId'));
     }
