@@ -244,11 +244,11 @@ class ReportController extends Controller
         {
             $season_data = SeasonMaster::find($cultivation_data->season_id);
             $crop_information = CropInformation::find($cultivation_data->crop_id);
-            $farm_land_data->crop_name = $crop_information->name;
-            $farm_land_data->season_period_from = $season_data->from_period;
-            $farm_land_data->season_period_to = $season_data->to_period;
-            $farm_land_data->est_yeild = $cultivation_data->est_yield;
-            $farm_land_data->harvest_date = $cultivation_data->expect_date;
+            $farm_land_data->crop_name = $crop_information?->name;
+            $farm_land_data->season_period_from = $season_data?->from_period;
+            $farm_land_data->season_period_to = $season_data?->to_period;
+            $farm_land_data->est_yeild = $cultivation_data?->est_yield;
+            $farm_land_data->harvest_date = $cultivation_data?->expect_date;
         }
         else
         {
